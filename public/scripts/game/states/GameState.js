@@ -1,4 +1,5 @@
 import State from "../../core/State.js";
+import Skeleton from "../Skeleton.js";
 
 /** Example of Gamestate
  * 
@@ -15,22 +16,29 @@ export default class GameState extends State {
 
     constructor(){
         super("Game");
-
+        //check 
 
     }
 
     setup(){
         super.setup();
 
-        
+        //Instantiate skeleton
+		this.gameSession.skeleton = new Skeleton();
     }
 
     render(){
         super.render();
+
+        //Render skeleton
+        this.gameSession.skeleton.render();
     }
 
     update(){
         super.update();
+
+        //Update skeleton
+        this.gameSession.skeleton.update();
     }
 
     cleanup(){
@@ -41,39 +49,4 @@ export default class GameState extends State {
         return this.__gameBackground;
     }
 
-    set gameBackground(gameBackground){
-        this.__gameBackground = gameBackground;
-    }
-
-    get sweatEffect(){
-        return this.__sweatEffect;
-    }
-
-    set sweatEffect(sweatEffect){
-        this.__sweatEffect = sweatEffect;
-    }
-
-    get circleUI(){
-        return this.__circleUI;
-    }
-
-    set circleUI(circleUI){
-        this.__circleUI = circleUI;
-    }
-
-    get chargeEffectBefore(){
-        return this.__chargeEffectBefore;
-    }
-
-    set chargeEffectBefore(chargeEffectBefore){
-        this.__chargeEffectBefore = chargeEffectBefore;
-    }
-
-    get benderBodyParts(){
-        return this.__benderBodyParts;
-    }
-
-    set benderBodyParts(benderBodyParts){
-        this.__benderBodyParts = benderBodyParts;
-    }
 }

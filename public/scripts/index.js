@@ -1,6 +1,7 @@
 import GameSession from "./core/GameSession.js";
 import Skeleton from "./game/Skeleton.js";
 import GameState from "./game/states/GameState.js";
+import LoadingState from "./game/states/LoadingState.js";
 /**TODOS:
 SETUP should be abstracted to be made easier to use.
 
@@ -10,7 +11,7 @@ SETUP should be abstracted to be made easier to use.
 let gameSession = new GameSession();
 
 //Define how our P5 sketch will look. Treat this as the "Main".
-var foldnstir = function (p) {
+var TIYW = function (p) {
 
 	//Executed before beginning setup
 	p.preload = function() {
@@ -35,8 +36,12 @@ var foldnstir = function (p) {
 		let gameState = new GameState();
 		gameSession.addStateToGame(gameState);
 
+		//Library loading and camera initialization (TODO: Move to preload?)
+		let loadingState = new LoadingState();
+		gameSession.addStateToGame(loadingState);
+
 		//Set initial game state as loading, call setup method
-		gameSession.setCurrentState(gameState);
+		gameSession.setCurrentState(loadingState);
 
 		//Time scale management
 		gameSession.timeManager.timeScale = 1;
@@ -47,8 +52,7 @@ var foldnstir = function (p) {
 		p.frameRate(60);
 		p.imageMode(p.CENTER);
 
-		//Instantiate skeleton
-		gameSession.skeleton = new Skeleton();
+
 
 	}
 
@@ -59,8 +63,6 @@ var foldnstir = function (p) {
 		gameSession.timeManager.update();
 		gameSession.currentState.update();
 
-		gameSession.skeleton.update();
-
 		//Renders last and from back to front. Clear before going.
 		p.clear();
 		p.angleMode(p.DEGREES);
@@ -69,8 +71,7 @@ var foldnstir = function (p) {
 		p.background(p.color(gameSession.backgroundColor)); 
 		gameSession.particleManager.render();
 		gameSession.currentState.render();
-		
-		gameSession.skeleton.render();
+
 	}
 
 	//implement your controls inside of your specific state.
@@ -152,5 +153,5 @@ var foldnstir = function (p) {
 }
 
 //Instantiate P5 and attach it to our gameSession instance
-gameSession.p5 = new p5(foldnstir, 'canvas');
+gameSession.p5 = new p5(TIYW, 'canvas');
 

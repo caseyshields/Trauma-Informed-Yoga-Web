@@ -42,10 +42,7 @@ export default class State {
 
     //make updates to display
     render(){
-        this.p5.fill(255);
-        this.p5.textSize(40);
-        this.p5.textAlign(this.p5.CENTER, this.p5.CENTER);
-        this.p5.text("Welcome to GameState.js!", 333, 333);
+
     }
 
     //call after leaving main context for the engine. Manage memory and state appropriately
