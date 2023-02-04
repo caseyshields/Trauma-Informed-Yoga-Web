@@ -37,10 +37,10 @@ export default class LoadingState extends State {
     update(){
 
         //Attempt to load camera. If successful, callback transitions session to main menu.
-        if(!this.cameraLoaded){
-            console.log("Loading camera...");
-            this.loadCamera();
-        } 
+        // if(!this.cameraLoaded){
+        //     console.log("Loading camera...");
+        //     this.loadCamera();
+        // } 
 
         
     }
