@@ -59,7 +59,27 @@ export default class Mediapipe {
         }
     }
 
+    // Returns bone name -> [{x, y}, {x, y}] bone vertices normalized to 0 - 2 (initially from -1 - 1)
+    // Return null on error
+    getBoneVertices(name) {
+        const index = this.getBone(name);
+
+        if (index && this.key3D) {
+            const pointStart = this.key3D[index[0]];
+            const pointEnd = this.key3D[index[1]];
+
+            // x is inverted because the camera is facing the user
+            return [
+                {x: 2 - (pointStart.x + 1),     y: pointStart.y + 1},
+                {x: 2 - (pointEnd.x + 1),       y: pointEnd.y + 1},
+            ];
+        }
+
+        return null;
+    }
+
     // Returns bone name -> [a, b] index pair into bonePoints[]
+    // Return null on error
     getBone(name) {
         const index = this.boneName.indexOf(name);
 
@@ -78,7 +98,10 @@ export default class Mediapipe {
             this.pose = await poseDetection.createDetector(this.#tfjsModelBlazePose, this.#tfjsConfig);
             
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({audio: false, video: true});
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: false, 
+                    video: { facingMode: "user" },
+                });
                 this.#video.srcObject = stream;
                 this.#video.play();
             } catch (err) {
@@ -106,7 +129,7 @@ export default class Mediapipe {
         if (this.estimating && this.cameraRunning) {
             const pose = await this.pose.estimatePoses(this.#video, this.#estimationConfig);
 
-            if (pose) {
+            if (pose && pose[0]) {
                 this.key = pose[0].keypoints;
                 this.key3D = pose[0].keypoints3D;
             }
@@ -115,7 +138,7 @@ export default class Mediapipe {
 
     static #instance;
     static getInstance() {
-        if (Mediapipe.instance)
+        if (Mediapipe.#instance)
             return this.#instance;
         
         this.#instance = new Mediapipe();

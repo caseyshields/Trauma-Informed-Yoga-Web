@@ -2,15 +2,12 @@ import GameSession from "./core/GameSession.js";
 import Skeleton from "./game/Skeleton.js";
 import GameState from "./game/states/GameState.js";
 import LoadingState from "./game/states/LoadingState.js";
+import Mediapipe from "./core/Mediapipe.js";
+
 /**TODOS:
 SETUP should be abstracted to be made easier to use.
 
 */
-
-import Mediapipe from "./core/Mediapipe.js";
-
-const MP = Mediapipe.getInstance();
-MP.setup();
 
 //Instantiate our Game Session - this will be our parent for all game data.
 let gameSession = new GameSession();
@@ -25,6 +22,9 @@ var TIYW = function (p) {
 
 	//Executed before draw
 	p.setup = function () {
+		// Setup Mediapipe
+		const MP = Mediapipe.getInstance();
+		MP.setup();
 
 		//Set canvas to browser size
 		gameSession.canvasWidth = window.innerWidth;
