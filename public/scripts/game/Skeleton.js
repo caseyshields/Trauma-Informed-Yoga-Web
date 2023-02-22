@@ -3,11 +3,16 @@
 import GameObject from "../core/GameObject.js";
 import GameSession from "../core/GameSession.js";
 import Bone from "./Bone.js";
+import Target from "./Target.js";
 import Mediapipe from "../core/Mediapipe.js";
 
 export default class Skeleton extends GameObject {
 
+    // Array of bones initialized for skeleton
     bones = [];
+
+    // Array of current targets active on the screen
+    targets = [];
 
     // Bone names and connections.
     MP = null;
