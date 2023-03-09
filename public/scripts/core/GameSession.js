@@ -5,6 +5,7 @@ import ParticleManager from "./Managers/ParticleManager.js";
 import SpriteManager from "./Managers/SpriteManager.js";
 import ParticleSystemDefinitions from "./Effects/ParticleEffects/ParticleSystemDefinitions.js";
 
+
 export default class GameSession{
 	
 	constructor() {
