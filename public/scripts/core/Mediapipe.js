@@ -18,21 +18,6 @@ export default class Mediapipe {
     key = null;
     key3D = null;
 
-    bonePoints = [[8, 6], [6, 5], [5, 4], [4, 0], [0, 1], [1, 2], [2, 3], [3, 7], [10, 9],
-        [18, 20], [16, 20], [16, 18], [16, 22], [16, 14], [14, 12], [12, 24], [24, 26],
-        [26, 28], [28, 30], [28, 32], [32, 30], [24, 23], [23, 25], [25, 27], [27, 29],
-        [27, 31], [29, 31], [23, 11], [12, 11], [11, 13], [13, 15], [15, 21], [15, 19], 
-        [15, 17], [17, 19]];
-
-    boneName = ["Left Temple", "Left Eyebrow 1", "Left Eyebrow 2", "Left Nose Bridge",
-        "Right Nose Bridge", " Right Eyebrow 2", "Right Eyebrow 1", "Right Temple",
-        "Mouth", "Left Fingertips", "Left Innerpalm", "Left Outerpalm", "Left Thumb",
-        "Left Forearm", "Left Upperarm", "Left Abdominal", "Left Thigh", "Left Shin",
-        "Left Heel", "Left Foot Top", "Left Foot Bottom", "Hips", "Right Thigh",
-        "Right Shin", "Right Heel", "Right Foot Top", "Right Foot Bottom", "Right Abdominal",
-        "Shoulders", "Right Upperarm", "Right Forearm", "Right Thumb", "Right Innerpalm",
-        "Right Outerpalm", "Right Fingertips"];
-
     // MP pose and current status of camera/model
     pose = null;
     cameraRunning = false;
@@ -56,39 +41,6 @@ export default class Mediapipe {
         this.#video.oncanplay = () => {
             this.cameraRunning = true;
             window.requestAnimationFrame(this.#runEstimator.bind(this));
-        }
-    }
-
-    // Returns bone name -> [{x, y}, {x, y}] bone vertices normalized to 0 - 2 (initially from -1 - 1)
-    // Return null on error
-    getBoneVertices(name) {
-        const index = this.getBone(name);
-
-        if (index && this.key3D) {
-            const pointStart = this.key3D[index[0]];
-            const pointEnd = this.key3D[index[1]];
-
-            // x is inverted because the camera is facing the user
-            return [
-                {x: 2 - (pointStart.x + 1),     y: pointStart.y + 1},
-                {x: 2 - (pointEnd.x + 1),       y: pointEnd.y + 1},
-            ];
-        }
-
-        return null;
-    }
-
-    // Returns bone name -> [a, b] index pair into bonePoints[]
-    // Return null on error
-    getBone(name) {
-        const index = this.boneName.indexOf(name);
-
-        if (index !== -1) {
-            return this.bonePoints[index];
-        }
-        else {
-            console.error(`Failed to find bone ${name}!`);
-            return null;
         }
     }
 

@@ -3,15 +3,19 @@
 import GameObject from "../core/GameObject.js";
 import GameSession from "../core/GameSession.js";
 import Bone from "./Bone.js";
+import Target from "./Target.js";
 import Mediapipe from "../core/Mediapipe.js";
 
 export default class Skeleton extends GameObject {
 
+    // Array of bones initialized for skeleton
     bones = [];
 
+    // Array of current targets active on the screen
+    targets = [];
+
     // Bone names and connections.
-    // Also defined in core/Mediapipe.js! Must be kept consistent
-    // TODO: move away bone functions from Mediapipe.js
+    MP = null;
 
     bonePoints = [[8, 6], [6, 5], [5, 4], [4, 0], [0, 1], [1, 2], [2, 3], [3, 7], [10, 9],
         [18, 20], [16, 20], [16, 18], [16, 22], [16, 14], [14, 12], [12, 24], [24, 26],
@@ -19,64 +23,86 @@ export default class Skeleton extends GameObject {
         [27, 31], [29, 31], [23, 11], [12, 11], [11, 13], [13, 15], [15, 21], [15, 19], 
         [15, 17], [17, 19]];
 
-
-    // TODO: convert to object for autocompletion once bone functions are moved away from MP file
-    // Use helper functions in Mediapipe.js until then
-    boneName = ["Left Temple", "Left Eyebrow 1", "Left Eyebrow 2", "Left Nose Bridge",
-        "Right Nose Bridge", " Right Eyebrow 2", "Right Eyebrow 1", "Right Temple",
-        "Mouth", "Left Fingertips", "Left Innerpalm", "Left Outerpalm", "Left Thumb",
-        "Left Forearm", "Left Upperarm", "Left Abdominal", "Left Thigh", "Left Shin",
-        "Left Heel", "Left Foot Top", "Left Foot Bottom", "Hips", "Right Thigh",
-        "Right Shin", "Right Heel", "Right Foot Top", "Right Foot Bottom", "Right Abdominal",
-        "Shoulders", "Right Upperarm", "Right Forearm", "Right Thumb", "Right Innerpalm",
-        "Right Outerpalm", "Right Fingertips"];
+    boneTypes = {leftTemple: "Left Temple", leftEyebrow1: "Left Eyebrow 1",  leftEyebrow2: "Left Eyebrow 2", 
+        leftNoseBridge: "Left Nose Bridge", rightNoseBridge: "Right Nose Bridge", rightEyebrow2: "Right Eyebrow 2",
+        rightEyebrow1: "Right Eyebrow 1", rightTemple: "Right Temple", mouth: "Mouth", leftFingertips: "Left Fingertips", 
+        leftInnerpalm: "Left Innerpalm", leftOuterpalm: "Left Outerpalm", leftThumb: "Left Thumb", leftForearm: "Left Forearm", 
+        leftUpperarm: "Left Upperarm", leftAbdominal: "Left Abdominal", leftThigh: "Left Thigh", leftShin: "Left Shin",
+        leftHeel: "Left Heel", leftFootTop: "Left Foot Top", leftFootBottom: "Left Foot Bottom", hips: "Hips", 
+        rightThigh: "Right Thigh", rightShin: "Right Shin", rightHeel: "Right Heel", rightFootTop: "Right Foot Top", 
+        rightFootBottom: "Right Foot Bottom", rightAbdominal: "Right Abdominal", shoulders: "Shoulders", rightUpperarm: "Right Upperarm",
+        rightForearm: "Right Forearm", rightThumb: "Right Thumb", rightInnerpalm: "Right Innerpalm", rightOuterpalm: "Right Outerpalm", 
+        rightFingertips: "Right Fingertips"};
 
     constructor() {
         super(0, 0, 0, 0, 0, 0);
 
-        const MP = Mediapipe.getInstance();
+        this.MP = Mediapipe.getInstance();
 
         // populate bones
-        MP.boneName.forEach(name => {
-            this.bones.push(new Bone(name));
-        })
-
-        // NOTE: colors unused currently
-        // this.__noseC = this.p5.color(153, 0, 153);
-        // this.__rightShoulderC = this.p5.color(0, 55, 0);
-        // this.__rightElbowC = this.p5.color(55, 0, 0);
-        // this.__rightWristC = this.p5.color(153, 153, 153);
-        // this.__rightHipC = this.p5.color(0, 0, 153);
-        // this.__rightKneeC = this.p5.color(0, 55, 55);
-        // this.__rightAnkleC = this.p5.color(153, 153, 0);
-        // this.__rightIndexC = this.p5.color(0, 0, 0);
-        // this.__rightHeelC = this.p5.color(0, 0, 0);
-        // this.__rightFootIndexC = this.p5.color(0, 0, 0);
-        // this.__leftShoulderC = this.p5.color(0, 55, 0);
-        // this.__leftElbowC = this.p5.color(55, 0, 0);
-        // this.__leftWristC = this.p5.color(153, 153, 153);
-        // this.__leftHipC = this.p5.color(0, 0, 153);
-        // this.__leftKneeC = this.p5.color(0, 55, 55);
-        // this.__leftAnkleC = this.p5.color(153, 153, 0);
-        // this.__leftIndexC = this.p5.color(0, 0, 0);
-        // this.__leftHeelC = this.p5.color(0, 0, 0);
-        // this.__leftFootIndexC = this.p5.color(0, 0, 0);
+        Object.entries(this.boneTypes).forEach( ([key, val], index) => {
+            this.bones.push(new Bone(key, val, index, this.bonePoints[index]));
+        });
     }
 
     //updates any model attributes of the bone
     update(){
         if(this.gameSession.instance){
             for (const bone of this.bones)
-                bone.update();
+                bone.update(this.getBoneVertices(bone.index));
         }
     }
 
     //Adds bone to the canvas
     render(){
-        this.p5.stroke(255);
-
         for (const bone of this.bones)
             bone.render();
+    }
+
+    // returns a Bone (defined in Bone.js) if found (use boneType define to search)
+    // otherwise returns null
+    getBone(name) {
+        let bone = null;
+
+        // first search by bone name key
+        if (Object.hasOwn(this.boneTypes, name)) {
+            bone = this.bones.find(el => el.name == name);
+        }
+        else {
+            // else search by formatted name
+            bone = this.bones.find(el => el.nameFormatted == name);
+        }
+
+        if (!bone)
+            console.error(`Failed to find bone ${name}!`);
+
+        // .find() might return undefined in the second case. make sure to return null instead.
+        return bone !== null ? bone : null;
+    }
+
+    // name of bone or index into bone array to get vertices for the bone [{x, y}, {x, y}] (normalized to 0 - 2)
+    // return null on error
+    getBoneVertices(boneNameOrIndex) {
+        let bone;
+
+        // find the bone if given a name, if given a number index directly into bone array
+        if (typeof boneType === "string")
+            bone = this.getBone(boneNameOrIndex);
+        else
+            bone = this.bones[boneNameOrIndex];
+
+        if (bone && this.MP.key3D) {
+            const pointStart = this.MP.key3D[bone.points[0]];
+            const pointEnd = this.MP.key3D[bone.points[1]];
+
+            // x is inverted because the camera is facing the user
+            return [
+                {x: 2 - (pointStart.x + 1),     y: pointStart.y + 1},
+                {x: 2 - (pointEnd.x + 1),       y: pointEnd.y + 1},
+            ];
+        }
+
+        return null;
     }
 
     //This is a big nasty method because we are hardcoding 
@@ -153,6 +179,28 @@ export default class Skeleton extends GameObject {
         33	right_outerpalm	15	17
         34	right_fingertips	17	19
      * 
+
+        // NOTE: colors unused currently
+        // this.__noseC = this.p5.color(153, 0, 153);
+        // this.__rightShoulderC = this.p5.color(0, 55, 0);
+        // this.__rightElbowC = this.p5.color(55, 0, 0);
+        // this.__rightWristC = this.p5.color(153, 153, 153);
+        // this.__rightHipC = this.p5.color(0, 0, 153);
+        // this.__rightKneeC = this.p5.color(0, 55, 55);
+        // this.__rightAnkleC = this.p5.color(153, 153, 0);
+        // this.__rightIndexC = this.p5.color(0, 0, 0);
+        // this.__rightHeelC = this.p5.color(0, 0, 0);
+        // this.__rightFootIndexC = this.p5.color(0, 0, 0);
+        // this.__leftShoulderC = this.p5.color(0, 55, 0);
+        // this.__leftElbowC = this.p5.color(55, 0, 0);
+        // this.__leftWristC = this.p5.color(153, 153, 153);
+        // this.__leftHipC = this.p5.color(0, 0, 153);
+        // this.__leftKneeC = this.p5.color(0, 55, 55);
+        // this.__leftAnkleC = this.p5.color(153, 153, 0);
+        // this.__leftIndexC = this.p5.color(0, 0, 0);
+        // this.__leftHeelC = this.p5.color(0, 0, 0);
+        // this.__leftFootIndexC = this.p5.color(0, 0, 0);
+
      * @param {*} poseLandmarks 
      */
 }
