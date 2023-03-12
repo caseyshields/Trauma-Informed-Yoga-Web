@@ -24,7 +24,6 @@ var TIYW = function (p) {
 	p.setup = function () {
 		// Setup Mediapipe
 		const MP = Mediapipe.getInstance();
-		MP.setup();
 
 		//Set canvas to browser size
 		gameSession.canvasWidth = window.innerWidth;

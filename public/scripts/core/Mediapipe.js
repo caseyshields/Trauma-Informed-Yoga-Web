@@ -29,6 +29,7 @@ export default class Mediapipe {
 
     constructor() {
         this.pane.registerPlugin(TweakpaneEssentialsPlugin);
+        this.pane.addButton({title: 'Start webcam'}).on('click', () => this.setup());
         this.pane.addMonitor(this, 'cameraRunning', {label: 'Webcam running'});
         this.pane.addMonitor(this, 'estimating', {label: 'MP estimating'});
         this.#fpsGraph = this.pane.addBlade({
@@ -64,7 +65,6 @@ export default class Mediapipe {
         } catch (err) {
             console.error(`Failed to create TFJS model: ${err}`);
         }
-
     }
 
     async #runEstimator() {
