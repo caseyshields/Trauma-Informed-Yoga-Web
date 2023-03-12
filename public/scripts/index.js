@@ -17,17 +17,15 @@ let gameSession = new GameSession();
 
 //Define how our P5 sketch will look. Treat this as the "Main".
 var TIYW = function (p) {
-
 	//Executed before beginning setup
-	p.preload = function() {
+	p.preload = function () {
 		//Load any assets or libraries
-	}
+	};
 
 	//Executed before draw
 	p.setup = function () {
 		// Setup Mediapipe
 		const MP = Mediapipe.getInstance();
-		MP.setup();
 
 		//Set canvas to browser size
 		gameSession.canvasWidth = window.innerWidth;
@@ -67,9 +65,8 @@ var TIYW = function (p) {
 	}
 
 	//core update function of the game
-	p.draw = function(){
-
-		//Call managers and states to update each frame. 
+	p.draw = function () {
+		//Call managers and states to update each frame.
 		gameSession.timeManager.update();
 		gameSession.currentState.update();
 
@@ -78,71 +75,69 @@ var TIYW = function (p) {
 		p.angleMode(p.DEGREES);
 
 		//TODO: Move to individual classes and use an image
-		p.background(p.color(gameSession.backgroundColor)); 
+		p.background(p.color(gameSession.backgroundColor));
 		gameSession.particleManager.render();
 		gameSession.currentState.render();
-
-	}
+	};
 
 	//implement your controls inside of your specific state.
-	p.mousePressed = function(){
+	p.mousePressed = function () {
 		//call gameState code here as needed.
-	}
+	};
 
-    p.keyPressed = function(){
+	p.keyPressed = function () {
 		//call gameState code here as needed.
-	}
+	};
 
-    p.keyReleased = function(){
+	p.keyReleased = function () {
 		//call gameState code here as needed.
-	}
+	};
 
-    p.keyTyped = function(){
+	p.keyTyped = function () {
 		//call gameState code here as needed.
-	}
+	};
 
-    p.keyIsDown = function(){
+	p.keyIsDown = function () {
 		//call gameState code here as needed.
-	}
+	};
 
-    p.mouseMoved = function(){
+	p.mouseMoved = function () {
 		//call gameState code here as needed.
-	}
+	};
 
-    p.mouseDragged = function(){
+	p.mouseDragged = function () {
 		//call gameState code here as needed.
-	}
+	};
 
-    p.mousePressed = function(){
+	p.mousePressed = function () {
 		//call gameState code here as needed.
-	}
+	};
 
-    p.mouseReleased = function(){
-		if(gameSession.currentState.mouseReleased){
+	p.mouseReleased = function () {
+		if (gameSession.currentState.mouseReleased) {
 			gameSession.currentState.mouseReleased();
 		}
-	}
+	};
 
-    p.mouseClicked = function(){
+	p.mouseClicked = function () {
 		//call gameState code here as needed.
-	}
+	};
 
-    p.doubleClicked = function(){
+	p.doubleClicked = function () {
 		//call gameState code here as needed.
-	}
+	};
 
-    p.mouseWheel = function(){
+	p.mouseWheel = function () {
 		//call gameState code here as needed.
-	}
+	};
 
-    p.requestPointerLock = function(){
+	p.requestPointerLock = function () {
 		//call gameState code here as needed.
-	}
+	};
 
-    p.exitPointerLock = function(){
+	p.exitPointerLock = function () {
 		//call gameState code here as needed.
-	}
-
+	};
 
 	p.getAngle = function(x1, y1, x2, y2) {
 		let angle = Math.atan2(y2-y1, x2-x1) * 180 / Math.PI;
@@ -150,18 +145,15 @@ var TIYW = function (p) {
 	}
 
 	// Manage game input.
-	p.keyPressed = function () {
-		
-	}
+	p.keyPressed = function () {};
 
 	p.windowResized = function () {
 		gameSession.canvasWidth = window.innerWidth;
 		gameSession.canvasHeight = window.innerHeight;
 
 		p.resizeCanvas(gameSession.canvasWidth, gameSession.canvasHeight);
-	}
-}
+	};
+};
 
 //Instantiate P5 and attach it to our gameSession instance
-gameSession.p5 = new p5(TIYW, 'canvas');
-
+gameSession.p5 = new p5(TIYW, "canvas");

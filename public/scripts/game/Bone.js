@@ -3,8 +3,8 @@ import VectorGameObject from "../core/VectorGameObject.js";
 
 export default class Bone extends VectorGameObject {
 	vertices = [
-		{x: 0.0, y: 0.0},
-		{x: 0.0, y: 0.0},
+		{ x: 0.0, y: 0.0 },
+		{ x: 0.0, y: 0.0 },
 	];
 
 	style = {
@@ -35,9 +35,9 @@ export default class Bone extends VectorGameObject {
 			this.vertices = vertices;
 
 			// vertices are normalized to 0 - 2, scale to canvas
-			this.vertices.forEach(vertex => {
-				vertex.x *= (this.gameSession.canvasWidth / 2);
-				vertex.y *= (this.gameSession.canvasHeight / 2);
+			this.vertices.forEach((vertex) => {
+				vertex.x *= this.gameSession.canvasWidth / 2;
+				vertex.y *= this.gameSession.canvasHeight / 2;
 			});
 		}
 	}
@@ -45,7 +45,7 @@ export default class Bone extends VectorGameObject {
 	render() {
 		this.p5.stroke(this.style.stroke);
 		this.p5.strokeWeight(this.style.strokeWeight);
-		this.p5.line(this.vertices[0].x, this.vertices[0].y, this.vertices[1].x, this.vertices[1].y)
+		this.p5.line(this.vertices[0].x, this.vertices[0].y, this.vertices[1].x, this.vertices[1].y);
 	}
 
 	setColor(r, g, b) {
