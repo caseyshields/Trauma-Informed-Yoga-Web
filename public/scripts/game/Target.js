@@ -8,7 +8,7 @@ export default class Target {
 
 	color = "rgba(255, 255, 255, 1";
 
-	constructor(x = 0.0, y = 0.0, radius = 1, color = "rgba(255, 255, 255, 1") {
+	constructor(x = 0.0, y = 0.0, radius = 1, color = "rgba(255, 255, 255, 1)") {
 		this.pos = { x: x, y: y };
 		this.radius = radius;
 		this.color = color;
