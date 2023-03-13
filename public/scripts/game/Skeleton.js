@@ -143,14 +143,13 @@ export default class Skeleton extends GameObject {
 		if (typeof boneType === "string") bone = this.getBone(boneNameOrIndex);
 		else bone = this.bones[boneNameOrIndex];
 
-		if (bone && this.MP.key3D) {
-			const pointStart = this.MP.key3D[bone.points[0]];
-			const pointEnd = this.MP.key3D[bone.points[1]];
+		if (bone && this.MP.key) {
+			const pointStart = this.gameSession.poseLandmarks[bone.points[0]];
+			const pointEnd = this.gameSession.poseLandmarks[bone.points[1]];
 
-			// x is inverted because the camera is facing the user
 			return [
-				{ x: 2 - (pointStart.x + 1), y: pointStart.y + 1 },
-				{ x: 2 - (pointEnd.x + 1), y: pointEnd.y + 1 },
+				{ x: pointStart.x, y: pointStart.y, z: pointStart.z },
+				{ x: pointEnd.x, y: pointEnd.y, z: pointEnd.z },
 			];
 		}
 

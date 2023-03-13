@@ -5,7 +5,7 @@ import LoadingState from "./game/states/LoadingState.js";
 import Mediapipe from "./core/Mediapipe.js";
 
 //audio libary
-import * as Tone from './libs/Tone.js';
+import * as Tone from "./libs/Tone.js";
 
 /**TODOS:
 SETUP should be abstracted to be made easier to use.
@@ -59,10 +59,9 @@ var TIYW = function (p) {
 		p.imageMode(p.CENTER);
 
 		//Tone.js Test
-		const synth = new Tone.Synth().toDestination();
-		synth.triggerAttackRelease("C4", "8n");
-
-	}
+		// const synth = new Tone.Synth().toDestination();
+		// synth.triggerAttackRelease("C4", "8n");
+	};
 
 	//core update function of the game
 	p.draw = function () {
@@ -139,10 +138,10 @@ var TIYW = function (p) {
 		//call gameState code here as needed.
 	};
 
-	p.getAngle = function(x1, y1, x2, y2) {
-		let angle = Math.atan2(y2-y1, x2-x1) * 180 / Math.PI;
+	p.getAngle = function (x1, y1, x2, y2) {
+		let angle = (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI;
 		return angle;
-	}
+	};
 
 	// Manage game input.
 	p.keyPressed = function () {};
