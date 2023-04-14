@@ -5,6 +5,7 @@ import GameSession from "../core/GameSession.js";
 import Bone from "./Bone.js";
 import Target from "./Target.js";
 import Mediapipe from "../core/Mediapipe.js";
+import CenterOfMass from "./CenterOfMass.js";
 
 export default class Skeleton extends GameObject {
 	// Array of bones initialized for skeleton
@@ -92,6 +93,8 @@ export default class Skeleton extends GameObject {
 		rightFingertips: "Right Fingertips",
 	};
 
+	centerOfMass = {};
+
 	constructor() {
 		super(0, 0, 0, 0, 0, 0);
 
@@ -101,6 +104,14 @@ export default class Skeleton extends GameObject {
 		Object.entries(this.boneTypes).forEach(([key, val], index) => {
 			this.bones.push(new Bone(key, val, index, this.bonePoints[index]));
 		});
+
+		//instantiate center of mass
+		this.centerOfMass = new CenterOfMass(
+			this.gameSession.poseLandmarks[23], //leftHip
+			this.gameSession.poseLandmarks[24], //rightHip
+			this.gameSession.poseLandmarks[11], //leftShoulder
+			this.gameSession.poseLandmarks[12] //rightSHoulder
+		);
 	}
 
 	//updates any model attributes of the bone
@@ -108,11 +119,25 @@ export default class Skeleton extends GameObject {
 		if (this.gameSession.instance) {
 			for (const bone of this.bones) bone.update(this.getBoneVertices(bone.index));
 		}
+
+		//update center of mass
+		this.centerOfMass.updateCOMFromTorso(
+			this.gameSession.poseLandmarks[23], //leftHip
+			this.gameSession.poseLandmarks[24], //rightHip
+			this.gameSession.poseLandmarks[11], //leftShoulder
+			this.gameSession.poseLandmarks[12] //rightSHoulder
+		);
 	}
 
 	//Adds bone to the canvas
 	render() {
 		for (const bone of this.bones) bone.render();
+
+		//render center of mass
+		if(this.centerOfMass){
+			this.centerOfMass.render();
+		}
+	
 	}
 
 	// returns a Bone (defined in Bone.js) if found (use boneType define to search)

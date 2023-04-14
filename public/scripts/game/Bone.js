@@ -13,7 +13,7 @@ export default class Bone extends VectorGameObject {
 	};
 
 	name = "unknown";
-	nameFormatted = "Unknown";
+	nameFormatted = "unknown";
 	index = -1;
 	points = [-1, -1];
 
