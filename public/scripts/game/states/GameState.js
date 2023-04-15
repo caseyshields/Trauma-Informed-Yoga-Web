@@ -1,5 +1,6 @@
 import State from "../../core/State.js";
 import Skeleton from "../Skeleton.js";
+import Target from "../Target.js";
 
 /** Example of Gamestate
  *
@@ -13,6 +14,8 @@ import Skeleton from "../Skeleton.js";
  */
 
 export default class GameState extends State {
+	testTarget = {};
+	
 	constructor() {
 		super("Game");
 		//check
@@ -23,6 +26,9 @@ export default class GameState extends State {
 
 		//Instantiate skeleton
 		this.gameSession.skeleton = new Skeleton();
+
+		//TESTING TARGET
+		this.testTarget = new Target(500, 500, 100, {}, false, 10, this.gameSession.skeleton);
 	}
 
 	render() {
@@ -30,6 +36,9 @@ export default class GameState extends State {
 
 		//Render skeleton
 		this.gameSession.skeleton.render();
+
+		//TESTING TARGET
+		this.testTarget.render();
 	}
 
 	update() {

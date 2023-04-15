@@ -181,6 +181,14 @@ export default class Skeleton extends GameObject {
 		return null;
 	}
 
+	get centerOfMass(){
+		return this.centerOfMass;
+	}
+
+	set centerOfMass(centerOfMass){
+		this.centerOfMass = centerOfMass;
+	}
+
 	//This is a big nasty method because we are hardcoding
 	//based on fig 4. https://google.github.io/mediapipe/solutions/pose#javascript-solution-api
 	/** points are based on their position in the poseLandmarks array with the following objects:
