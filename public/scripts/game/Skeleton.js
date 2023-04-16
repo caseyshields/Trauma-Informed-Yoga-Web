@@ -17,93 +17,16 @@ export default class Skeleton extends GameObject {
 	// Bone names and connections.
 	MP = null;
 
-	bonePoints = [
-		[8, 6],
-		[6, 5],
-		[5, 4],
-		[4, 0],
-		[0, 1],
-		[1, 2],
-		[2, 3],
-		[3, 7],
-		[10, 9],
-		[18, 20],
-		[16, 20],
-		[16, 18],
-		[16, 22],
-		[16, 14],
-		[14, 12],
-		[12, 24],
-		[24, 26],
-		[26, 28],
-		[28, 30],
-		[28, 32],
-		[32, 30],
-		[24, 23],
-		[23, 25],
-		[25, 27],
-		[27, 29],
-		[27, 31],
-		[29, 31],
-		[23, 11],
-		[12, 11],
-		[11, 13],
-		[13, 15],
-		[15, 21],
-		[15, 19],
-		[15, 17],
-		[17, 19],
-	];
-
-	boneTypes = {
-		leftTemple: "Left Temple",
-		leftEyebrow1: "Left Eyebrow 1",
-		leftEyebrow2: "Left Eyebrow 2",
-		leftNoseBridge: "Left Nose Bridge",
-		rightNoseBridge: "Right Nose Bridge",
-		rightEyebrow2: "Right Eyebrow 2",
-		rightEyebrow1: "Right Eyebrow 1",
-		rightTemple: "Right Temple",
-		mouth: "Mouth",
-		leftFingertips: "Left Fingertips",
-		leftInnerpalm: "Left Innerpalm",
-		leftOuterpalm: "Left Outerpalm",
-		leftThumb: "Left Thumb",
-		leftForearm: "Left Forearm",
-		leftUpperarm: "Left Upperarm",
-		leftAbdominal: "Left Abdominal",
-		leftThigh: "Left Thigh",
-		leftShin: "Left Shin",
-		leftHeel: "Left Heel",
-		leftFootTop: "Left Foot Top",
-		leftFootBottom: "Left Foot Bottom",
-		hips: "Hips",
-		rightThigh: "Right Thigh",
-		rightShin: "Right Shin",
-		rightHeel: "Right Heel",
-		rightFootTop: "Right Foot Top",
-		rightFootBottom: "Right Foot Bottom",
-		rightAbdominal: "Right Abdominal",
-		shoulders: "Shoulders",
-		rightUpperarm: "Right Upperarm",
-		rightForearm: "Right Forearm",
-		rightThumb: "Right Thumb",
-		rightInnerpalm: "Right Innerpalm",
-		rightOuterpalm: "Right Outerpalm",
-		rightFingertips: "Right Fingertips",
-	};
-
 	centerOfMass = {};
+
+	config = null;
 
 	constructor() {
 		super(0, 0, 0, 0, 0, 0);
 
-		this.MP = Mediapipe.getInstance();
+		void this.configBones();
 
-		// populate bones
-		Object.entries(this.boneTypes).forEach(([key, val], index) => {
-			this.bones.push(new Bone(key, val, index, this.bonePoints[index]));
-		});
+		this.MP = Mediapipe.getInstance();
 
 		//instantiate center of mass
 		this.centerOfMass = new CenterOfMass(
@@ -112,6 +35,17 @@ export default class Skeleton extends GameObject {
 			this.gameSession.poseLandmarks[11], //leftShoulder
 			this.gameSession.poseLandmarks[12] //rightSHoulder
 		);
+	}
+
+	async configBones() {
+		// load bones from the config file
+		const response = await fetch("/config.json");
+		this.config = await response.json();
+
+		// populate bones array from config
+		Object.entries(this.config.bones).forEach(([key, val], index) => {
+			this.bones.push(new Bone(key, val.name, index, val.points, val.style.stroke, val.style.strokeWeight));
+		});
 	}
 
 	//updates any model attributes of the bone
@@ -134,10 +68,9 @@ export default class Skeleton extends GameObject {
 		for (const bone of this.bones) bone.render();
 
 		//render center of mass
-		if(this.centerOfMass){
+		if (this.centerOfMass) {
 			this.centerOfMass.render();
 		}
-	
 	}
 
 	// returns a Bone (defined in Bone.js) if found (use boneType define to search)
@@ -181,11 +114,11 @@ export default class Skeleton extends GameObject {
 		return null;
 	}
 
-	get centerOfMass(){
+	get centerOfMass() {
 		return this.centerOfMass;
 	}
 
-	set centerOfMass(centerOfMass){
+	set centerOfMass(centerOfMass) {
 		this.centerOfMass = centerOfMass;
 	}
 

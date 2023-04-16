@@ -1,0 +1,284 @@
+{
+	"bones": {
+		"leftTemple": {
+			"name": "Left Temple",
+			"points": [8, 6],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftEyebrow1": {
+			"name": "Left Eyebrow 1",
+			"points": [6, 5],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftEyebrow2": {
+			"name": "Left Eyebrow 2",
+			"points": [5, 4],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftNoseBridge": {
+			"name": "Left Nose Bridge",
+			"points": [4, 0],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightNoseBridge": {
+			"name": "Right Nose Bridge",
+			"points": [0, 1],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightEyebrow2": {
+			"name": "Right Eyebrow 2",
+			"points": [1, 2],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightEyebrow1": {
+			"name": "Right Eyebrow 1",
+			"points": [2, 3],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightTemple": {
+			"name": "Right Temple",
+			"points": [3, 7],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"mouth": {
+			"name": "Mouth",
+			"points": [10, 9],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftFingertips": {
+			"name": "Left Fingertips",
+			"points": [18, 20],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftInnerpalm": {
+			"name": "Left Innerpalm",
+			"points": [16, 20],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftOuterpalm": {
+			"name": "Left Outerpalm",
+			"points": [16, 18],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftThumb": {
+			"name": "Left Thumb",
+			"points": [16, 22],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftForearm": {
+			"name": "Left Forearm",
+			"points": [16, 14],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftUpperarm": {
+			"name": "Left Upperarm",
+			"points": [14, 12],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftAbdominal": {
+			"name": "Left Abdominal",
+			"points": [12, 24],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftThigh": {
+			"name": "Left Thigh",
+			"points": [24, 26],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftShin": {
+			"name": "Left Shin",
+			"points": [26, 28],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftHeel": {
+			"name": "Left Heel",
+			"points": [28, 30],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftFootTop": {
+			"name": "Left Foot Top",
+			"points": [28, 32],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"leftFootBottom": {
+			"name": "Left Foot Bottom",
+			"points": [32, 30],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"hips": {
+			"name": "Hips",
+			"points": [24, 23],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightThigh": {
+			"name": "Right Thigh",
+			"points": [23, 25],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightShin": {
+			"name": "Right Shin",
+			"points": [25, 27],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightHeel": {
+			"name": "Right Heel",
+			"points": [27, 29],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightFootTop": {
+			"name": "Right Foot Top",
+			"points": [27, 31],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightFootBottom": {
+			"name": "Right Foot Bottom",
+			"points": [29, 31],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightAbdominal": {
+			"name": "Right Abdominal",
+			"points": [23, 11],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"shoulders": {
+			"name": "Shoulders",
+			"points": [12, 11],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightUpperarm": {
+			"name": "Right Upperarm",
+			"points": [11, 13],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightForearm": {
+			"name": "Right Forearm",
+			"points": [13, 15],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightThumb": {
+			"name": "Right Thumb",
+			"points": [15, 21],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightInnerpalm": {
+			"name": "Right Innerpalm",
+			"points": [15, 19],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightOuterpalm": {
+			"name": "Right Outerpalm",
+			"points": [15, 17],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		},
+		"rightFingertips": {
+			"name": "Right Fingertips",
+			"points": [17, 19],
+			"style": {
+				"stroke": "#7bea64",
+				"strokeWeight": 5
+			}
+		}
+	}
+}

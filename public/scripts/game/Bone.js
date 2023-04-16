@@ -17,7 +17,7 @@ export default class Bone extends VectorGameObject {
 	index = -1;
 	points = [-1, -1];
 
-	constructor(name, nameFormatted, index, points) {
+	constructor(name, nameFormatted, index, points, stroke, strokeWeight) {
 		// constructor for vector object, no position yet
 		super(0, 0, {}, true, 5, 255, 0, 1, 1, false);
 
@@ -25,6 +25,8 @@ export default class Bone extends VectorGameObject {
 		this.nameFormatted = nameFormatted;
 		this.index = index;
 		this.points = points;
+		this.style.stroke = this.p5.color(stroke);
+		this.style.strokeWeight = strokeWeight;
 	}
 
 	update(vertices) {
