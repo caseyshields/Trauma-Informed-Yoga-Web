@@ -73,23 +73,15 @@ export default class Skeleton extends GameObject {
 		}
 	}
 
-	// returns a Bone (defined in Bone.js) if found (use boneType define to search)
+	// returns a Bone (defined in Bone.js) if found (use config.json for bone names)
 	// otherwise returns null
 	getBone(name) {
-		let bone = null;
-
-		// first search by bone name key
-		if (Object.hasOwn(this.boneTypes, name)) {
-			bone = this.bones.find((el) => el.name == name);
-		} else {
-			// else search by formatted name
-			bone = this.bones.find((el) => el.nameFormatted == name);
-		}
+		let bone = this.bones.find((x) => x.name === name || x.nameFormatted === name);
 
 		if (!bone) console.error(`Failed to find bone ${name}!`);
 
 		// .find() might return undefined in the second case. make sure to return null instead.
-		return bone !== null ? bone : null;
+		return bone ?? null;
 	}
 
 	// name of bone or index into bone array to get vertices for the bone [{x, y}, {x, y}] (normalized to 0 - 2)
