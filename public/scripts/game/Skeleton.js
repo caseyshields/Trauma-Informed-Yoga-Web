@@ -76,7 +76,13 @@ export default class Skeleton extends GameObject {
 	// returns a Bone (defined in Bone.js) if found (use config.json for bone names)
 	// otherwise returns null
 	getBone(name) {
+      console.log(this.bones);
 		let bone = this.bones.find((x) => x.name === name || x.nameFormatted === name);
+
+      for(let i = 0; i <= this.bones.length; i++){
+         let tempBone = this.bones[i];
+         console.log(tempBone.name);
+      }
 
 		if (!bone) console.error(`Failed to find bone ${name}!`);
 

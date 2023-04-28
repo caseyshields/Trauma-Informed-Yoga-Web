@@ -27,8 +27,11 @@ export default class GameState extends State {
 		//Instantiate skeleton
 		this.gameSession.skeleton = new Skeleton();
 
+		//testing get bone and target assignment
+		let rightPalm = this.gameSession.skeleton.getBone("leftInnerpalm");
+
 		//TESTING TARGET
-		this.testTarget = new Target(500, 500, 100, {}, false, 10, this.gameSession.skeleton);
+		this.testTarget = new Target(500, 500, 100, rightPalm, false, 10, this.gameSession.skeleton);
 	}
 
 	render() {
@@ -47,6 +50,7 @@ export default class GameState extends State {
 		//Update skeleton
 		this.gameSession.skeleton.update();
 	}
+	
 
 	cleanup() {
 		super.update();

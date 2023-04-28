@@ -24,9 +24,6 @@ var TIYW = function (p) {
 
 	//Executed before draw
 	p.setup = function () {
-		// Setup Mediapipe
-		const MP = Mediapipe.getInstance();
-
 		//Set canvas to browser size
 		gameSession.canvasWidth = window.innerWidth;
 		gameSession.canvasHeight = window.innerHeight;
@@ -58,9 +55,6 @@ var TIYW = function (p) {
 		p.frameRate(60);
 		p.imageMode(p.CENTER);
 
-		//Tone.js Test
-		// const synth = new Tone.Synth().toDestination();
-		// synth.triggerAttackRelease("C4", "8n");
 	};
 
 	//core update function of the game
@@ -73,9 +67,7 @@ var TIYW = function (p) {
 		p.clear();
 		p.angleMode(p.DEGREES);
 
-		//TODO: Move to individual classes and use an image
-		p.background(p.color(gameSession.backgroundColor));
-		gameSession.particleManager.render();
+		//Render according to current state
 		gameSession.currentState.render();
 	};
 
@@ -109,6 +101,9 @@ var TIYW = function (p) {
 	};
 
 	p.mousePressed = function () {
+		if (gameSession.currentState.mousePressed) {
+			gameSession.currentState.mousePressed();
+		}
 		//call gameState code here as needed.
 	};
 
@@ -151,6 +146,8 @@ var TIYW = function (p) {
 		gameSession.canvasHeight = window.innerHeight;
 
 		p.resizeCanvas(gameSession.canvasWidth, gameSession.canvasHeight);
+		
+		gameSession.currentState.resize();
 	};
 };
 

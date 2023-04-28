@@ -14,7 +14,7 @@ export default class Mediapipe {
 	};
 
 	#estimationConfig = {
-		enableSmoothing: true,
+		model_complexity: 2,
 	};
 
 	#video = document.getElementById("input_video");
@@ -36,16 +36,16 @@ export default class Mediapipe {
 	#fpsGraph = null;
 
 	constructor() {
-		this.pane.registerPlugin(TweakpaneEssentialsPlugin);
-		this.pane.addButton({ title: "Start webcam" }).on("click", () => this.setup());
-		this.pane.addMonitor(this, "cameraRunning", { label: "Webcam running" });
-		this.pane.addMonitor(this, "estimating", { label: "MP estimating" });
-		this.pane.addMonitor(this, "debugStr", { label: "Pose data", multiline: true, lineCount: 25 });
-		this.#fpsGraph = this.pane.addBlade({
-			view: "fpsgraph",
-			label: "FPS",
-			lineCount: 2,
-		});
+		// this.pane.registerPlugin(TweakpaneEssentialsPlugin);
+		// this.pane.addButton({ title: "Start webcam" }).on("click", () => this.setup());
+		// this.pane.addMonitor(this, "cameraRunning", { label: "Webcam running" });
+		// this.pane.addMonitor(this, "estimating", { label: "MP estimating" });
+		// this.pane.addMonitor(this, "debugStr", { label: "Pose data", multiline: true, lineCount: 25 });
+		// this.#fpsGraph = this.pane.addBlade({
+		// 	view: "fpsgraph",
+		// 	label: "FPS",
+		// 	lineCount: 2,
+		// });
 
 		// Start attempting to run estimator once camera is ready
 		this.#video.oncanplay = () => {
@@ -77,11 +77,11 @@ export default class Mediapipe {
 	}
 
 	async #runEstimator() {
-		this.#fpsGraph.begin();
+		//this.#fpsGraph.begin();
 
 		await this.#runFrame();
 
-		this.#fpsGraph.end();
+		//this.#fpsGraph.end();
 
 		window.requestAnimationFrame(this.#runEstimator.bind(this));
 	}

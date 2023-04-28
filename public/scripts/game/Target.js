@@ -45,11 +45,23 @@ export default class Target extends VectorGameObject {
 		//see if requiredBone is assigned
 		if(this.requiredBone){
 			//get start/end point from vertices
-			let inTarget = false;
+			let inTarget = 
+				this.inTarget(
+					this.requiredBone.vertices[0].x, 
+					this.requiredBone.vertices[0].y
+				) || 
+				this.inTarget(
+					this.requiredBone.vertices[1].x, 
+					this.requiredBone.vertices[1].y
+				)
+			;
+			console.log("Bone assigned and in target: " + inTarget);
+
 			//what is the bone name?
 			//what is the bone coordinates?
 			//are those coordinates in target?
 		} else {
+			console.log("Bone initialization error.");
 			return false;
 		}
 	}

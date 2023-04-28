@@ -19,6 +19,9 @@ export default class GameSession {
 		this.__p5 = {}; //P5 instance
 		this.__canvas = {}; //P5 Canvas
 
+		// reference to mediapipe manager
+		this.__mediapipe = {};
+
 		// array of {x, y, z, score, name} object
 		this.__poseLandmarks = {}; //Pose landmarks
 
@@ -209,4 +212,13 @@ export default class GameSession {
 	get particleSystemDefinitions() {
 		return this.__particleSystemDefinitions;
 	}
+
+	get mediapipe() {
+		return this.__mediapipe;
+	}
+
+	set mediapipe(mediapipe) {
+		this.__mediapipe = mediapipe;
+	}
+	
 }

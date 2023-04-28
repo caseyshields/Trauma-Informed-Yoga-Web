@@ -45,6 +45,11 @@ export default class State {
 
     }
 
+    //Manage view resizes
+    resize(){
+        
+    }
+
     //call after leaving main context for the engine. Manage memory and state appropriately
     cleanup(){
         console.log("Cleaning up " + this.name) + " state.";
