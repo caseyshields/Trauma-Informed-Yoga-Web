@@ -7,30 +7,29 @@ import Mediapipe from "../../core/Mediapipe.js";
  */
 
 export default class LoadingState extends State {
-	
 	loadCameraButtonStyle = {
-		stroke: this.p5.color(230,251,255),
+		stroke: this.p5.color(230, 251, 255),
 		strokeWeight: 5,
-		fill: this.p5.color(51,51,51),
-		hoverFill: this.p5.color(76,76,76),
-		pressedFill: this.p5.color(102,102,102),
-		loadingFill: this.p5.color(0,128,255)
-	}
+		fill: this.p5.color(51, 51, 51),
+		hoverFill: this.p5.color(76, 76, 76),
+		pressedFill: this.p5.color(102, 102, 102),
+		loadingFill: this.p5.color(0, 128, 255),
+	};
 
 	LOAD_CAMERA_BUTTON_STATES = {
 		IDLE: "idle",
 		HOVER: "hover",
 		PRESSED: "pressed",
 		LOADING: "loading",
-		DISABLED: "disabled"
-	}
+		DISABLED: "disabled",
+	};
 
 	loadCameraState = this.LOAD_CAMERA_BUTTON_STATES.IDLE;
 	loadCameraButtonX = 0;
 	loadCameraButtonY = 0;
 	loadCameraWidth = 0;
 	loadCameraHeight = 0;
-	
+
 	constructor() {
 		super("Loading");
 		//get reference to gameSession
@@ -47,7 +46,6 @@ export default class LoadingState extends State {
 	setup() {
 		super.setup();
 		this.initLoadCameraButton();
-
 	}
 
 	update() {
@@ -63,7 +61,7 @@ export default class LoadingState extends State {
 		this.renderLoadCameraButton();
 	}
 
-	resize() { 
+	resize() {
 		this.initLoadCameraButton();
 	}
 
@@ -71,47 +69,47 @@ export default class LoadingState extends State {
 		super.cleanup();
 	}
 
-	mousePressed(){
-		if(
-			(this.loadCameraState != this.LOAD_CAMERA_BUTTON_STATES.PRESSED) && 
-			(this.loadCameraState != this.LOAD_CAMERA_BUTTON_STATES.LOADING) &&
-			(this.loadCameraState != this.LOAD_CAMERA_BUTTON_STATES.DISABLED)
-		){
+	mousePressed() {
+		if (
+			this.loadCameraState != this.LOAD_CAMERA_BUTTON_STATES.PRESSED &&
+			this.loadCameraState != this.LOAD_CAMERA_BUTTON_STATES.LOADING &&
+			this.loadCameraState != this.LOAD_CAMERA_BUTTON_STATES.DISABLED
+		) {
 			//check bounds for render loadCamera
-			if(this.pointWithinRectangle(
-				this.p5.mouseX,
-				this.p5.mouseY,
-				this.loadCameraButtonX,
-				this.loadCameraButtonY,
-				this.loadCameraWidth,
-				this.loadCameraHeight
+			if (
+				this.pointWithinRectangle(
+					this.p5.mouseX,
+					this.p5.mouseY,
+					this.loadCameraButtonX,
+					this.loadCameraButtonY,
+					this.loadCameraWidth,
+					this.loadCameraHeight
 				)
-			){
+			) {
 				this.loadCameraState = this.LOAD_CAMERA_BUTTON_STATES.PRESSED;
-			} 
+			}
 		}
 	}
 
-
-	mouseReleased(){
+	mouseReleased() {
 		//if we started a camera state press, release it and trigger the load
-		if(this.loadCameraState == this.LOAD_CAMERA_BUTTON_STATES.PRESSED){
+		if (this.loadCameraState == this.LOAD_CAMERA_BUTTON_STATES.PRESSED) {
 			this.loadCameraState = this.LOAD_CAMERA_BUTTON_STATES.LOADING;
 			this.initMediaPipe();
 			//init media pipe
 		}
 	}
 
-	/** Controls rendering of load camera button. 
-	 *  States: Camera Loaded, Camera Loading, 
+	/** Controls rendering of load camera button.
+	 *  States: Camera Loaded, Camera Loading,
 	 */
-	renderLoadCameraButton(){
+	renderLoadCameraButton() {
 		//White square covering bottom half of screen with padding
 		this.p5.push();
 		this.p5.stroke(this.loadCameraButtonStyle.stroke);
 		this.p5.strokeWeight(this.loadCameraButtonStyle.strokeWeight);
-		switch(this.loadCameraState){
-			case(this.LOAD_CAMERA_BUTTON_STATES.IDLE):
+		switch (this.loadCameraState) {
+			case this.LOAD_CAMERA_BUTTON_STATES.IDLE:
 				this.p5.push();
 				this.p5.stroke(this.loadCameraButtonStyle.stroke);
 				this.p5.strokeWeight(this.loadCameraButtonStyle.strokeWeight);
@@ -119,7 +117,7 @@ export default class LoadingState extends State {
 				this.p5.rect(this.loadCameraButtonX, this.loadCameraButtonY, this.loadCameraWidth, this.loadCameraHeight);
 				this.p5.pop();
 				break;
-			case(this.LOAD_CAMERA_BUTTON_STATES.HOVER):
+			case this.LOAD_CAMERA_BUTTON_STATES.HOVER:
 				this.p5.push();
 				this.p5.stroke(this.loadCameraButtonStyle.stroke);
 				this.p5.strokeWeight(this.loadCameraButtonStyle.strokeWeight);
@@ -127,7 +125,7 @@ export default class LoadingState extends State {
 				this.p5.rect(this.loadCameraButtonX, this.loadCameraButtonY, this.loadCameraWidth, this.loadCameraHeight);
 				this.p5.pop();
 				break;
-			case(this.LOAD_CAMERA_BUTTON_STATES.PRESSED):
+			case this.LOAD_CAMERA_BUTTON_STATES.PRESSED:
 				this.p5.push();
 				this.p5.stroke(this.loadCameraButtonStyle.stroke);
 				this.p5.strokeWeight(this.loadCameraButtonStyle.strokeWeight);
@@ -135,7 +133,7 @@ export default class LoadingState extends State {
 				this.p5.rect(this.loadCameraButtonX, this.loadCameraButtonY, this.loadCameraWidth, this.loadCameraHeight);
 				this.p5.pop();
 				break;
-			case(this.LOAD_CAMERA_BUTTON_STATES.LOADING):
+			case this.LOAD_CAMERA_BUTTON_STATES.LOADING:
 				this.p5.push();
 				this.p5.stroke(this.loadCameraButtonStyle.stroke);
 				this.p5.strokeWeight(this.loadCameraButtonStyle.strokeWeight);
@@ -143,46 +141,45 @@ export default class LoadingState extends State {
 				this.p5.rect(this.loadCameraButtonX, this.loadCameraButtonY, this.loadCameraWidth, this.loadCameraHeight);
 				this.p5.pop();
 				break;
-			case(this.LOAD_CAMERA_BUTTON_STATES.DISABLED):
+			case this.LOAD_CAMERA_BUTTON_STATES.DISABLED:
 				//don't render anything
 				break;
 			default:
 				//error state
 				console.log("ERROR RENDERING LOAD CAMERA BUTTON");
 				break;
-			
 		}
 	}
 
-	updateLoadCameraButton(){
+	updateLoadCameraButton() {
 		//If we are loading, and we detect that the camera has loaded, disable
-		if(this.loadCameraState == this.LOAD_CAMERA_BUTTON_STATES.LOADING){
+		if (this.loadCameraState == this.LOAD_CAMERA_BUTTON_STATES.LOADING) {
 			//if mediapipe has the camera on and is estimating, we're loaded
-			if(this.gameSession.mediapipe){
-				if(this.gameSession.mediapipe.cameraRunning && this.gameSession.mediapipe.estimating){
+			if (this.gameSession.mediapipe) {
+				if (this.gameSession.mediapipe.cameraRunning && this.gameSession.mediapipe.estimating) {
 					this.loadCameraState = this.LOAD_CAMERA_BUTTON_STATES.DISABLED;
 					this.cameraLoaded = true;
 					//TODO: Enable start embodying button(s)
 				}
 			}
-
 		}
 		//Don't update if we're disabled or pressed
-		if(
-			(this.loadCameraState != this.LOAD_CAMERA_BUTTON_STATES.PRESSED) && 
-			(this.loadCameraState != this.LOAD_CAMERA_BUTTON_STATES.LOADING) &&
-			(this.loadCameraState != this.LOAD_CAMERA_BUTTON_STATES.DISABLED)
-			){
+		if (
+			this.loadCameraState != this.LOAD_CAMERA_BUTTON_STATES.PRESSED &&
+			this.loadCameraState != this.LOAD_CAMERA_BUTTON_STATES.LOADING &&
+			this.loadCameraState != this.LOAD_CAMERA_BUTTON_STATES.DISABLED
+		) {
 			//check for hover
-			if(this.pointWithinRectangle(
-				this.p5.mouseX,
-				this.p5.mouseY,
-				this.loadCameraButtonX,
-				this.loadCameraButtonY,
-				this.loadCameraWidth,
-				this.loadCameraHeight
+			if (
+				this.pointWithinRectangle(
+					this.p5.mouseX,
+					this.p5.mouseY,
+					this.loadCameraButtonX,
+					this.loadCameraButtonY,
+					this.loadCameraWidth,
+					this.loadCameraHeight
 				)
-			){
+			) {
 				this.loadCameraState = this.LOAD_CAMERA_BUTTON_STATES.HOVER;
 			} else {
 				this.loadCameraState = this.LOAD_CAMERA_BUTTON_STATES.IDLE;
@@ -192,45 +189,50 @@ export default class LoadingState extends State {
 
 	/** Checks if a point is within a bounded box.
 	 * TODO: This should be a utility or refactored somewhere generic.
-	 * @param {*} pointX 
-	 * @param {*} pointY 
-	 * @param {*} rectX 
-	 * @param {*} rectY 
-	 * @param {*} width 
-	 * @param {*} height 
-	 * @returns 
+	 * @param {*} pointX
+	 * @param {*} pointY
+	 * @param {*} rectX
+	 * @param {*} rectY
+	 * @param {*} width
+	 * @param {*} height
+	 * @returns
 	 */
-	pointWithinRectangle(pointX, pointY, rectX, rectY, width, height){
-		let pointInside = (pointX > rectX) && (pointX < rectX + width);
-		if(pointInside){
-			pointInside = (pointY > rectY) && (pointY < rectY + height);
+	pointWithinRectangle(pointX, pointY, rectX, rectY, width, height) {
+		let pointInside = pointX > rectX && pointX < rectX + width;
+		if (pointInside) {
+			pointInside = pointY > rectY && pointY < rectY + height;
 		}
 		return pointInside;
 	}
 
 	/**Initializes renderLoadCameraButton().
-	 * 
+	 *
 	 */
-	initLoadCameraButton(){
+	initLoadCameraButton() {
 		// button on bottom half of screen with 10% padding.
-		this.loadCameraButtonX = this.gameSession.canvasWidth * (.05);
-		this.loadCameraButtonY = this.gameSession.canvasHeight * (.55);
-		this.loadCameraHeight = this.gameSession.canvasHeight * (.4);
-		this.loadCameraWidth = this.gameSession.canvasWidth * (.5);
+		this.loadCameraButtonX = this.gameSession.canvasWidth * 0.05;
+		this.loadCameraButtonY = this.gameSession.canvasHeight * 0.55;
+		this.loadCameraHeight = this.gameSession.canvasHeight * 0.4;
+		this.loadCameraWidth = this.gameSession.canvasWidth * 0.5;
 	}
 
 	/**Init Mediapipe
-	 * 
+	 *
 	 */
-	initMediaPipe(){
+	async initMediaPipe() {
 		let mediapipe = new Mediapipe();
 		this.gameSession.mediapipe = mediapipe;
-		mediapipe.setup();
+
+		try {
+			await mediapipe.setup();
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
-	onLoadCameraButtonMouseDown(){}
-	onLoadCameraButtonMouseUp(){}
-	onLoadCameraButtonHover(){}
+	onLoadCameraButtonMouseDown() {}
+	onLoadCameraButtonMouseUp() {}
+	onLoadCameraButtonHover() {}
 
 	get loading() {
 		return this.__loading;

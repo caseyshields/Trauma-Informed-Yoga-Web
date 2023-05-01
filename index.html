@@ -1,63 +1,57 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name='description' content='TIRED ROBOT'>
-    <meta name='author' content='TODO: AUTHORS'>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="description" content="TIRED ROBOT" />
+		<meta name="author" content="TODO: AUTHORS" />
 
-    <!-- Mobile viewport -->
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
+		<!-- Mobile viewport -->
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Bootstrap is used for layout and non-game page elements -->
-    <link rel="stylesheet" type="text/css" href="/styles/bootstrap.min.css">
+		<!-- Bootstrap is used for layout and non-game page elements -->
+		<link rel="stylesheet" type="text/css" href="/styles/bootstrap.min.css" />
 
-    <!-- Font import from CDN -->
-    <link href="http://fonts.cdnfonts.com/css/hyperspace" rel="stylesheet">
-            
-    <!-- Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="/styles/index.css">
+		<!-- Font import from CDN -->
+		<link href="http://fonts.cdnfonts.com/css/hyperspace" rel="stylesheet" />
 
-    <!-- JAVASCRIPT IMPORTS -->
-    <!-- Bootstrap for form and nav elements-->
-    <script type="text/javascript" src="/scripts/libs/bootstrap/bootstrap.bundle.min.js"></script>
+		<!-- Custom CSS -->
+		<link rel="stylesheet" type="text/css" href="/styles/index.css" />
 
-    <!-- Tone is used for audio synthesis -->
-    <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.js"></script>
+		<!-- JAVASCRIPT IMPORTS -->
+		<!-- Bootstrap for form and nav elements-->
+		<script type="text/javascript" src="/scripts/libs/bootstrap/bootstrap.bundle.min.js"></script>
 
-    <!-- Mediapipe pose and utils used for camera input and pose detection -->
-    <!--<script src="/scripts/libs/mediapipe/pose/pose.js"></script>-->
-    <!--<script src="/scripts/libs/mediapipe/camera_utils/camera_utils.js"></script>-->
-    <!--<script src="/scripts/libs/mediapipe/control_utils/control_utils.js"></script>-->
-    <!--<script src="/scripts/libs/mediapipe/drawing_utils/drawing_utils.js"></script>-->
+		<!-- Tone is used for audio synthesis -->
+		<script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.js"></script>
 
-    <!-- Pose detection, TFJS backend -->
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
+		<!-- Mediapipe pose and utils used for camera input and pose detection -->
+		<!--<script src="/scripts/libs/mediapipe/pose/pose.js"></script>-->
+		<!--<script src="/scripts/libs/mediapipe/camera_utils/camera_utils.js"></script>-->
+		<!--<script src="/scripts/libs/mediapipe/control_utils/control_utils.js"></script>-->
+		<!--<script src="/scripts/libs/mediapipe/drawing_utils/drawing_utils.js"></script>-->
 
-    <!-- Tweakpane for debug GUI, disable for prod -->
-    <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.4/dist/tweakpane.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tweakpane/plugin-essentials@0.1.8/dist/tweakpane-plugin-essentials.min.js"></script>
+		<!-- Pose detection, TFJS backend -->
+		<script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
 
+		<!-- P5 is used for rendering -->
+		<script type="module" src="/scripts/libs/p5/p5.js"></script>
 
-    <!-- P5 is used for rendering -->
-    <script type="module" src="/scripts/libs/p5/p5.js"></script>
-    
-    <!-- entry point of application -->
-    <script type="module" src="/scripts/index.js"></script>
-  </head>
+		<!-- entry point of application -->
+		<script type="module" src="/scripts/index.js"></script>
+	</head>
 
-  <body>  
-    <div class="tiy_container">
-      <div class = "row">
-          <div class = "col-12 canvas-col" id = "canvas-col">
-            <div id = "canvas"></div>
-          </div>
-      </div>
-    </div>
+	<body>
+		<div class="tiy_container">
+			<div class="row">
+				<div class="col-12 canvas-col" id="canvas-col">
+					<div id="canvas"></div>
+				</div>
+			</div>
+		</div>
 
-    <video id="input_video" class="input_video"></video>
-
-  </body>
+		<video id="input_video" class="input_video"></video>
+	</body>
 </html>

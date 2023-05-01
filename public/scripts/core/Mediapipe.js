@@ -30,23 +30,9 @@ export default class Mediapipe {
 	pose = null;
 	cameraRunning = false;
 	estimating = false;
-
-	// Debug UI
-	pane = new Tweakpane.Pane();
-	#fpsGraph = null;
+	paused = false;
 
 	constructor() {
-		// this.pane.registerPlugin(TweakpaneEssentialsPlugin);
-		// this.pane.addButton({ title: "Start webcam" }).on("click", () => this.setup());
-		// this.pane.addMonitor(this, "cameraRunning", { label: "Webcam running" });
-		// this.pane.addMonitor(this, "estimating", { label: "MP estimating" });
-		// this.pane.addMonitor(this, "debugStr", { label: "Pose data", multiline: true, lineCount: 25 });
-		// this.#fpsGraph = this.pane.addBlade({
-		// 	view: "fpsgraph",
-		// 	label: "FPS",
-		// 	lineCount: 2,
-		// });
-
 		// Start attempting to run estimator once camera is ready
 		this.#video.oncanplay = () => {
 			this.cameraRunning = true;
@@ -64,24 +50,21 @@ export default class Mediapipe {
 					audio: false,
 					video: { facingMode: "user" },
 				});
+
 				this.#video.srcObject = stream;
 				this.#video.play();
 			} catch (err) {
-				console.error(`Failed to load camera: ${err}`);
+				throw new Error(`Failed to access camera: ${err}`);
 			}
 
 			this.estimating = true;
 		} catch (err) {
-			console.error(`Failed to create TFJS model: ${err}`);
+			throw new Error(`Failed to load TFJS model: ${err}`);
 		}
 	}
 
 	async #runEstimator() {
-		//this.#fpsGraph.begin();
-
-		await this.#runFrame();
-
-		//this.#fpsGraph.end();
+		if (!this.paused) await this.#runFrame();
 
 		window.requestAnimationFrame(this.#runEstimator.bind(this));
 	}
@@ -113,6 +96,11 @@ export default class Mediapipe {
 				this.debugStr = JSON.stringify(this.transformedPoints, null, 1);
 			}
 		}
+	}
+
+	// Toggle pause state of estimator
+	togglePause() {
+		this.paused = !this.paused;
 	}
 
 	static #instance;
