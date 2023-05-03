@@ -7,6 +7,7 @@ import Mediapipe from "../../core/Mediapipe.js";
  */
 
 export default class LoadingState extends State {
+	//Load camera button triggers init of mediapipe
 	loadCameraButtonStyle = {
 		stroke: this.p5.color(230, 251, 255),
 		strokeWeight: 5,
@@ -30,6 +31,27 @@ export default class LoadingState extends State {
 	loadCameraWidth = 0;
 	loadCameraHeight = 0;
 
+	//About button triggers open of an about page in a new tab
+	aboutButtonStyle = {
+		stroke: this.p5.color(230, 251, 255),
+		strokeWeight: 5,
+		fill: this.p5.color(51, 51, 51),
+		hoverFill: this.p5.color(76, 76, 76),
+		pressedFill: this.p5.color(102, 102, 102)
+	};
+
+	ABOUT_BUTTON_STATES = {
+		IDLE: "idle",
+		HOVER: "hover",
+		PRESSED: "pressed"
+	};
+
+	aboutState = this.ABOUT_BUTTON_STATES.IDLE;
+	aboutButtonX = 0;
+	aboutButtonY = 0;
+	aboutWidth = 0;
+	aboutHeight = 0;
+
 	constructor() {
 		super("Loading");
 		//get reference to gameSession
@@ -46,11 +68,12 @@ export default class LoadingState extends State {
 	setup() {
 		super.setup();
 		this.initLoadCameraButton();
+		this.initAboutButton();
 	}
 
 	update() {
 		this.updateLoadCameraButton();
-		console.log(this.loadCameraState);
+		this.updateAboutButton();
 	}
 
 	render() {
@@ -59,10 +82,12 @@ export default class LoadingState extends State {
 		this.p5.background(51);
 		//Render load camera button only before camera loaded
 		this.renderLoadCameraButton();
+		this.renderAboutButton();
 	}
 
 	resize() {
 		this.initLoadCameraButton();
+		this.initAboutButton();
 	}
 
 	cleanup() {
@@ -89,6 +114,21 @@ export default class LoadingState extends State {
 				this.loadCameraState = this.LOAD_CAMERA_BUTTON_STATES.PRESSED;
 			}
 		}
+
+		if(this.aboutButtonState != this.ABOUT_BUTTON_STATES.PRESSED){
+			if(
+				this.pointWithinRectangle(
+					this.p5.mouseX,
+					this.p5.mouseY,
+					this.aboutButtonX,
+					this.aboutButtonY,
+					this.aboutWidth,
+					this.aboutHeight
+				)
+			) {
+				this.aboutButtonState = this.ABOUT_BUTTON_STATES.PRESSED;
+			}
+		}
 	}
 
 	mouseReleased() {
@@ -98,6 +138,42 @@ export default class LoadingState extends State {
 			this.initMediaPipe();
 			//init media pipe
 		}
+
+		if (this.aboutButtonState == this.ABOUT_BUTTON_STATES.PRESSED) {
+			//TODO: Launch About page.
+			this.aboutButtonOnClick();
+			
+		}
+	}
+
+	aboutButtonOnClick(){
+		//trigger navigation
+		alert("This will launch the about page!");
+		//return to idle
+		this.aboutButtonState = this.ABOUT_BUTTON_STATES.IDLE;
+	}
+
+	renderAboutButton(){
+		this.p5.push();
+		this.p5.stroke(this.aboutButtonStyle.stroke);
+		this.p5.strokeWeight(this.aboutButtonStyle.strokeWeight);
+		switch (this.aboutButtonState) {
+			case this.ABOUT_BUTTON_STATES.IDLE:
+				this.p5.fill(this.aboutButtonStyle.fill);
+				break;
+			case this.ABOUT_BUTTON_STATES.HOVER:
+				this.p5.fill(this.aboutButtonStyle.hoverFill);
+				break;
+			case this.ABOUT_BUTTON_STATES.PRESSED:
+				this.p5.fill(this.aboutButtonStyle.pressedFill);
+				break;
+			default:
+				//error state
+				console.log("ERROR RENDERING ABOUT BUTTON");
+				break;
+		}
+		this.p5.rect(this.aboutButtonX, this.aboutButtonY, this.aboutWidth, this.aboutHeight);
+		this.p5.pop();
 	}
 
 	/** Controls rendering of load camera button.
@@ -110,36 +186,20 @@ export default class LoadingState extends State {
 		this.p5.strokeWeight(this.loadCameraButtonStyle.strokeWeight);
 		switch (this.loadCameraState) {
 			case this.LOAD_CAMERA_BUTTON_STATES.IDLE:
-				this.p5.push();
-				this.p5.stroke(this.loadCameraButtonStyle.stroke);
-				this.p5.strokeWeight(this.loadCameraButtonStyle.strokeWeight);
 				this.p5.fill(this.loadCameraButtonStyle.fill);
 				this.p5.rect(this.loadCameraButtonX, this.loadCameraButtonY, this.loadCameraWidth, this.loadCameraHeight);
-				this.p5.pop();
 				break;
 			case this.LOAD_CAMERA_BUTTON_STATES.HOVER:
-				this.p5.push();
-				this.p5.stroke(this.loadCameraButtonStyle.stroke);
-				this.p5.strokeWeight(this.loadCameraButtonStyle.strokeWeight);
 				this.p5.fill(this.loadCameraButtonStyle.hoverFill);
 				this.p5.rect(this.loadCameraButtonX, this.loadCameraButtonY, this.loadCameraWidth, this.loadCameraHeight);
-				this.p5.pop();
 				break;
 			case this.LOAD_CAMERA_BUTTON_STATES.PRESSED:
-				this.p5.push();
-				this.p5.stroke(this.loadCameraButtonStyle.stroke);
-				this.p5.strokeWeight(this.loadCameraButtonStyle.strokeWeight);
 				this.p5.fill(this.loadCameraButtonStyle.pressedFill);
 				this.p5.rect(this.loadCameraButtonX, this.loadCameraButtonY, this.loadCameraWidth, this.loadCameraHeight);
-				this.p5.pop();
 				break;
 			case this.LOAD_CAMERA_BUTTON_STATES.LOADING:
-				this.p5.push();
-				this.p5.stroke(this.loadCameraButtonStyle.stroke);
-				this.p5.strokeWeight(this.loadCameraButtonStyle.strokeWeight);
 				this.p5.fill(this.loadCameraButtonStyle.loadingFill);
 				this.p5.rect(this.loadCameraButtonX, this.loadCameraButtonY, this.loadCameraWidth, this.loadCameraHeight);
-				this.p5.pop();
 				break;
 			case this.LOAD_CAMERA_BUTTON_STATES.DISABLED:
 				//don't render anything
@@ -148,6 +208,27 @@ export default class LoadingState extends State {
 				//error state
 				console.log("ERROR RENDERING LOAD CAMERA BUTTON");
 				break;
+		}
+		this.p5.pop();
+	}
+
+	updateAboutButton(){
+		if(this.aboutButtonState != this.ABOUT_BUTTON_STATES.PRESSED){
+			//check for hover
+			if (
+				this.pointWithinRectangle(
+					this.p5.mouseX,
+					this.p5.mouseY,
+					this.aboutButtonX,
+					this.aboutButtonY,
+					this.aboutWidth,
+					this.aboutHeight
+				)
+			) {
+				this.aboutButtonState = this.ABOUT_BUTTON_STATES.HOVER;
+			} else {
+				this.aboutButtonState = this.ABOUT_BUTTON_STATES.IDLE;
+			}
 		}
 	}
 
@@ -209,11 +290,22 @@ export default class LoadingState extends State {
 	 *
 	 */
 	initLoadCameraButton() {
-		// button on bottom half of screen with 10% padding.
+		// button on bottom half of screen with 05% padding.
 		this.loadCameraButtonX = this.gameSession.canvasWidth * 0.05;
 		this.loadCameraButtonY = this.gameSession.canvasHeight * 0.55;
 		this.loadCameraHeight = this.gameSession.canvasHeight * 0.4;
 		this.loadCameraWidth = this.gameSession.canvasWidth * 0.5;
+	}
+
+	/**Initializes aboutButton
+	 * 
+	 */
+	initAboutButton(){
+		// button on bottom half of screen with 05% padding.
+		this.aboutButtonX = this.gameSession.canvasWidth * 0.6;
+		this.aboutButtonY = this.gameSession.canvasHeight * 0.55;
+		this.aboutHeight = this.gameSession.canvasHeight * 0.4;
+		this.aboutWidth = this.gameSession.canvasWidth * 0.35;
 	}
 
 	/**Init Mediapipe
