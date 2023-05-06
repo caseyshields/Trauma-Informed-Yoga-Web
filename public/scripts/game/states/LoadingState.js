@@ -160,11 +160,10 @@ export default class LoadingState extends State {
 	 *
 	 */
 	async initMediaPipe() {
-		let mediapipe = Mediapipe.getInstance();
-		this.gameSession.mediapipe = mediapipe;
+		this.gameSession.mediapipe = Mediapipe.getInstance();
 
 		try {
-			await mediapipe.setup();
+			await this.gameSession.mediapipe.setup();
 		} catch (error) {
 			console.error(error);
 		}

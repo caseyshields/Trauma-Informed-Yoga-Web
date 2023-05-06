@@ -25,7 +25,7 @@ export default class CalibrationState extends State {
     render(){
         super.render();
 
-        this.gameSession.skeleton.update();
+        this.gameSession.skeleton.render();
     }
 
     resize(){

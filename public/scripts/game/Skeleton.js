@@ -27,7 +27,7 @@ export default class Skeleton extends GameObject {
 
 		void this.configBones();
 
-		this.MP = Mediapipe.getInstance();
+		this.MP = this.gameSession.mediapipe;
 
 		//instantiate center of mass
 		this.centerOfMass = new CenterOfMass(
