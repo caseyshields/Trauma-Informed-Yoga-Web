@@ -22,6 +22,7 @@ export default class Skeleton extends GameObject {
 	config = null;
 
 	constructor() {
+      console.log("Skeleton Created.");
 		super(0, 0, 0, 0, 0, 0);
 
 		void this.configBones();

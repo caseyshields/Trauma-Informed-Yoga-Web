@@ -37,6 +37,7 @@ export default class Mediapipe {
 		this.#video.oncanplay = () => {
 			this.cameraRunning = true;
 			window.requestAnimationFrame(this.#runEstimator.bind(this));
+			console.log("Mediapipe instantiated.");
 		};
 	}
 
@@ -58,6 +59,7 @@ export default class Mediapipe {
 			}
 
 			this.estimating = true;
+			console.log("Mediapipe Setup.");
 		} catch (err) {
 			throw new Error(`Failed to load TFJS model: ${err}`);
 		}

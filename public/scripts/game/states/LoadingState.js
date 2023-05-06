@@ -61,6 +61,7 @@ export default class LoadingState extends State {
 
 	cleanup() {
 		super.cleanup();
+		//TODO: Delete all unnecessary data to prevent leaks/namespace collisions
 	}
 
 	mousePressed() {
@@ -79,19 +80,40 @@ export default class LoadingState extends State {
 			this.onLoadCameraButtonPressed();
 		}
 		//ABOUT BUTTON
-		if(
-			this.pointWithinRectangle(
-				this.p5.mouseX,
-				this.p5.mouseY,
-				this.aboutButtonX,
-				this.aboutButtonY,
-				this.aboutWidth,
-				this.aboutHeight
-			)
-		) {
+		if(this.pointWithinRectangle(
+			this.p5.mouseX,
+			this.p5.mouseY,
+			this.aboutButtonX,
+			this.aboutButtonY,
+			this.aboutWidth,
+			this.aboutHeight
+		)) {
 			this.onAboutButtonPressed();
 		}
-	
+
+		//FREE BUTTON
+		if(this.pointWithinRectangle(
+			this.p5.mouseX,
+			this.p5.mouseY,
+			this.freeButtonX,
+			this.freeButtonY,
+			this.freeButtonWidth,
+			this.freeButtonHeight
+		)){
+			this.onFreeButtonPressed();
+		}
+
+		//GUIDED BUTTON
+		if(this.pointWithinRectangle(
+			this.p5.mouseX,
+			this.p5.mouseY,
+			this.guidedButtonX,
+			this.guidedButtonY,
+			this.guidedButtonWidth,
+			this.guidedButtonHeight
+		)){
+			this.onGuidedButtonPressed();
+		}
 	}
 
 	mouseReleased() {
@@ -103,7 +125,14 @@ export default class LoadingState extends State {
 		if (this.aboutButtonState == this.ABOUT_BUTTON_STATES.PRESSED) {
 			//TODO: Launch About page.
 			this.onAboutButtonReleased();
-			
+		}
+
+		if (this.freeButtonState == this.FREE_BUTTON_STATES.PRESSED) {
+			this.onFreeButtonReleased();
+		}
+
+		if (this.guidedButtonState == this.GUIDED_BUTTON_STATES.PRESSED) {
+			this.onGuidedButtonReleased();
 		}
 	}
 
@@ -131,7 +160,7 @@ export default class LoadingState extends State {
 	 *
 	 */
 	async initMediaPipe() {
-		let mediapipe = new Mediapipe();
+		let mediapipe = Mediapipe.getInstance();
 		this.gameSession.mediapipe = mediapipe;
 
 		try {
@@ -161,6 +190,8 @@ export default class LoadingState extends State {
 	/**UI Components. TODO: Refactor to framework "button" class
 	 * 
 	 */
+
+
 	//ABOUT BUTTON
 	aboutButtonStyle = {
 		stroke: this.p5.color(230, 251, 255),
@@ -369,6 +400,7 @@ export default class LoadingState extends State {
 		this.initMediaPipe();
 		//init media pipe
 	}
+
 	onLoadCameraButtonHover() {}
 
 	//Free Button  
@@ -453,6 +485,22 @@ export default class LoadingState extends State {
 		}
 	}
 
+	//Move to calibration state
+	onFreeButtonPressed(){
+		if(
+			this.freeButtonState != this.FREE_BUTTON_STATES.DISABLED &&
+			this.freeButtonState != this.FREE_BUTTON_STATES.PRESSED
+			){
+			this.freeButtonState = this.FREE_BUTTON_STATES.PRESSED;	
+		}
+	}
+
+	onFreeButtonReleased(){
+		//TODO: Cleanup
+		this.gameSession.setCurrentStateByName("Calibration");
+
+	}
+
 	//Guided button
 	guidedButtonStyle = {
 		stroke: this.p5.color(230, 251, 255),
@@ -533,6 +581,22 @@ export default class LoadingState extends State {
 				this.guidedButtonState = this.GUIDED_BUTTON_STATES.IDLE;
 			}
 		}
+	}
+
+	//Right now, both of these lead to the same state.
+	//TODO: Add a clean vs. guided section
+	onGuidedButtonPressed(){		
+		if(
+			this.guidedButtonState != this.GUIDED_BUTTON_STATES.DISABLED &&
+			this.guidedButtonState != this.GUIDED_BUTTON_STATES.PRESSED
+		){
+			this.guidedButtonState = this.Guided_BUTTON_STATES.PRESSED;	
+		}
+	}
+
+	onGuidedButtonReleased(){
+		//TODO: Cleanup
+		this.gameSession.setCurrentStateByName("Calibration");
 	}
 
 }

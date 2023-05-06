@@ -2,6 +2,7 @@ import GameSession from "./core/GameSession.js";
 import Skeleton from "./game/Skeleton.js";
 import GameState from "./game/states/GameState.js";
 import LoadingState from "./game/states/LoadingState.js";
+import CalibrationState from "./game/states/CalibrationState.js";
 import Mediapipe from "./core/Mediapipe.js";
 
 //audio libary
@@ -39,9 +40,13 @@ var TIYW = function (p) {
 		let gameState = new GameState();
 		gameSession.addStateToGame(gameState);
 
-		//Library loading and camera initialization (TODO: Move to preload?)
+		//Library loading and camera initialization
 		let loadingState = new LoadingState();
 		gameSession.addStateToGame(loadingState);
+
+		//Calibration state to have the user get in the correct position
+		let calibrationState = new CalibrationState();
+		gameSession.addStateToGame(CalibrationState);
 
 		//Set initial game state as loading, call setup method
 		gameSession.setCurrentState(loadingState);
