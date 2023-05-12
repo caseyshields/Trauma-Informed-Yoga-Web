@@ -1,4 +1,4 @@
-import VectorGameObject from "../core/VectorGameObject.js";
+import VectorGameObject from "./VectorGameObject.js";
 
 export default class Button extends VectorGameObject {
 	layout = {

@@ -1,9 +1,7 @@
 import GameSession from "./core/GameSession.js";
-import Skeleton from "./game/Skeleton.js";
 import GameState from "./game/states/GameState.js";
 import LoadingState from "./game/states/LoadingState.js";
-import CalibrationState from "./game/states/CalibrationState.js";
-import Mediapipe from "./core/Mediapipe.js";
+import MenuState from "./game/states/MenuState.js";
 
 //audio libary
 import * as Tone from "./libs/Tone.js";
@@ -36,17 +34,18 @@ var TIYW = function (p) {
 		//save canvas reference to gameSession
 		gameSession.canvas = canvas;
 
-		//Instantiate all relevant game states and add them to the session.
-		let gameState = new GameState();
-		gameSession.addStateToGame(gameState);
-
 		//Library loading and camera initialization
 		let loadingState = new LoadingState();
 		gameSession.addStateToGame(loadingState);
 
-		//Calibration state to have the user get in the correct position
-		let calibrationState = new CalibrationState();
-		gameSession.addStateToGame(CalibrationState);
+		//Instantiate all relevant game states and add them to the session.
+		let gameState = new GameState();
+		gameSession.addStateToGame(gameState);
+
+		//Instantiate scene for game configurations
+		let menuState = new MenuState();
+		gameSession.addStateToGame(menuState);
+
 
 		//Set initial game state as loading, call setup method
 		gameSession.setCurrentState(loadingState);

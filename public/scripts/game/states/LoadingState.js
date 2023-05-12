@@ -1,7 +1,7 @@
 import GameSession from "../../core/GameSession.js";
 import State from "../../core/State.js";
 import Mediapipe from "../../core/Mediapipe.js";
-import Button from "../Button.js";
+import Button from "../../core/Button.js";
 /** Initial state used to welcome a user into the game and
  * load libraries in the background.
  *
@@ -90,11 +90,11 @@ export default class LoadingState extends State {
 		});
 
 		this.freeButton.checkReleased(() => {
-			this.gameSession.setCurrentStateByName("Calibration");
+			this.gameSession.setCurrentStateByName("Game");
 		});
 
 		this.guidedButton.checkReleased(() => {
-			this.gameSession.setCurrentStateByName("Calibration");
+			this.gameSession.setCurrentStateByName("Game");
 		});
 	}
 
