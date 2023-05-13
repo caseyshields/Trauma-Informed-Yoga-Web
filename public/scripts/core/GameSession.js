@@ -27,6 +27,7 @@ export default class GameSession {
 
 		// instance of Skeleton class
 		this.__skeleton = {}; //player skeleton
+		this.__skeletonLoaded = false;
 
 		//Important Globals
 		this.__backgroundColor = 0;
@@ -105,6 +106,14 @@ export default class GameSession {
 
 	set skeleton(skeleton) {
 		this.__skeleton = skeleton;
+	}
+
+	get skeletonLoaded() {
+		return this.__skeletonLoaded;
+	}
+
+	set skeletonLoaded(skeletonLoaded) {
+		this.__skeletonLoaded = skeletonLoaded;
 	}
 
 	get poseLandmarks() {

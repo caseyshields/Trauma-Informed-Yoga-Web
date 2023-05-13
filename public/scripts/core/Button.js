@@ -98,6 +98,7 @@ export default class Button extends VectorGameObject {
 			this.state = loading ? this.states.loading : this.states.idle;
 
 			// call the passed in function
+			this.onButtonReleased();
 			func();
 		}
 	}
@@ -108,5 +109,10 @@ export default class Button extends VectorGameObject {
 			pointInside = pointY > rectY && pointY < rectY + height;
 		}
 		return pointInside;
+	}
+
+	//abstract method - useful for overriding in child class.
+	onButtonReleased(){
+
 	}
 }

@@ -137,4 +137,12 @@ export default class State {
     set p5(p5){
         this.__p5 = p5;
     }
+
+    get prevState(){
+        return this.__prevState;
+    }
+
+    set prevState(prevState){
+        this.__prevState = prevState;
+    }
 }

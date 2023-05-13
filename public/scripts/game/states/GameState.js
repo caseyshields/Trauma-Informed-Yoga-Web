@@ -1,6 +1,6 @@
 import State from "../../core/State.js";
 import Skeleton from "../Skeleton.js";
-import Target from "../Target.js";
+import BackButton from "../buttons/BackButton.js";
 
 /** Example of Gamestate
  *
@@ -14,24 +14,42 @@ import Target from "../Target.js";
  */
 
 export default class GameState extends State {
-	testTarget = {};
+	backButton = {};
 	
 	constructor() {
 		super("Game");
-		//check
+		
 	}
 
 	setup() {
 		super.setup();
 
-		//Instantiate skeleton
-		this.gameSession.skeleton = new Skeleton();
+		if(!this.gameSession.skeletonLoaded){
+			this.gameSession.skeleton = new Skeleton();
+			this.gameSession.skeletonLoaded = true;
+		}
 
-		//testing get bone and target assignment
-		let rightPalm = this.gameSession.skeleton.getBone("leftInnerpalm");
+		//Instantiate backbutton
+		let backButtonLayout = {
+			x: this.gameSession.canvasWidth * .05,
+			y: this.gameSession.canvasHeight * .05,
+			width: this.gameSession.canvasWidth * .05,
+			height: this.gameSession.canvasWidth * .05
+		}
 
-		//TESTING TARGET
-		this.testTarget = new Target(500, 500, 100, rightPalm, false, 10, this.gameSession.skeleton);
+		let backButtonStyle = {
+			stroke: this.p5.color(255, 255, 255),
+			strokeWeight: 5,
+			fill: this.p5.color(0, 0, 0),
+			hoverFill: this.p5.color(123, 123, 123),
+			pressedFill: this.p5.color(255, 255, 255),
+			loadingFill: this.p5.color(62, 62, 62),
+			disabledFill: this.p5.color(125, 0, 0),
+		}
+
+
+		this.backButton = new BackButton(backButtonLayout, backButtonStyle, false, "Loading");
+		this.backButton.setup();
 	}
 
 	render() {
@@ -39,9 +57,20 @@ export default class GameState extends State {
 
 		//Render skeleton
 		this.gameSession.skeleton.render();
+		this.backButton.render();
 
-		//TESTING TARGET
-		this.testTarget.render();
+	}
+
+	resize() {
+		super.resize();
+		//TODO: I'm almost sure there's a better way for us to structure resize
+		
+		this.backButton.resize(
+			this.gameSession.canvasWidth * .05,
+			this.gameSession.canvasHeight * .05,
+			this.gameSession.canvasWidth * .05,
+			this.gameSession.canvasWidth * .05
+		);
 	}
 
 	update() {
@@ -49,6 +78,15 @@ export default class GameState extends State {
 
 		//Update skeleton
 		this.gameSession.skeleton.update();
+		this.backButton.update();
+	}
+
+	mousePressed(){
+		this.backButton.checkPressed();
+	}
+
+	mouseReleased(){
+		this.backButton.checkReleased();
 	}
 	
 
