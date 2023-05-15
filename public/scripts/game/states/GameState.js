@@ -2,6 +2,7 @@ import State from "../../core/State.js";
 import Skeleton from "../Skeleton.js";
 import BackButton from "../buttons/BackButton.js";
 import MenuButton from "../buttons/MenuButton.js";
+import Target from "../Target.js";
 
 /** Example of Gamestate
  *
@@ -17,6 +18,7 @@ import MenuButton from "../buttons/MenuButton.js";
 export default class GameState extends State {
 	backButton = {};
 	menuButton = {};
+	testTarget = {};
 	
 	constructor() {
 		super("Game");
@@ -74,6 +76,11 @@ export default class GameState extends State {
 		this.menuButton = new MenuButton(menuButtonLayout, menuButtonStyle, false, "Menu");
 		this.menuButton.setup();
 
+		//TODO: Test target out
+		let testBone = this.gameSession.skeleton.getBone("Right Innerpalm");
+		//find target item
+		this.testTarget = new Target(500, -500, 50, testBone, 100, true, this.gameSession.skeleton);
+		
 	}
 
 	render() {
@@ -81,6 +88,9 @@ export default class GameState extends State {
 
 		//Render skeleton
 		this.gameSession.skeleton.render();
+
+		//Test target
+		this.testTarget.render();
 
 		//UI
 		this.backButton.render();
@@ -112,6 +122,10 @@ export default class GameState extends State {
 		//Update skeleton
 		this.gameSession.skeleton.update();
 
+		//Test Target
+		this.testTarget.update();
+
+		//UI
 		this.backButton.update();
 		this.menuButton.update();
 	}

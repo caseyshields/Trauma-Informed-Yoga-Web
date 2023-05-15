@@ -68,13 +68,13 @@ export default class Target extends VectorGameObject {
 
 	// Return true if (x, y) is within the target radius, false otherwise.
 	inTarget(x, y) {
-		const r2 = Math.pow(this.style.radius, 2);
-		const inside = Math.pow(x - this.pos.x, 2) + (y - this.pos.y, 2) < r2;
-		return inside;
+		// const r2 = Math.pow(this.style.radius, 2);
+		// const inside = Math.pow(x - this.pos.x, 2) + (y - this.pos.y, 2) < r2;
+		// return inside;
 	}
 
 	update(){
-
+		this.checkTarget();
 	}
 
 	render(){
@@ -86,4 +86,6 @@ export default class Target extends VectorGameObject {
 		}
 
 	}
+
+	//TODO: Resize and make sizing screen-size scaled
 }

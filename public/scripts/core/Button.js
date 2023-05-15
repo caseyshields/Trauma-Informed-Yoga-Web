@@ -97,8 +97,9 @@ export default class Button extends VectorGameObject {
 			// change state to loading if we need to do some action before returning to idle
 			this.state = loading ? this.states.loading : this.states.idle;
 
-			// call the passed in function
+			//Call abstract method for override in child class
 			this.onButtonReleased();
+			// call the passed in function
 			func();
 		}
 	}
