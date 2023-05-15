@@ -77,7 +77,7 @@ export default class GameState extends State {
 		this.menuButton.setup();
 
 		//TODO: Test target out
-		let testBone = this.gameSession.skeleton.getBone("Right Innerpalm");
+		let testBone = this.gameSession.skeleton.getBone("Left Innerpalm");
 		//find target item
 		this.testTarget = new Target(500, -500, 50, testBone, 100, true, this.gameSession.skeleton);
 		
