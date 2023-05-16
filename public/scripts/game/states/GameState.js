@@ -79,7 +79,7 @@ export default class GameState extends State {
 		//TODO: Test target out
 		let testBone = this.gameSession.skeleton.getBone("Left Innerpalm");
 		//find target item
-		this.testTarget = new Target(500, -500, 50, testBone, 100, true, this.gameSession.skeleton);
+		this.testTarget = new Target(500, -500, 50, testBone, 10000, false, this.gameSession.skeleton);
 		
 	}
 

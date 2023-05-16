@@ -6,6 +6,13 @@ export default class Target extends VectorGameObject {
 
 	//indicates if the target hit conditions are currently filled.
 	targetHit = false;
+
+	//indicates if the set target goals are completed
+	targetComplete = false;
+
+	//timer used to measure interaction
+	targetHitTimeStart = 0;
+	targetHitTimerRunning = false;
 	
 	//point we'll use for rendering - RELATIVE FROM COM?!
 	x = 0;
@@ -19,31 +26,41 @@ export default class Target extends VectorGameObject {
 	skeleton = {};
 
 	//options
-	requiredBone = {}; //if not null, require a specific bone or set of bones to be in target
-	duration = 10; //in seconds, how long the target needs to be filled
-	isCumulative = false; //if true, leaving target does not reset counter
-	
-	//used for managing how long the target has been filled
-	counter = 0;
+
+	//TODO: multiple required bones, or any bone
+	requiredBone; //if not null, require a specific bone or set of bones to be in target
+	goalHoldDuration; //in milliseconds, how long the target needs to be filled
+	runningHoldDuration = 0; //in milliseconds, how close the target is to being fulfilled
+	isConsecutive; //if true, leaving target resets timer
+	cumulativeHoldDuration = 0;
 
 	//width/height of target
 	style = {
 		stroke: this.p5.color(3, 80, 150),
         fill: this.p5.color(3, 80, 150, 127),
 		hitFill: this.p5.color(255, 215, 0),
+		completeFill: this.p5.color(123, 234, 100),
 		strokeWeight: 2,
         radius: 100
 	};
 
-	constructor(x, y, radius, requiredBone, duration, isCumulative, skeleton) {
+	constructor(
+		x = 0, 
+		y = 0, 
+		radius = 100, 
+		requiredBone = {}, 
+		goalHoldDuration = 1000, 
+		isConsecutive = false, 
+		skeleton= {}
+	) {
 		super(0, 0, {}, true, 5, 255, 0, 1, 1, false);
 
 		this.x = x;
 		this.y = y;
 		this.style.radius = radius;
-		this.duration = duration;
+		this.goalHoldDuration = goalHoldDuration;
 		this.requiredBone = requiredBone;
-		this.isCumulative = isCumulative;
+		this.isConsecutive = isConsecutive;
 		this.skeleton = skeleton;
 
 	}
@@ -64,9 +81,7 @@ export default class Target extends VectorGameObject {
 					this.requiredBone.vertices[1].y
 				)
 			;
-			//what is the bone name?
-			//what is the bone coordinates?
-			//are those coordinates in target?
+			
 		} else {
 			console.log("Bone initialization error.");
 		}
@@ -82,7 +97,38 @@ export default class Target extends VectorGameObject {
 	}
 
 	update(){
+		//confirm if target is hit.
 		this.targetHit = this.checkTargetHit();
+		//if hit, see if how our completion objectives are
+		if(this.targetHit && !this.targetComplete){
+			//check if we have a start time recorded.
+			if(this.targetHitTimerRunning){
+				//update running duration with current time
+				this.runningHoldDuration = Date.now() - this.targetHitTimeStart;
+				
+				//check for completion
+				if(this.isConsecutive){
+					//only check running
+					this.targetComplete = this.runningHoldDuration >= this.goalHoldDuration;
+				} else {
+					//check running plus past timers
+					this.targetComplete = (this.cumulativeHoldDuration + this.runningHoldDuration) >= this.goalHoldDuration;
+				}
+			} else {
+				//start a timer if we don't have one
+				this.targetHitTimeStart = Date.now();
+				this.targetHitTimerRunning = true;
+			}
+		} else {
+			if(!this.isConsecutive){
+				//add current timer to cumulative hold
+				this.cumulativeHoldDuration += this.runningHoldDuration;
+			}
+			//reset timer
+			this.runningHoldDuration = 0;
+			this.targetHitTimerRunning = false;
+		}
+			
 	}
 
 	render(){
@@ -90,8 +136,10 @@ export default class Target extends VectorGameObject {
 			this.p5.push();
 			this.p5.stroke(this.style.stroke);
 			this.p5.strokeWeight(this.style.strokeWeight);
-			if(this.targetHit){
-				this.p5.fill(this.style.hitFill);
+			if(this.targetComplete){
+				this.p5.fill(this.style.completeFill);
+			} else if(this.targetHit){
+				this.p5.fill(this.p5.lerpColor(this.style.hitFill, this.style.completeFill, (this.cumulativeHoldDuration + this.runningHoldDuration)/this.goalHoldDuration));
 			} else {
 				this.p5.fill(this.style.fill);
 			}
