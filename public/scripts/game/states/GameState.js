@@ -1,8 +1,8 @@
 import State from "../../core/State.js";
-import Skeleton from "../Skeleton.js";
+import Skeleton from "../skeleton/Skeleton.js";
 import BackButton from "../buttons/BackButton.js";
 import MenuButton from "../buttons/MenuButton.js";
-import Target from "../Target.js";
+import Target from "../form/Target.js";
 
 /** Example of Gamestate
  *

@@ -1,6 +1,6 @@
 //Collects all bones of user into single addressable unit
 
-import GameObject from "../core/GameObject.js";
+import GameObject from "../../core/GameObject.js";
 import Bone from "./Bone.js";
 import CenterOfMass from "./CenterOfMass.js";
 
