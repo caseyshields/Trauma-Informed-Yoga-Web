@@ -1,28 +1,30 @@
 {
-  "name": "FoldNStir",
-  "version": "1.0.0",
-  "description": "A game made to help people mindfully stretch throughout their day.",
-  "main": "webserver.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/smshields/FoldNStir"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/smshields/FoldNStir/issues"
-  },
-  "homepage": "https://github.com/smshields/FoldNStir#readme",
-  "dependencies": {
-    "@tensorflow-models/pose-detection": "^2.0.0",
-    "@tensorflow/tfjs-backend-wasm": "^3.21.0",
-    "@tensorflow/tfjs-core": "^3.21.0",
-    "express": "^4.18.0",
-    "node": "^18.11.0",
-    "nodemon": "^2.0.20",
-    "tone": "^14.7.77"
-  }
+	"name": "TraumaYogaApp",
+	"version": "1.0.0",
+	"description": "A game made to help people mindfully stretch throughout their day.",
+	"main": "webserver.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "nodemon -L webserver.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/smshields/FoldNStir"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/smshields/FoldNStir/issues"
+	},
+	"homepage": "https://github.com/smshields/FoldNStir#readme",
+	"dependencies": {
+		"@tensorflow-models/pose-detection": "^2.0.0",
+		"@tensorflow/tfjs-backend-wasm": "^3.21.0",
+		"@tensorflow/tfjs-core": "^3.21.0",
+		"express": "^4.18.0",
+		"tone": "^14.7.77"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.22"
+	}
 }
