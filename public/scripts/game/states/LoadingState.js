@@ -60,13 +60,10 @@ export default class LoadingState extends State {
 	resize() {
 		super.resize();
 
-		const cWidth = this.gameSession.canvasWidth;
-		const cHeight = this.gameSession.canvasHeight;
-
-		this.cameraButton.resize(cWidth * 0.05, cHeight * 0.55, cWidth * 0.5, cHeight * 0.4);
-		this.aboutButton.resize(cWidth * 0.6, cHeight * 0.55, cWidth * 0.35, cHeight * 0.4);
-		this.freeButton.resize(cWidth * 0.05, cHeight * 0.55, cWidth * 0.5, cHeight * 0.175);
-		this.guidedButton.resize(cWidth * 0.05, cHeight * 0.775, cWidth * 0.5, cHeight * 0.175);
+		this.cameraButton.updateSize();
+		this.aboutButton.updateSize();
+		this.freeButton.updateSize();
+		this.guidedButton.updateSize();
 	}
 
 	cleanup() {
@@ -136,10 +133,10 @@ export default class LoadingState extends State {
 	 */
 
 	cameraButtonLayout = {
-		x: this.gameSession.canvasWidth * 0.05,
-		y: this.gameSession.canvasHeight * 0.55,
-		width: this.gameSession.canvasWidth * 0.5,
-		height: this.gameSession.canvasHeight * 0.4,
+		xRatio: 0.05,
+		yRatio: 0.55,
+		widthRatio: 0.5,
+		heightRatio: 0.4,
 	};
 
 	// "null" as fill means the button will not be rendered
@@ -153,13 +150,18 @@ export default class LoadingState extends State {
 		disabledFill: null,
 	};
 
-	cameraButton = new Button(this.cameraButtonLayout, this.cameraButtonStyle);
+	cameraButtonText = {
+		text: "Load Camera",
+		textRatio: 7,
+	};
+
+	cameraButton = new Button(this.cameraButtonLayout, this.cameraButtonStyle, this.cameraButtonText);
 
 	aboutButtonLayout = {
-		x: this.gameSession.canvasWidth * 0.6,
-		y: this.gameSession.canvasHeight * 0.55,
-		width: this.gameSession.canvasWidth * 0.35,
-		height: this.gameSession.canvasHeight * 0.4,
+		xRatio: 0.6,
+		yRatio: 0.55,
+		widthRatio: 0.35,
+		heightRatio: 0.4,
 	};
 
 	aboutButtonStyle = {
@@ -170,13 +172,18 @@ export default class LoadingState extends State {
 		pressedFill: this.p5.color(102, 102, 102),
 	};
 
-	aboutButton = new Button(this.aboutButtonLayout, this.aboutButtonStyle);
+	aboutButtonText = {
+		text: "About",
+		textRatio: 4,
+	};
+
+	aboutButton = new Button(this.aboutButtonLayout, this.aboutButtonStyle, this.aboutButtonText);
 
 	freeButtonLayout = {
-		x: this.gameSession.canvasWidth * 0.05,
-		y: this.gameSession.canvasHeight * 0.55,
-		width: this.gameSession.canvasWidth * 0.5,
-		height: this.gameSession.canvasHeight * 0.175,
+		xRatio: 0.05,
+		yRatio: 0.55,
+		widthRatio: 0.5,
+		heightRatio: 0.175,
 	};
 
 	freeButtonStyle = {
@@ -188,14 +195,19 @@ export default class LoadingState extends State {
 		disabledFill: null,
 	};
 
+	freeButtonText = {
+		text: "Free Use",
+		textRatio: 6,
+	};
+
 	// initially disabled
-	freeButton = new Button(this.freeButtonLayout, this.freeButtonStyle, true);
+	freeButton = new Button(this.freeButtonLayout, this.freeButtonStyle, this.freeButtonText, true);
 
 	guidedButtonLayout = {
-		x: this.gameSession.canvasWidth * 0.05,
-		y: this.gameSession.canvasHeight * 0.775,
-		width: this.gameSession.canvasWidth * 0.5,
-		height: this.gameSession.canvasHeight * 0.175,
+		xRatio: 0.05,
+		yRatio: 0.775,
+		widthRatio: 0.5,
+		heightRatio: 0.175,
 	};
 
 	guidedButtonStyle = {
@@ -207,6 +219,11 @@ export default class LoadingState extends State {
 		disabledFill: null,
 	};
 
+	guidedButtonText = {
+		text: "Guided Use",
+		textRatio: 6,
+	};
+
 	// initially disabled
-	guidedButton = new Button(this.guidedButtonLayout, this.guidedButtonStyle, true);
+	guidedButton = new Button(this.guidedButtonLayout, this.guidedButtonStyle, this.guidedButtonText, true);
 }
