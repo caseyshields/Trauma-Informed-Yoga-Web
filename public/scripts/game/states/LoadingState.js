@@ -48,8 +48,6 @@ export default class LoadingState extends State {
 
 	render() {
 		super.render();
-		//Background - using image for more flexibility
-		this.p5.background(51);
 
 		this.cameraButton.render();
 		this.aboutButton.render();
@@ -151,8 +149,8 @@ export default class LoadingState extends State {
 	};
 
 	cameraButtonText = {
-		text: "Load Camera",
-		textRatio: 7,
+		text: "initialize",
+		textRatio: 12,
 	};
 
 	cameraButton = new Button(this.cameraButtonLayout, this.cameraButtonStyle, this.cameraButtonText);
@@ -173,8 +171,8 @@ export default class LoadingState extends State {
 	};
 
 	aboutButtonText = {
-		text: "About",
-		textRatio: 4,
+		text: "about",
+		textRatio: 10,
 	};
 
 	aboutButton = new Button(this.aboutButtonLayout, this.aboutButtonStyle, this.aboutButtonText);
@@ -196,8 +194,8 @@ export default class LoadingState extends State {
 	};
 
 	freeButtonText = {
-		text: "Free Use",
-		textRatio: 6,
+		text: "free",
+		textRatio: 14,
 	};
 
 	// initially disabled
@@ -220,8 +218,8 @@ export default class LoadingState extends State {
 	};
 
 	guidedButtonText = {
-		text: "Guided Use",
-		textRatio: 6,
+		text: "guided",
+		textRatio: 14,
 	};
 
 	// initially disabled

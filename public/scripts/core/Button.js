@@ -1,5 +1,6 @@
 import VectorGameObject from "./VectorGameObject.js";
 
+//TODO: add flag to toggle text sizing be optional between absolute and relative
 export default class Button extends VectorGameObject {
 	layout = {
 		x: 0,
@@ -71,6 +72,7 @@ export default class Button extends VectorGameObject {
 			this.p5.strokeWeight(this.textStyle.textStrokeWeight);
 			this.p5.textSize(this.textStyle.textSize);
 			this.p5.textAlign(this.p5.CENTER, this.p5.CENTER);
+			this.p5.textFont("Oswald");
 			this.p5.fill(this.textStyle.textFill);
 			this.p5.text(this.textStyle.text, this.layout.x + this.layout.width / 2, this.layout.y + this.layout.height / 2);
 		}

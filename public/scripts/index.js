@@ -63,6 +63,9 @@ var TIYW = function (p) {
 
 	//core update function of the game
 	p.draw = function () {
+		//background
+		p.background(21);
+
 		//Call managers and states to update each frame.
 		gameSession.timeManager.update();
 		gameSession.currentState.update();
