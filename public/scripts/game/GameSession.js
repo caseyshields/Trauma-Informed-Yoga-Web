@@ -1,8 +1,7 @@
-import SoundManager from "./Managers/SoundManager.js";
-import TimeManager from "./Managers/TimeManager.js";
-import ParticleManager from "./Managers/ParticleManager.js";
-import SpriteManager from "./Managers/SpriteManager.js";
-import ParticleSystemDefinitions from "./Effects/ParticleEffects/ParticleSystemDefinitions.js";
+import SoundManager from "../core/Manager/SoundManager.js";
+import TimeManager from "../core/Manager/TimeManager.js";
+import ParticleManager from "../core/GameObject/Particle/ParticleManager.js";
+import ParticleSystemDefinitions from "../core/GameObject/Particle/ParticleSystemDefinitions.js";
 
 export default class GameSession {
 	constructor() {
@@ -41,9 +40,6 @@ export default class GameSession {
 
 		//Particle Manager
 		this.__particleManager = new ParticleManager();
-
-		//Sprite Manager
-		this.__spriteManager = new SpriteManager();
 
 		//Object stores particle system definitions
 		this.__particleSystemDefinitions = new ParticleSystemDefinitions();

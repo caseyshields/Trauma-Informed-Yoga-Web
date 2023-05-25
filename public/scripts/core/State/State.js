@@ -15,7 +15,7 @@
  * 
 */
 
-import GameSession from "./GameSession.js";
+import GameSession from "../../game/GameSession.js";
 
 export default class State {
 

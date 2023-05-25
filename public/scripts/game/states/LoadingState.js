@@ -1,7 +1,6 @@
-import GameSession from "../../core/GameSession.js";
-import State from "../../core/State.js";
-import Mediapipe from "../../core/Mediapipe.js";
-import Button from "../../core/Button.js";
+import State from "../../core/State/State.js";
+import Mediapipe from "../../core/Input/Mediapipe.js";
+import Button from "../../core/UI/Button.js";
 import Skeleton from "../skeleton/Skeleton.js";
 /** Initial state used to welcome a user into the game and
  * load libraries in the background.

@@ -1,4 +1,4 @@
-import State from "../../core/State.js";
+import State from "../../core/State/State.js";
 import BackButton from "../buttons/BackButton.js";
 
 /** Example of Gamestate

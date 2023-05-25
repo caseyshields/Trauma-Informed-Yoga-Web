@@ -1,4 +1,4 @@
-import VectorGameObject from "../../core/VectorGameObject.js";
+import VectorGameObject from "../../core/GameObject/VectorGameObject.js";
 /**
  * 
  */

@@ -1,4 +1,4 @@
-import VectorGameObject from "../../core/VectorGameObject.js";
+import VectorGameObject from "../../core/GameObject/VectorGameObject.js";
 
 //TODO: CALIBRATION: How do we choose appropriate relative placement of target from center of mass?
 

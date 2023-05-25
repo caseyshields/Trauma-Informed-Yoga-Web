@@ -8,8 +8,8 @@
   Last Updated 5/7/22 by Eddie
 */
 
-import GameSession from "../core/GameSession.js";
-import HelperFunctions from "./HelperFunctions.js";
+import GameSession from "../../game/GameSession.js";
+import HelperFunctions from "../Util/HelperFunctions.js";
 import Collision from "./Collision.js";
 
 

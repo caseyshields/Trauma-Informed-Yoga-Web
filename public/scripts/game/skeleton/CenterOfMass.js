@@ -1,4 +1,4 @@
-import VectorGameObject from "../../core/VectorGameObject.js";
+import VectorGameObject from "../../core/GameObject/VectorGameObject.js";
 
 export default class CenterOfMass extends VectorGameObject{
     //TODO: Improve COM rendering for when torso is not fully available

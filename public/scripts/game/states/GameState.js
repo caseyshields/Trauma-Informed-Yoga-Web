@@ -1,4 +1,4 @@
-import State from "../../core/State.js";
+import State from "../../core/State/State.js";
 import Skeleton from "../skeleton/Skeleton.js";
 import BackButton from "../buttons/BackButton.js";
 import MenuButton from "../buttons/MenuButton.js";

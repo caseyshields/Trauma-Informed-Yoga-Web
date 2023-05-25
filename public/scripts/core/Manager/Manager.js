@@ -8,7 +8,7 @@
   Last Updated 5/7/22
 */
 
-import GameSession from "../GameSession.js";
+import GameSession from "../../game/GameSession.js";
 
 
 export default class Manager {

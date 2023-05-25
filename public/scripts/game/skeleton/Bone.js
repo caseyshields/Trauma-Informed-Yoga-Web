@@ -1,5 +1,4 @@
-import Mediapipe from "../../core/Mediapipe.js";
-import VectorGameObject from "../../core/VectorGameObject.js";
+import VectorGameObject from "../../core/GameObject/VectorGameObject.js";
 
 export default class Bone extends VectorGameObject {
 	vertices = [

@@ -1,10 +1,4 @@
-import Manager from "./Manager.js";
-import JetSmoke from "../Effects/ParticleEffects/JetSmoke.js";
-import SmokeTrail from "../Effects/ParticleEffects/SmokeTrail.js";
-import SpriteParticle from "../Effects/ParticleEffects/SpriteParticle.js";
-import JetParticleSystem from "../Effects/ParticleEffects/JetParticleSystem.js";
-import SmokeTrailSystem from "../Effects/ParticleEffects/SmokeTrailSystem.js";
-
+import Manager from "../../Manager/Manager.js";
 
 export default class ParticleManager extends Manager {
 

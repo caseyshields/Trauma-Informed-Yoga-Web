@@ -8,7 +8,7 @@
 */
 
 import GameObject from "./GameObject.js";
-import HelperFunctions from "./HelperFunctions.js";
+import HelperFunctions from "../Util/HelperFunctions.js";
 
 
 export default class VectorGameObject extends GameObject {

@@ -1,4 +1,4 @@
-import VectorGameObject from "./VectorGameObject.js";
+import VectorGameObject from "../GameObject/VectorGameObject.js";
 
 //TODO: add flag to toggle text sizing be optional between absolute and relative
 export default class Button extends VectorGameObject {

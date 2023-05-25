@@ -1,4 +1,4 @@
-import Button from "../../core/Button.js";
+import Button from "../../core/UI/Button.js";
 
 export default class MenuButton extends Button {
 	layout = {

@@ -1,4 +1,4 @@
-import GameSession from "../core/GameSession.js";
+import GameSession from "../../game/GameSession.js";
 
 export default class Mediapipe {
 	// GameSession global which will get updates from each run

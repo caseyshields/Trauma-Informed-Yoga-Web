@@ -1,4 +1,4 @@
-import GameSession from "./core/GameSession.js";
+import GameSession from "./game/GameSession.js";
 import GameState from "./game/states/GameState.js";
 import LoadingState from "./game/states/LoadingState.js";
 import MenuState from "./game/states/MenuState.js";
