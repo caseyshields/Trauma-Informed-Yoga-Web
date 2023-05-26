@@ -9,8 +9,12 @@ export default class SparkleSound extends Sound {
     part = {};
     randomPart = {};
     delay = 0;
-    baseVol = -10;
-    notes = ["C7","D7","E7","F7","G7","A7","B7"]; //TODO: refactor to tone sound class.
+    baseVol = -20;
+    notes = [
+        "C5","E5","G5","B5",
+        "C6","E6","G6","B6",
+        "C7","E7","G7","B7"
+]; //TODO: refactor to tone sound class.
 
     constructor(){
         super();
