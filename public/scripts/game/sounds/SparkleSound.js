@@ -62,7 +62,6 @@ export default class SparkleSound extends Sound {
 
     //plays a single note randomly
     trigger(){
-        console.log(this);
         this.fmSynth.triggerAttackRelease(this.gameSession.p5.random(this.notes),"32t");
         this.nSynth.triggerAttackRelease("C3","32t");
     }

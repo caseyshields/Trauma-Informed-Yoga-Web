@@ -86,6 +86,9 @@ export default class GameState extends State {
 		let testBone1 = this.gameSession.skeleton.getBone("Right Innerpalm");
 		//find target item
 		this.testTarget1 = new Target(-750, -300, 50, testBone1, 10000, false, this.gameSession.skeleton);
+	
+		//TODO: Test background waves out
+		this.gameSession.soundManager.waveSound.startLoop();
 	}
 
 	render() {

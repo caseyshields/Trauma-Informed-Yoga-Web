@@ -35,7 +35,7 @@ export default class GameSession {
 		this.__particleManager.setup();
 
 		//Sound Manager
-		this.__soundManager = new SoundManager(90);
+		this.__soundManager = new SoundManager(60);
 		this.__soundManager.setup();
 
 		//All states available to game

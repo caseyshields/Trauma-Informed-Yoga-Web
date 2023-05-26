@@ -1,4 +1,5 @@
 import SparkleSound from "../../game/sounds/SparkleSound.js";
+import WaveSound from "../../game/sounds/WaveSound.js";
 import Manager from "../Manager/Manager.js";
 
 //Sound manager is event driven, meaning that other methods request for it
@@ -9,6 +10,7 @@ export default class SoundManager extends Manager {
     
     //references to internal tracks that can be triggered... TODO: refactor into some structure
     __sparkleSound = {};
+    __waveSound = {};
 
     constructor(bpm){
         super();
@@ -23,6 +25,9 @@ export default class SoundManager extends Manager {
         //add necessary sounds for game
         this.sparkleSound = new SparkleSound(); //useful for particle effects
         this.sparkleSound.setup();
+
+        this.waveSound = new WaveSound();
+        this.waveSound.setup();
     }
 
     update(){
@@ -48,5 +53,14 @@ export default class SoundManager extends Manager {
     set sparkleSound(sparkleSound){
         this.__sparkleSound = sparkleSound;
     }
+
+    get waveSound(){
+        return this.__waveSound;
+    }
+
+    set waveSound(waveSound){
+        this.__waveSound = waveSound;
+    }
+
 
 }
