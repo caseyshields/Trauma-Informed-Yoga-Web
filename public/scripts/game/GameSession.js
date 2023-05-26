@@ -1,4 +1,5 @@
 import ParticleManager from "../core/GameObject/Particle/ParticleManager.js";
+import SoundManager from "../core/Sound/SoundManager.js";
 
 export default class GameSession {
 	constructor() {
@@ -31,6 +32,11 @@ export default class GameSession {
 
 		//Particle Manager
 		this.__particleManager = new ParticleManager();
+		this.__particleManager.setup();
+
+		//Sound Manager
+		this.__soundManager = new SoundManager(90);
+		this.__soundManager.setup();
 
 		//All states available to game
 		this.__states = [];
@@ -152,22 +158,6 @@ export default class GameSession {
 
 	set soundManager(soundManager) {
 		this.__soundManager = soundManager;
-	}
-
-	get timeManager() {
-		return this.__timeManager;
-	}
-
-	set timeManager(timeManager) {
-		this.__timeManager = timeManager;
-	}
-
-	get screenShakeManager() {
-		return this.__screenShakeManager;
-	}
-
-	set screenShakeManager(screenShakeManager) {
-		this.__screenShakeManager = screenShakeManager;
 	}
 
 	get particleManager() {

@@ -3,9 +3,6 @@ import GameState from "./game/states/GameState.js";
 import LoadingState from "./game/states/LoadingState.js";
 import MenuState from "./game/states/MenuState.js";
 
-//audio libary
-import * as Tone from "./libs/Tone.js";
-
 /**TODOS:
 SETUP should be abstracted to be made easier to use.
 
@@ -63,6 +60,7 @@ var TIYW = function (p) {
 		//Call managers and top-level state to update each frame.
 		gameSession.currentState.update();
 		gameSession.particleManager.update();
+		gameSession.soundManager.update();
 
 		//Renders last and from back to front. Clear before going.
 		p.clear();
@@ -71,6 +69,7 @@ var TIYW = function (p) {
 		//Render according to current top-level state and manager
 		gameSession.currentState.render();
 		gameSession.particleManager.render();
+		gameSession.soundManager.render();
 	};
 
 	//implement your controls inside of your specific state.

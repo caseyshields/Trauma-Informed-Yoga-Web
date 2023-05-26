@@ -126,6 +126,8 @@ export default class Target extends VectorGameObject {
 			this.particleSettings.style.stroke = this.p5.color(this.p5.random(0,255),this.p5.random(0,255),this.p5.random(0,255));
 
 			this.gameSession.particleManager.createParticle(this.particleSettings);
+
+			this.gameSession.soundManager.sparkleSound.trigger();
 			
 		}
 
