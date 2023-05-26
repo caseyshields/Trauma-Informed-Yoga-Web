@@ -46,17 +46,11 @@ var TIYW = function (p) {
 		let menuState = new MenuState();
 		gameSession.addStateToGame(menuState);
 
-
 		//Set initial game state as loading, call setup method
 		gameSession.setCurrentState(loadingState);
 
-		//Time scale management
-		gameSession.timeManager.timeScale = 1;
-		gameSession.timeManager.frameRate = 60;
-		gameSession.timeManager.start();
-
 		//P5 configurations
-		p.frameRate(60);
+		p.frameRate(30);
 		p.imageMode(p.CENTER);
 
 	};
@@ -66,16 +60,17 @@ var TIYW = function (p) {
 		//background
 		p.background(21);
 
-		//Call managers and states to update each frame.
-		gameSession.timeManager.update();
+		//Call managers and top-level state to update each frame.
 		gameSession.currentState.update();
+		gameSession.particleManager.update();
 
 		//Renders last and from back to front. Clear before going.
 		p.clear();
 		p.angleMode(p.DEGREES);
 
-		//Render according to current state
+		//Render according to current top-level state and manager
 		gameSession.currentState.render();
+		gameSession.particleManager.render();
 	};
 
 	//implement your controls inside of your specific state.

@@ -1,3 +1,4 @@
+import Particle from "../../core/GameObject/Particle/Particle.js";
 import VectorGameObject from "../../core/GameObject/VectorGameObject.js";
 
 //TODO: CALIBRATION: How do we choose appropriate relative placement of target from center of mass?
@@ -24,6 +25,9 @@ export default class Target extends VectorGameObject {
 
 	//reference to skeleton for easier management
 	skeleton = {};
+
+	//particle test
+	particleTest;
 
 	//options
 
@@ -65,6 +69,26 @@ export default class Target extends VectorGameObject {
 
 	}
 
+	particleSettings = {
+		startingX : 0,
+		startingY : 0,
+		radius : 50,
+		isRotating : false,
+		rotationRate : 0,
+		duration : 3000,
+		velocityX : 1,
+		velocityY : 1,
+		accelX : 0,
+		accelY : .01,
+		shape : "CIRCLE",
+		style : {
+			stroke: this.p5.color(0, 0, 0),
+			fill: this.p5.color(200, 200, 200),
+			alpha: 1,
+			strokeWeight: 1
+		}
+	}
+
 	// Check if target has relevant bone within bounds
 	checkTargetHit(){
 		let inTarget = false;
@@ -84,6 +108,25 @@ export default class Target extends VectorGameObject {
 			
 		} else {
 			console.log("Bone initialization error.");
+		}
+
+		//trigger target hit
+		if(inTarget){
+			//TODO: determine velocity and acceleration based on hand hitting
+			this.particleSettings.startingX = this.absoluteX;
+			this.particleSettings.startingY = this.absoluteY;
+			//pick random velocity
+			this.particleSettings.velocityX = this.p5.random(-5, 5);
+			this.particleSettings.velocityY = this.p5.random(-5, 5);
+			//pick random accelerations
+			this.particleSettings.accelX = this.p5.random(-.5, .5);
+			this.particleSettings.accelY = this.p5.random(-.5, .5);
+			//pick random colors
+			this.particleSettings.style.fill = this.p5.color(this.p5.random(0,255),this.p5.random(0,255),this.p5.random(0,255));
+			this.particleSettings.style.stroke = this.p5.color(this.p5.random(0,255),this.p5.random(0,255),this.p5.random(0,255));
+
+			this.gameSession.particleManager.createParticle(this.particleSettings);
+			
 		}
 
 		return inTarget;

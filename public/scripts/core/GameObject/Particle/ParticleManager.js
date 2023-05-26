@@ -1,88 +1,67 @@
 import Manager from "../../Manager/Manager.js";
+import Particle from "./Particle.js";
+/** manages all particles on screen to prevent
+ * 
+ */
 
 export default class ParticleManager extends Manager {
 
-    constructor(){
-        if(ParticleManager.__instance){
-            return ParticleManager.__instance;
-        }
+    //contains all particles
+    particlePool = [];
 
+    constructor() {
         super();
-
-        ParticleManager.__instance = this;
-        this.__instance = {};
-
-        this.__particleSystems = [];
-
-        console.log("ParticleManager created successfully");
-
     }
 
-    get instance() {
-        return this.__instance;
-    }
+    setup() {}
 
-    set instance(instance) {
-        this.__instance = instance;
-    }
-
-    findParticleSystemByTag(tag) {
-        for (let i = 0; i < this.__particleSystems.length; i++){
-            if (tag === this.__particleSystems[i].tag) {
-                return this.__particleSystems[i];
-            }
-        }
-        console.log("Can not find the ParticleSystem with tag: " + tag);
-        return null;
-    }
-
-    play() {
-        this.__isPlaying = true;
-    }
-
-    stop() {
-        this.__isPlaying = false;
-    }
-
-    //position is Vector 
-    addSmoke(x, y) {
-        var startPosition = this.p5.createVector(x, y);
-        var smokeSystem = new SmokeTrailSystem("SmokeTrail", null, startPosition, 0, 3, 1000, true);
-        this.addParticleSystem(smokeSystem);
-    }
-
-    addJet(x,y, rotation) {
-        /*
-            let particlePosition = this.p5.createVector(x,y);
-            this.addParticle(new JetSmoke(200, particlePosition, rotation, (0.1 + velocity.mag() / 10) * Math.random(5, 10)), [200, 204, 2]);
-        */
-        var startPosition = this.p5.createVector(x, y);
-        var jetSystem = new JetParticleSystem("JetForShip", null, startPosition, rotation, 100, 100, true);
-        this.addParticleSystem(jetSystem);
-    }
-
-
-
-    addParticleSystem(newParticleSystem) {
-        this.__particleSystems.push(newParticleSystem);
-    }
-    
     update() {
-        for (let i = this.__particleSystems.length - 1; i >= 0; i--) {
-            if (this.__particleSystems[i].finished()) {
-                this.__particleSystems.splice(i, 1);
-            }
-            else {
-                this.__particleSystems[i].emission();
-                this.__particleSystems[i].update();
+        //update pool based on particle completion.
+        for(let i = this.particlePool.length-1; i >= 0; i--){
+            this.particlePool[i].update();
+            if(this.particlePool[i].completed){
+                this.particlePool.splice(i,1);
             }
         }
     }
 
     render() {
-        for (let i = 0; i < this.__particleSystems.length; i++) {
-            this.__particleSystems[i].render();
+        for(let i = this.particlePool.length-1; i >= 0; i--){
+            this.particlePool[i].render();
         }
+    }
+
+    //creates a particle based on passed-in settings, otherwise creates a default particle.
+    //returns a reference to the particle being created.
+    createParticle(particleSettings) {
+        if(particleSettings){
+            let style = {
+                stroke: particleSettings.style.stroke,
+                fill: particleSettings.style.fill,
+                alpha: particleSettings.style.alpha,
+                strokeWeight: particleSettings.style.strokeWeight
+            };
+
+            let newParticle = new Particle(
+                particleSettings.startingX,
+                particleSettings.startingY,
+                particleSettings.radius,
+                particleSettings.isRotating,
+                particleSettings.rotationRate,
+                particleSettings.duration,
+                particleSettings.velocityX,
+                particleSettings.velocityY,
+                particleSettings.accelX,
+                particleSettings.accelY,
+                particleSettings.shape,
+                style
+            );
+
+            this.particlePool.push(newParticle);
+        } else {
+            console.log("TODO: default particle creation.");
+        }
+
     }
 
 }

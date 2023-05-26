@@ -1,7 +1,4 @@
-import SoundManager from "../core/Manager/SoundManager.js";
-import TimeManager from "../core/Manager/TimeManager.js";
 import ParticleManager from "../core/GameObject/Particle/ParticleManager.js";
-import ParticleSystemDefinitions from "../core/GameObject/Particle/ParticleSystemDefinitions.js";
 
 export default class GameSession {
 	constructor() {
@@ -32,17 +29,8 @@ export default class GameSession {
 		this.__backgroundColor = 0;
 		this.__flashColor = 0;
 
-		//SoundManager
-		this.__soundManager = new SoundManager();
-
-		//TimeManager
-		this.__timeManager = new TimeManager();
-
 		//Particle Manager
 		this.__particleManager = new ParticleManager();
-
-		//Object stores particle system definitions
-		this.__particleSystemDefinitions = new ParticleSystemDefinitions();
 
 		//All states available to game
 		this.__states = [];
@@ -212,10 +200,6 @@ export default class GameSession {
 
 	set spriteManager(spriteManager) {
 		this.__spriteManager = spriteManager;
-	}
-
-	get particleSystemDefinitions() {
-		return this.__particleSystemDefinitions;
 	}
 
 	get mediapipe() {

@@ -19,6 +19,7 @@ export default class GameState extends State {
 	backButton = {};
 	menuButton = {};
 	testTarget = {};
+	testTarget1 = {};
 	
 	constructor() {
 		super("Game");
@@ -79,8 +80,12 @@ export default class GameState extends State {
 		//TODO: Test target out
 		let testBone = this.gameSession.skeleton.getBone("Left Innerpalm");
 		//find target item
-		this.testTarget = new Target(500, -500, 50, testBone, 10000, false, this.gameSession.skeleton);
+		this.testTarget = new Target(750, -300, 50, testBone, 10000, false, this.gameSession.skeleton);
 		
+		//TODO: Test target out
+		let testBone1 = this.gameSession.skeleton.getBone("Right Innerpalm");
+		//find target item
+		this.testTarget1 = new Target(-750, -300, 50, testBone1, 10000, false, this.gameSession.skeleton);
 	}
 
 	render() {
@@ -91,6 +96,7 @@ export default class GameState extends State {
 
 		//Test target
 		this.testTarget.render();
+		this.testTarget1.render();
 
 		//UI
 		this.backButton.render();
@@ -124,6 +130,7 @@ export default class GameState extends State {
 
 		//Test Target
 		this.testTarget.update();
+		this.testTarget1.update();
 
 		//UI
 		this.backButton.update();
