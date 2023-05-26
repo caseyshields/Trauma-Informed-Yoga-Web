@@ -1,5 +1,5 @@
 import State from "../../core/State/State.js";
-import Mediapipe from "../../core/Input/Mediapipe.js";
+import Mediapipe from "../../core/Plugin/Mediapipe.js";
 import Button from "../../core/UI/Button.js";
 import Skeleton from "../skeleton/Skeleton.js";
 /** Initial state used to welcome a user into the game and
