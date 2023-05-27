@@ -30,6 +30,7 @@ export default class Button extends VectorGameObject {
 		textFill: this.p5.color(255, 255, 255),
 		textStroke: this.p5.color(255, 255, 255),
 		textStrokeWeight: 0,
+		textStatic: false, // if true, text will not be resized when button is resized
 	};
 
 	states = {
@@ -73,7 +74,7 @@ export default class Button extends VectorGameObject {
 			this.p5.textFont("Oswald");
 			this.p5.fill(this.textStyle.textFill);
 			this.p5.text(this.textStyle.text, this.layout.x + this.layout.width / 2, this.layout.y + this.layout.height / 2);
-		
+
 			this.p5.pop();
 		}
 	}
@@ -90,7 +91,7 @@ export default class Button extends VectorGameObject {
 		this.layout.widthRatio = this.layout.width / this.gameSession.canvasWidth;
 		this.layout.heightRatio = this.layout.height / this.gameSession.canvasHeight;
 
-		this.textStyle.textSize = this.layout.width / this.textStyle.textRatio;
+		if (!this.textStyle.textStatic) this.textStyle.textSize = this.layout.width / this.textStyle.textRatio;
 	}
 
 	// use this function when resizing canvas
@@ -104,7 +105,7 @@ export default class Button extends VectorGameObject {
 			this.layout.width = cWidth * this.layout.widthRatio;
 			this.layout.height = cHeight * this.layout.heightRatio;
 
-			this.textStyle.textSize = this.layout.width / this.textStyle.textRatio;
+			if (!this.textStyle.textStatic) this.textStyle.textSize = this.layout.width / this.textStyle.textRatio;
 		}
 	}
 
@@ -171,7 +172,7 @@ export default class Button extends VectorGameObject {
 			this.layout.heightRatio = this.layout.height / cHeight;
 		}
 
-		this.textStyle.textSize = this.layout.width / this.textStyle.textRatio;
+		if (!this.textStyle.textSize) this.textStyle.textSize = this.layout.width / this.textStyle.textRatio;
 	}
 
 	#pointWithinRectangle(pointX, pointY, rectX, rectY, width, height) {
