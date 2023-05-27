@@ -66,8 +66,6 @@ export default class Button extends VectorGameObject {
 			this.p5.fill(this.style[this.state]);
 			this.p5.rect(this.layout.x, this.layout.y, this.layout.width, this.layout.height);
 
-			this.p5.pop();
-
 			this.p5.stroke(this.textStyle.textStroke);
 			this.p5.strokeWeight(this.textStyle.textStrokeWeight);
 			this.p5.textSize(this.textStyle.textSize);
@@ -75,6 +73,8 @@ export default class Button extends VectorGameObject {
 			this.p5.textFont("Oswald");
 			this.p5.fill(this.textStyle.textFill);
 			this.p5.text(this.textStyle.text, this.layout.x + this.layout.width / 2, this.layout.y + this.layout.height / 2);
+		
+			this.p5.pop();
 		}
 	}
 

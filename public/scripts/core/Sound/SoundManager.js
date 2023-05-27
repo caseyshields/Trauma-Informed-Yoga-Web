@@ -1,3 +1,4 @@
+import NarratorSound from "../../game/sounds/NarratorSound.js";
 import SparkleSound from "../../game/sounds/SparkleSound.js";
 import WaveSound from "../../game/sounds/WaveSound.js";
 import Manager from "../Manager/Manager.js";
@@ -28,6 +29,9 @@ export default class SoundManager extends Manager {
 
         this.waveSound = new WaveSound();
         this.waveSound.setup();
+
+        this.narratorSound = new NarratorSound();
+        this.narratorSound.setup();
     }
 
     update(){

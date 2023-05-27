@@ -3,6 +3,7 @@ import Skeleton from "../skeleton/Skeleton.js";
 import BackButton from "../buttons/BackButton.js";
 import MenuButton from "../buttons/MenuButton.js";
 import Target from "../form/Target.js";
+import Narrator from "../narrator/Narrator.js";
 
 /** Example of Gamestate
  *
@@ -20,6 +21,7 @@ export default class GameState extends State {
 	menuButton = {};
 	testTarget = {};
 	testTarget1 = {};
+	narrator = {};
 	
 	constructor() {
 		super("Game");
@@ -89,6 +91,9 @@ export default class GameState extends State {
 	
 		//TODO: Test background waves out
 		this.gameSession.soundManager.waveSound.startLoop();
+
+		this.narrator = new Narrator();
+		this.narrator.setup();
 	}
 
 	render() {
@@ -104,6 +109,11 @@ export default class GameState extends State {
 		//UI
 		this.backButton.render();
 		this.menuButton.render();
+
+		//TODO: Make generic and add logic to exist across multiple states... singleton.
+		//Test Narrator
+		this.narrator.render();
+
 	}
 
 	resize() {
@@ -123,6 +133,8 @@ export default class GameState extends State {
 			this.gameSession.canvasWidth * .05,
 			this.gameSession.canvasWidth * .05
 		);
+
+		this.narrator.resize();
 	}
 
 	update() {
@@ -138,6 +150,8 @@ export default class GameState extends State {
 		//UI
 		this.backButton.update();
 		this.menuButton.update();
+
+		this.narrator.update();
 	}
 
 	mousePressed(){
