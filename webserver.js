@@ -1,14 +1,33 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
-const path = require('path');
+const fs = require("fs");
+const https = require("https");
 
-app.get('/', (req, res) => {
-  res.sendFile('/index.html', {root: __dirname});
+let key = null;
+let cert = null;
+
+if (fs.existsSync("./privkey.pem") && fs.existsSync("./cert.pem")) {
+	key = fs.readFileSync("./privkey.pem");
+	cert = fs.readFileSync("./cert.pem");
+}
+
+app.get("/", (req, res) => {
+	res.sendFile("/index.html", { root: __dirname });
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-});
+if (key && cert) {
+	const server = https.createServer({ key: key, cert: cert }, app);
 
-app.use(express.static('public'));
+	server.listen(port, () => {
+		console.log(`Example app listening on port ${port}`);
+	});
+} else {
+	console.log("No key or cert found, running insecured server.");
+
+	app.listen(port, () => {
+		console.log(`Example app listening on port ${port}`);
+	});
+}
+
+app.use(express.static("public"));
