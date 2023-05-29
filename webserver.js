@@ -20,7 +20,7 @@ if (key && cert) {
 	const server = https.createServer({ key: key, cert: cert }, app);
 
 	server.listen(443, () => {
-		console.log(`Example app listening on port ${port}`);
+		console.log(`Example app listening on port 443`);
 	});
 } else {
 	console.log("No key or cert found, running insecured server.");
