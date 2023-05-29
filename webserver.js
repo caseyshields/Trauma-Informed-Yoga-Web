@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
 if (key && cert) {
 	const server = https.createServer({ key: key, cert: cert }, app);
 
-	server.listen(port, () => {
+	server.listen(443, () => {
 		console.log(`Example app listening on port ${port}`);
 	});
 } else {
