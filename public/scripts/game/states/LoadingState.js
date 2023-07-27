@@ -81,8 +81,10 @@ export default class LoadingState extends State {
 		}, true);
 
 		this.aboutButton.checkReleased(() => {
-			alert("This will launch the about page!");
-		});
+            this.gameSession.setCurrentStateByName("About");
+//          alert("This will launch the about page!");
+        });
+
 
 		this.freeButton.checkReleased(() => {
 			this.gameSession.setCurrentStateByName("Game");
