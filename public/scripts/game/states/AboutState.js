@@ -67,7 +67,6 @@ export default class AboutState extends State {
         this.backButton.checkReleased();
     }
     
-
     cleanup() {
         super.update();
     }
