@@ -59,12 +59,8 @@ export default class AboutState extends State {
         this.backButton.update();
     }
 
-    mousePressed(){
-        this.backButton.checkPressed();
-    }
-
     mouseReleased(){
-        this.backButton.checkReleased(this.gameSession.setCurrentStateByName("Loading"));
+        this.backButton.checkReleased();
     }
     
 
