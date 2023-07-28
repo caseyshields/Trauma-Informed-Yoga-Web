@@ -30,7 +30,7 @@ export default class AboutState extends State {
             disabledFill: this.p5.color(125, 0, 0),
         }
 
-        this.backButton = new BackButton(backButtonLayout, backButtonStyle, false, "Game");
+        this.backButton = new BackButton(backButtonLayout, backButtonStyle, false, "Loading");
         this.backButton.setup();
     }
 
@@ -60,11 +60,11 @@ export default class AboutState extends State {
     }
 
     mousePressed(){
-        this.backButton.checkPressed(/*this.gameSession.setCurrentStateByName("Loading")*/);
+        this.backButton.checkPressed();
     }
 
     mouseReleased(){
-        this.backButton.checkReleased();
+        this.backButton.checkReleased(this.gameSession.setCurrentStateByName("Loading"));
     }
     
 
