@@ -147,7 +147,6 @@ export default class AboutState extends State {
             this.gameSession.canvasWidth * .05,
             this.gameSession.canvasWidth * .05
         );
-
         this.tsyButton.updateSize();
         this.yogaButton.updateSize();
         this.howGameButton.updateSize();
