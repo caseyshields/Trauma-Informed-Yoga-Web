@@ -9,7 +9,6 @@ export default class AboutState extends State {
     howGameButton = {};
     creditsButton = {};
 
-
     constructor() {
         super("About");
     }

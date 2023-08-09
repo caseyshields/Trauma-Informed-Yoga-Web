@@ -1,5 +1,4 @@
 import State from "../../core/State/State.js";
-import Button from "../../core/UI/Button.js";
 import TextBox from "../../core/UI/TextBox.js";
 import BackButton from "../buttons/BackButton.js";
 
@@ -53,25 +52,19 @@ export default class InfoState extends State {
 			//width: this.gameSession.canvasWidth * .05,
 			//height: this.gameSession.canvasWidth * .05
             xRatio: 0.075,
-            yRatio: 0.15,
+            yRatio: 0.1725,
             widthRatio: 0.85,
             heightRatio: 0.8,
 		};
 
 		let infoTextBoxStyle = {
 			//stroke: this.p5.color(255, 255, 255),
-			stroke: this.p5.color(0, 0, 0),
-			strokeWeight: 5,
-			fill: this.p5.color(0, 0, 0),
-			hoverFill: this.p5.color(0, 0, 0),
-			pressedFill: this.p5.color(0, 0, 0),
-			loadingFill: this.p5.color(62, 62, 62),
-			disabledFill: this.p5.color(125, 0, 0),
+			fill: this.p5.color(51, 51, 51),
 		}
 
         let infoText = {
             text: "",
-            textRatio: 45,
+            textRatio: 40,
         };
 
 		this.infoTextBox = new TextBox(infoTextBoxLayout, infoTextBoxStyle, infoText);
@@ -99,7 +92,7 @@ export default class InfoState extends State {
 
         //UI
         this.backButton.render();
-        this.infoTextBox.update();
+        this.infoTextBox.updateSize();
 
         this.backButton.resize(
 			this.gameSession.canvasWidth * .05,
@@ -111,15 +104,10 @@ export default class InfoState extends State {
 
     mousePressed(){
 		this.backButton.checkPressed();
-		this.infoTextBox.checkPressed();
 	}
 
 	mouseReleased(){
 		this.backButton.checkReleased();
-
-		this.infoTextBox.checkReleased(() => {
-            //alert(this.__text);
-        });
 	}
 	
 
