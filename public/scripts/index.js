@@ -3,6 +3,7 @@ import GameState from "./game/states/GameState.js";
 import LoadingState from "./game/states/LoadingState.js";
 import MenuState from "./game/states/MenuState.js";
 import AboutState from "./game/states/AboutState.js";
+import InfoState from "./game/states/InfoState.js";
 
 /**TODOS:
 SETUP should be abstracted to be made easier to use.
@@ -46,7 +47,11 @@ var TIYW = function (p) {
 
 		//Instantiate scene for about page
 		let aboutState = new AboutState();
-        gameSession.addStateToGame(aboutState);
+		gameSession.addStateToGame(AboutState);
+
+		//Instantiate scene for info page
+		let infoState = new InfoState();
+		gameSession.addStateToGame(infoState);
 
 		//Set initial game state as loading, call setup method
 		gameSession.setCurrentState(loadingState);

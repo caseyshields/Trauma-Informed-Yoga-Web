@@ -1,4 +1,5 @@
 import State from "../../core/State/State.js";
+import TextBox from "../../core/UI/TextBox.js";
 import BackButton from "../buttons/BackButton.js";
 
 /** Example of Gamestate
@@ -12,12 +13,12 @@ import BackButton from "../buttons/BackButton.js";
  * Alt: Game over on empty charge pack for 5 seconds
  */
 
-export default class MenuState extends State {
+export default class InfoState extends State {
 	backButton = {};
 
 	constructor() {
-		super("Menu");
-		
+		super("Info");
+        this.__text = "";
 	}
 
 	setup() {
@@ -41,15 +42,49 @@ export default class MenuState extends State {
 			disabledFill: this.p5.color(125, 0, 0),
 		}
 
-		this.backButton = new BackButton(backButtonLayout, backButtonStyle, false, "Game");
+		this.backButton = new BackButton(backButtonLayout, backButtonStyle, false, "About");
 		this.backButton.setup();
+
+        // Instantiate the TextBox for displaying specified content.
+		let infoTextBoxLayout = {
+			//x: this.gameSession.canvasWidth * .05,
+			//y: this.gameSession.canvasHeight * .05,
+			//width: this.gameSession.canvasWidth * .05,
+			//height: this.gameSession.canvasWidth * .05
+            xRatio: 0.075,
+            yRatio: 0.1725,
+            widthRatio: 0.85,
+            heightRatio: 0.8,
+		};
+
+		let infoTextBoxStyle = {
+			//stroke: this.p5.color(255, 255, 255),
+			fill: this.p5.color(51, 51, 51),
+		}
+
+        let infoText = {
+            text: "",
+            textRatio: 40,
+        };
+
+		this.infoTextBox = new TextBox(infoTextBoxLayout, infoTextBoxStyle, infoText);
 	}
+
+    get text() {
+        return this.__text;
+    }
+
+    set text(text) {
+        this.__text = text;
+        this.infoTextBox.displayInfo = text;
+    }
 
 	render() {
 		super.render();
 
         //UI
         this.backButton.render();
+        this.infoTextBox.render();
 	}
 
 	update() {
@@ -57,6 +92,7 @@ export default class MenuState extends State {
 
         //UI
         this.backButton.render();
+        this.infoTextBox.updateSize();
 
         this.backButton.resize(
 			this.gameSession.canvasWidth * .05,
