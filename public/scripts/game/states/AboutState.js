@@ -54,7 +54,7 @@ export default class AboutState extends State {
         };
     
         let tsyButtonText = {
-            text: "TSY resources",
+            text: "TSY Resources",
             textRatio: 10,
         };
     
@@ -174,13 +174,43 @@ export default class AboutState extends State {
 
     mouseReleased(){
         this.backButton.checkReleased();
-        this.tsyButton.checkReleased(() => {
-            this.gameSession.setCurrentStateByName("Loading");
-//          alert("This will launch the about page!");
+
+        this.howGameButton.checkReleased(() => {
+            this.gameSession.setCurrentStateByName("Info");
+            this.gameSession.currentState.text = "How This Game Works\n" +
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec enim sapien.\n Aliquam tincidunt enim vel magna ullamcorper, at faucibus lorem ullamcorper.\n Vestibulum semper nisl vitae est congue, eget posuere erat malesuada.\n Nam volutpat mollis nunc, in ultrices orci lacinia nec. Fusce dictum nunc in nulla\n blandit, ac euismod lectus blandit. Sed consequat lacus ut nulla interdum, sed\n sodales purus pellentesque. Fusce maximus justo eu est ultrices laoreet.\n Curabitur a lobortis sem. Maccenas viverra porttitor leo. Class aptent taciti sociosqu \nad litora torquent per conubia nostra, per inceptos himenaeos.";
+
+            // TODO: run into an error: 
+            //       Uncaught ReferenceError: require is not defined
+            /*
+            // Read the display content from a file.
+            require('fs').readFile('HowThisGameWorks.txt', function(err, content) {
+                if (err) {
+                    console.log(err.message);
+                } else {
+                    console.log("\n[\n" + content.toString() + "\n]\n");
+                }
+            });
+            */
         });
-        this.yogaButton.checkReleased();
-        this.howGameButton.checkReleased();
-        this.creditsButton.checkReleased();
+
+        this.tsyButton.checkReleased(() => {
+            this.gameSession.setCurrentStateByName("Info");
+            this.gameSession.currentState.text = "Additional TSY Resources\n" + 
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec enim sapien.\n Aliquam tincidunt enim vel magna ullamcorper, at faucibus lorem ullamcorper.\n Vestibulum semper nisl vitae est congue, eget posuere erat malesuada.\n Nam volutpat mollis nunc, in ultrices orci lacinia nec. Fusce dictum nunc in nulla\n blandit, ac euismod lectus blandit. Sed consequat lacus ut nulla interdum, sed\n sodales purus pellentesque. Fusce maximus justo eu est ultrices laoreet.\n Curabitur a lobortis sem. Maccenas viverra porttitor leo. Class aptent taciti sociosqu \nad litora torquent per conubia nostra, per inceptos himenaeos.";
+        });
+
+        this.yogaButton.checkReleased(() => {
+            this.gameSession.setCurrentStateByName("Info");
+            this.gameSession.currentState.text = "Yoga Culture & History\n" + 
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec enim sapien.\n Aliquam tincidunt enim vel magna ullamcorper, at faucibus lorem ullamcorper.\n Vestibulum semper nisl vitae est congue, eget posuere erat malesuada.\n Nam volutpat mollis nunc, in ultrices orci lacinia nec. Fusce dictum nunc in nulla\n blandit, ac euismod lectus blandit. Sed consequat lacus ut nulla interdum, sed\n sodales purus pellentesque. Fusce maximus justo eu est ultrices laoreet.\n Curabitur a lobortis sem. Maccenas viverra porttitor leo. Class aptent taciti sociosqu \nad litora torquent per conubia nostra, per inceptos himenaeos.";
+        });
+
+        this.creditsButton.checkReleased(() => {
+            this.gameSession.setCurrentStateByName("Info");
+            this.gameSession.currentState.text = "Academic Development Credits\n" +
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec enim sapien.\n Aliquam tincidunt enim vel magna ullamcorper, at faucibus lorem ullamcorper.\n Vestibulum semper nisl vitae est congue, eget posuere erat malesuada.\n Nam volutpat mollis nunc, in ultrices orci lacinia nec. Fusce dictum nunc in nulla\n blandit, ac euismod lectus blandit. Sed consequat lacus ut nulla interdum, sed\n sodales purus pellentesque. Fusce maximus justo eu est ultrices laoreet.\n Curabitur a lobortis sem. Maccenas viverra porttitor leo. Class aptent taciti sociosqu \nad litora torquent per conubia nostra, per inceptos himenaeos.";
+        });
     }
     
     cleanup() {

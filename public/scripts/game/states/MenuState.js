@@ -41,7 +41,7 @@ export default class MenuState extends State {
 			disabledFill: this.p5.color(125, 0, 0),
 		}
 
-		this.backButton = new BackButton(backButtonLayout, backButtonStyle, false, "Loading");
+		this.backButton = new BackButton(backButtonLayout, backButtonStyle, false, "Game");
 		this.backButton.setup();
 	}
 
