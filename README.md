@@ -48,3 +48,5 @@ Start the container:
 Reading logs:
 
 `sudo docker logs -f server`
+
+Andrew Li, Designer for Soothing Systems
