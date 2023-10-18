@@ -48,3 +48,6 @@ Start the container:
 Reading logs:
 
 `sudo docker logs -f server`
+
+
+Casey Shields, Gameplay Programmer
