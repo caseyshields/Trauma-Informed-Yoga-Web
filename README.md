@@ -49,4 +49,5 @@ Reading logs:
 
 `sudo docker logs -f server`
 
-Andrew Li, Designer for Soothing Systems
+Casey Shields, Gameplay Programmer
+Andrew Li, Designer
