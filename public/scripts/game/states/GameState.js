@@ -143,6 +143,9 @@ export default class GameState extends State {
 		//Update skeleton
 		this.gameSession.skeleton.update();
 
+		// Update breathing
+		this.gameSession.breathingManager.update();
+
 		//Test Target
 		this.testTarget.update();
 		this.testTarget1.update();
