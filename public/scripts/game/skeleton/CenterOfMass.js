@@ -118,4 +118,7 @@ export default class CenterOfMass extends VectorGameObject{
     set rightShoulder(rightShoulder){
         this.rightShoulder = rightShoulder;
     }
+
+    /** @returns {p5.Vector} returns the center of mass's coordinates */
+    get position() {return this.p5.createVector(this.x, this.y);}
 }
