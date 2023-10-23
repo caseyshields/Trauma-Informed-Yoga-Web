@@ -30,7 +30,7 @@ export default class Diaphragm extends GameObject{
     /** Render a circle that vacillates in size and color with the breath meter */
     render(){
         let p = this.skeleton.centerOfMass.position;
-        let value = this.gameSession.breathingManager.breath();
+        let value = this.gameSession.breathingManager.breath;
         let size = this.style.ellipseHeight * (1+value);
 
         this.p5.stroke(this.style.stroke);
