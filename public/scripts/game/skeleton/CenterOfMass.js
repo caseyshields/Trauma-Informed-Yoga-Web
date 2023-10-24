@@ -15,7 +15,7 @@ export default class CenterOfMass extends VectorGameObject{
 
     style = {
 		stroke: this.p5.color(255, 223, 0),
-        fill: this.p5.color(255,223, 0, 127),
+        fill: this.p5.color(255,223, 0),
 		strokeWeight: 2,
         ellipseWidth: 50,
         ellipseHeight: 50
@@ -36,10 +36,10 @@ export default class CenterOfMass extends VectorGameObject{
     }
 
     render(){
-        let diaphragm = this.style.ellipseHeight * this.gameSession.breathingManager.breath;
+        this.p5.fill(this.style.fill);
         this.p5.stroke(this.style.stroke);
 		this.p5.strokeWeight(this.style.strokeWeight);
-		this.p5.ellipse( this.x, this.y, diaphragm + this.style.ellipseWidth, diaphragm + this.style.ellipseHeight);
+		this.p5.ellipse( this.x, this.y, this.style.ellipseWidth, this.style.ellipseHeight);
     }
 
     updateCOMFromTorso(leftHip, rightHip, leftShoulder, rightShoulder){
