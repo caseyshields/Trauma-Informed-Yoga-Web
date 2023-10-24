@@ -1,8 +1,23 @@
-# Soothing Systems
+# Soothing Systems Architecture
+
+Here's a first pass on some architecture diagrams. Feel free to contribute!
+
+I intend to add more subsystems and break it into different levels of detail as I work my way through the codebase. Ultimately it is meant to give a 'lay of the land' to contributors at a glance.
+
+These diagrams are made using [Mermaid.js](http://mermaid.js.org/), which automatically generates various diagrams from grammar rules and ascii art! An emergent benefit of this approach is it works pretty well with version control and incremental changes. 
+
+ - <small>[PlantUML](https://plantuml.com/)! is another good diagramming tool.</small>
+
+Mermaid is supported by a lot of flavors of [Markdown](https://www.markdownguide.org/), most importantly [GitHub](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams) and [GitLab](https://docs.gitlab.com/ee/user/markdown.html#mermaid).
+So any mermaid code you upload is automatically converted to diagrams when viewed in repo.
+
+A Mermaid previewer is really handy while working on diagrams in VsCode. Here is the extension id of the best one I have used so far;
+
+> **bierner.markdown-mermaid**
+
+You normally don't have to go crazy with diagrams- the full UML recommendations are really heavyweight! However, I often find Class, sequence, and flowchart diagrams invaluable. This is the easiest way I have found to make them so far!
 
 ## Class Diagrams
-
-Taking notes on system architecture, will eventually break diagram into subsections at the right level of detail...
 
 ``` mermaid
 ---
@@ -158,13 +173,16 @@ class SparkleSound {
 
 ## initialization sequence
 
+**TODO**
+
 ```mermaid
 sequenceDiagram
-
 
 ```
 
 ## Menu State Diagram
+
+**TODO**
 
 ```mermaid
 stateDiagram-v2
@@ -175,22 +193,3 @@ stateDiagram-v2
     Load --> Game
     Game --> Load
 ```
-
-## Notes;
-
-- the manager base class supplies the singleton objects P5 and Session. Rather than getting these through the class hierarchy, we could just import them as needed in concrete implementations. Could reduce code complexity and make testing easier. Disregard this if managers will supply additional abstract behavior.
-
-- testing game objects currently requires spinning up the whole environment; we might benefit from a lighter testing harness for some components; for example testing a single game object.
-
-- instead of passing gameSession by inheritance hierarchy, just include a singleton constructor? Lots of member chains...
-
-- Collision BB is assumed at root game object. Rotation and scale assumed at base game object; However exceptions exist. consider particles which have no dimensions. Should we add more game objects to avoid 
-
-- Usually root classes are implemented so individual systems(physics, particles, etc) can treat a collection of game objects uniformly. However the current game loop explicitly invokes these methods. Meaning we have an interface but nothing is treated generically. is it just for conceptual purposes?
-
-- UI is homebrew; Is there a reason we are rending UI in the game canvas? is this a conscious effort to get people familiar with UI from scratch or be a solely P5 project? If there isn't an explicit goal we might consider just moving it all to normal HTML5 elements and have the game loop respond to plain old DOM events. easier to style and maintain. can even use your favorite css framework. The experience will probably be more transferrable for students interested in web design too.
-  - I can see this needing SPA-like functionality for the UI overlays which would then need to be synced with the game state which is presumably what we were trying to avoid!
-  - HTML5 Canvas actually allows you to add DOM elements 'inside' the canvas, and P5 does expose this functionality. So we may be able to still use HTML components directly in the context of your game states.
-  - I need to think about this more...
-
-- setup and cleanup calls 
