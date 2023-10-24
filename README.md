@@ -49,5 +49,5 @@ Reading logs:
 
 `sudo docker logs -f server`
 
-
 Casey Shields, Gameplay Programmer
+Andrew Li, Designer
