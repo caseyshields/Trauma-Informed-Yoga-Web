@@ -4,6 +4,7 @@ import BackButton from "../buttons/BackButton.js";
 import MenuButton from "../buttons/MenuButton.js";
 import Target from "../form/Target.js";
 import Narrator from "../narrator/Narrator.js";
+import Diaphragm from "../breathing/Diaphragm.js";
 
 /** Example of Gamestate
  *
@@ -22,6 +23,7 @@ export default class GameState extends State {
 	testTarget = {};
 	testTarget1 = {};
 	narrator = {};
+	diaphragm = {};
 	
 	constructor() {
 		super("Game");
@@ -36,6 +38,8 @@ export default class GameState extends State {
 			this.gameSession.skeleton = new Skeleton();
 			this.gameSession.skeletonLoaded = true;
 		}
+
+		this.diaphragm = new Diaphragm(this.gameSession.skeleton);
 
 		//Instantiate backbutton
 		let backButtonLayout = {
@@ -82,12 +86,12 @@ export default class GameState extends State {
 		//TODO: Test target out
 		let testBone = this.gameSession.skeleton.getBone("Left Innerpalm");
 		//find target item
-		this.testTarget = new Target(750, -300, 50, testBone, 10000, false, this.gameSession.skeleton);
+		this.testTarget = new Target(300, -300, 50, testBone, 10000, false, this.gameSession.skeleton);
 		
 		//TODO: Test target out
 		let testBone1 = this.gameSession.skeleton.getBone("Right Innerpalm");
 		//find target item
-		this.testTarget1 = new Target(-750, -300, 50, testBone1, 10000, false, this.gameSession.skeleton);
+		this.testTarget1 = new Target(-300, -300, 50, testBone1, 10000, false, this.gameSession.skeleton);
 	
 		//TODO: Test background waves out
 		this.gameSession.soundManager.waveSound.startLoop();
@@ -98,6 +102,8 @@ export default class GameState extends State {
 
 	render() {
 		super.render();
+
+		this.diaphragm.render();
 
 		//Render skeleton
 		this.gameSession.skeleton.render();
@@ -139,6 +145,8 @@ export default class GameState extends State {
 
 	update() {
 		super.update();
+
+		//this.diaphragm.update();//unnecessary but here for consistency or if something changes...
 
 		//Update skeleton
 		this.gameSession.skeleton.update();
