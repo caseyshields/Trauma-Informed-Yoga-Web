@@ -110,27 +110,6 @@ export default class Target extends VectorGameObject {
 			console.log("Bone initialization error.");
 		}
 
-		//trigger target hit
-		if(inTarget){
-			//TODO: determine velocity and acceleration based on hand hitting
-			this.particleSettings.startingX = this.absoluteX;
-			this.particleSettings.startingY = this.absoluteY;
-			//pick random velocity
-			this.particleSettings.velocityX = this.p5.random(-5, 5);
-			this.particleSettings.velocityY = this.p5.random(-5, 5);
-			//pick random accelerations
-			this.particleSettings.accelX = this.p5.random(-.5, .5);
-			this.particleSettings.accelY = this.p5.random(-.5, .5);
-			//pick random colors
-			this.particleSettings.style.fill = this.p5.color(this.p5.random(0,255),this.p5.random(0,255),this.p5.random(0,255));
-			this.particleSettings.style.stroke = this.p5.color(this.p5.random(0,255),this.p5.random(0,255),this.p5.random(0,255));
-
-			this.gameSession.particleManager.createParticle(this.particleSettings);
-
-			this.gameSession.soundManager.sparkleSound.trigger();
-			
-		}
-
 		return inTarget;
 	}
 
@@ -193,6 +172,27 @@ export default class Target extends VectorGameObject {
 			this.absoluteY = this.y + this.skeleton.centerOfMass.y;
 			this.p5.ellipse(this.absoluteX, this.absoluteY, this.style.radius);
 			this.p5.pop();
+		}
+
+		//trigger target hit
+		if(this.targetHit){
+			//TODO: determine velocity and acceleration based on hand hitting
+			this.particleSettings.startingX = this.absoluteX;
+			this.particleSettings.startingY = this.absoluteY;
+			//pick random velocity
+			this.particleSettings.velocityX = this.p5.random(-5, 5);
+			this.particleSettings.velocityY = this.p5.random(-5, 5);
+			//pick random accelerations
+			this.particleSettings.accelX = this.p5.random(-.5, .5);
+			this.particleSettings.accelY = this.p5.random(-.5, .5);
+			//pick random colors
+			this.particleSettings.style.fill = this.p5.color(this.p5.random(0,255),this.p5.random(0,255),this.p5.random(0,255));
+			this.particleSettings.style.stroke = this.p5.color(this.p5.random(0,255),this.p5.random(0,255),this.p5.random(0,255));
+
+			this.gameSession.particleManager.createParticle(this.particleSettings);
+
+			this.gameSession.soundManager.sparkleSound.trigger();
+			
 		}
 
 	}
