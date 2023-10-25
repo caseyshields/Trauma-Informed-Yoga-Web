@@ -1,5 +1,6 @@
 import ParticleManager from "../core/GameObject/Particle/ParticleManager.js";
 import SoundManager from "../core/Sound/SoundManager.js";
+import BreathingManager from "./breathing/BreathingManager.js";
 
 export default class GameSession {
 	constructor() {
@@ -37,6 +38,10 @@ export default class GameSession {
 		//Sound Manager
 		this.__soundManager = new SoundManager(60);
 		this.__soundManager.setup();
+
+		// Breathing Manager
+		this.__breathingManager = new BreathingManager(2000,2000,2000,2000);
+		this.__breathingManager.play();
 
 		//All states available to game
 		this.__states = [];
@@ -166,6 +171,14 @@ export default class GameSession {
 
 	set particleManager(particleManager) {
 		this.__particleManager = particleManager;
+	}
+
+	get breathingManager() {
+		return this.__breathingManager;
+	}
+
+	set breathingManager(breathingManager) {
+		this.__breathingManager = breathingManager
 	}
 
 	get canvasHeight() {
