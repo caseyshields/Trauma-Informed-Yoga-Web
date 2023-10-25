@@ -57,9 +57,6 @@ export default class State {
 
     //These are possible input methods. They should be implemented (if needed) in your state class.
     //these all are linked in index.js.
-    mousePressed(){
-        console.log("mouse pressed");
-    }
 
     keyPressed(){
         console.log("input detected");
@@ -86,7 +83,7 @@ export default class State {
     }
     
     mousePressed(){
-        console.log("input detected");
+        console.log("mouse pressed");
     }
     
     mouseReleased(){
