@@ -68,7 +68,7 @@ export default class Narrator extends GameObject {
             }
 
             this.displayText = tempText;
-            console.log(numCharacters);
+            // console.log(numCharacters);
 
             if(timeElapsed > this.displayDuration){
                 this.renderingFragment = false;
