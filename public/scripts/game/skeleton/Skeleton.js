@@ -76,11 +76,11 @@ export default class Skeleton extends GameObject {
 
       // render dots color-coded to convey confidence scores
       if (this.renderConfidence) {
-         this.p5.strokeWeight(2);
+         this.p5.strokeWeight(3);
          for (let pose of this.gameSession.poseLandmarks) {
             let c = this.p5.lerpColor(this.wrong, this.right, pose.score);
             this.p5.fill( c );
-            this.p5.circle(pose.x, pose.y, 10);
+            this.p5.circle(pose.x, pose.y, 15);
          }
       }
 
