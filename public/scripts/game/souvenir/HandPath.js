@@ -17,6 +17,8 @@ export default class HandPath {
         this.session = new GameSession();
         this.p5 = this.session.p5
         this.color = this.p5.color(0, 255, 255, 16);
+        this.emptyColor = this.p5.color(123, 234, 100),
+        this.fullColor = this.p5.color(3, 80, 150, 127),
         this.w = this.session.canvasWidth;
         this.h = this.session.canvasHeight;
         this.g = this.p5.createGraphics(this.w,this.h);
@@ -48,10 +50,16 @@ export default class HandPath {
                 // use exponential filter to scale screen effects?
 
                 // draw a circle at the estimate, whose radius is proportional to the velocity.
-                this.g.strokeWeight(0);
-                this.g.fill(this.color);
-                this.g.ellipse(this.session.poseLandmarks[n].x, 
-                    this.session.poseLandmarks[n].y,v);
+                // this.g.strokeWeight(0);
+                // this.g.fill(this.color);
+                // this.g.ellipse(this.session.poseLandmarks[n].x, 
+                //     this.session.poseLandmarks[n].y,v);
+
+                this.g.strokeWeight(v/2);
+                let c = this.p5.lerpColor(this.emptyColor, this.fullColor, this.session.breathingManager.breath);
+                this.g.stroke(c);
+                this.g.line(this.posed[n].x, this.posed[n].y, 
+                    this.session.poseLandmarks[n].x, this.session.poseLandmarks[n].y);
             }
             
             // draw it to the screen
