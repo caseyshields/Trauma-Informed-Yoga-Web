@@ -16,12 +16,12 @@ export default class HandPath {
     constructor() {
         this.session = new GameSession();
         this.p5 = this.session.p5
-        this.color = this.p5.color(0, 255, 255, 64);
+        this.color = this.p5.color(0, 255, 255, 16);
         this.w = this.session.canvasWidth;
         this.h = this.session.canvasHeight;
         this.g = this.p5.createGraphics(this.w,this.h);
-        for(let n=0; n<32; n++)
-            this.posed[n] = {x,y,z,score};
+        // for(let n=0; n<32; n++)
+        //     this.posed[n] = {x,y,z,score};
     }
 
     update() {
@@ -35,7 +35,7 @@ export default class HandPath {
         if (this.posed.length) {
 
             // for each pose estimation
-            for (let n=0; n<this.session.size; n++) { // TODO maybe just hands?
+            for (let n=0; n<this.session.poseLandmarks.length; n++) { // TODO maybe just hands?
                 
                 // determine velocity between frames
                 let vx = this.posed[n].x - this.session.poseLandmarks[n].x;
@@ -48,10 +48,10 @@ export default class HandPath {
                 // use exponential filter to scale screen effects?
 
                 // draw a circle at the estimate, whose radius is proportional to the velocity.
-                this.p5.strokeWeight(0);
-                this.p5.fill(this.color);
+                this.g.strokeWeight(0);
+                this.g.fill(this.color);
                 this.g.ellipse(this.session.poseLandmarks[n].x, 
-                    this.session.poseLandmarks.y,v);
+                    this.session.poseLandmarks[n].y,v);
             }
             
             // draw it to the screen
@@ -59,7 +59,8 @@ export default class HandPath {
         }
 
         // save previous poses
-        for (let n=0; n<this.session.size; n++) {
+        for (let n=0; n<this.session.poseLandmarks.length; n++) {
+            this.posed[n] = {};
             this.posed[n].x = this.session.poseLandmarks[n].x;
             this.posed[n].y = this.session.poseLandmarks[n].y;
             this.posed[n].z = this.session.poseLandmarks[n].z;

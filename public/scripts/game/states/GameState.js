@@ -5,7 +5,8 @@ import MenuButton from "../buttons/MenuButton.js";
 import Target from "../form/Target.js";
 import Narrator from "../narrator/Narrator.js";
 import Diaphragm from "../breathing/Diaphragm.js";
-import BodyTrace from "../souvenir/BodyTrace.js";
+// import BodyTrace from "../souvenir/BodyTrace.js";
+import BodyTrace from "../souvenir/HandPath.js";
 
 /** Example of Gamestate
  *
@@ -29,7 +30,6 @@ export default class GameState extends State {
 	
 	constructor() {
 		super("Game");
-		
 	}
 
 	setup() {
