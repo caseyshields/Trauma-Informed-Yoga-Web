@@ -1,6 +1,9 @@
 import GameSession from "../../game/GameSession.js"; 
 
-/** Renders the user's pose as a silhouette with motion blur. */
+/** Renders the user's pose as a silhouette with motion blur. 
+ * TODO should I just make the skeleton look like the silhouette and supply it this
+ * 'motion blur' image context? Such an organization would have less repetition...
+*/
 export default class BodyTrace {
     // Tried to see what it would look like not using the GameObject base class
     // if this silhouette need to interact with physics-
