@@ -41,6 +41,8 @@ export default class Poser {
         this.p5 = this.session.p5;
         this.newer = this.p5.color(200,100,100);
         this.older = this.p5.color(100,100,200);
+        this.inaccurate = this.p5.color(255,0,0);
+        this.accurate = this.p5.color(0,255,0);
         this.color = this.p5.color(150,150,150);
 
         this.measurements = [];//new Array(size);
@@ -109,11 +111,21 @@ export default class Poser {
         }
 
         // draw the filter with prominent lines
-        this.p5.strokeWeight(5);
+        this.p5.strokeWeight(3);
         this.p5.stroke(this.color);
         this.renderPose(this.position);
 
         // draw velocity and acceleration vectors at each landmark
+        // TODO
+
+        // indicate pose confidence with color-coded markers at the points
+        this.p5.stroke(this.color);
+        for (let i=0; i<this.landmarks; i++) {
+            let w = this.sums[i*4+3] / this.size;
+            let c = this.p5.lerpColor(this.inaccurate, this.accurate, w);
+            this.p5.fill(c);
+            this.p5.circle(this.position[i*4], this.position[i*4+1], 10);
+        }
     }
         
     renderPose(pose) {
