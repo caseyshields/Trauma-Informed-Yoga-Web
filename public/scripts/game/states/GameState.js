@@ -5,9 +5,9 @@ import MenuButton from "../buttons/MenuButton.js";
 import Target from "../form/Target.js";
 import Narrator from "../narrator/Narrator.js";
 import Diaphragm from "../breathing/Diaphragm.js";
-// import BodyTrace from "../souvenir/BodyTrace.js";
+import BodyTrace from "../souvenir/BodyTrace.js";
 // import BodyTrace from "../souvenir/PoseTrail.js";
-import BodyTrace from "../souvenir/HandPath.js";
+import HandPath from "../souvenir/HandPath.js";
 
 /** Example of Gamestate
  *
@@ -28,7 +28,7 @@ export default class GameState extends State {
 	narrator = {};
 	diaphragm = {};
 	bodyTrace = {};
-	HandPath = {};
+	handPath = {};
 	
 	constructor() {
 		super("Game");
@@ -45,6 +45,7 @@ export default class GameState extends State {
 
 		this.diaphragm = new Diaphragm(this.gameSession.skeleton);
 		this.bodyTrace = new BodyTrace();// TODO make these constructors configure the appearance!
+		this.handPath = new HandPath();
 
 		//Instantiate backbutton
 		let backButtonLayout = {
@@ -109,6 +110,7 @@ export default class GameState extends State {
 		super.render();
 
 		this.bodyTrace.render();
+		this.handPath.render();
 		// this.diaphragm.render();
 		
 		//Render skeleton
@@ -154,6 +156,7 @@ export default class GameState extends State {
 
 		//this.diaphragm.update();//unnecessary but here for consistency or if something changes...
 		//this.bodyTrace.update();
+		//this.handPath.update();
 
 		//Update skeleton
 		this.gameSession.skeleton.update();
