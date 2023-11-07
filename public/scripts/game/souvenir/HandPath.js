@@ -1,29 +1,29 @@
-import GameSession from "../../game/GameSession.js"; 
+import GameSession from "../GameSession.js"; 
 
-// I'd like to use the particle system and set initial velocity by the pose velocity. Maybe affect gravity by avatar position? Generate particles on accelerations.
-// Have it all draw in a cumulative image like with the motion blur.
-// Actually I think people would enjoy playing with that...
-// The particles have to be jury rigged to draw in an arbitrary graphics context and I worry discrete differentiation might be noisy without smoothing...
-
-/** just hacking out some image technique that produces a better cumulative image...
- * Basically will have all the same architectural problems discussed in BodyTrace.
+/** Different parts of the pose emit different hues, modified by breath
+ * note: will have all the same architectural problems discussed in BodyTrace.
  */
 export default class HandPath {
 
-    maxVelocity = 0;
+    // records the pose of the last frame
     posed = [];
 
     constructor() {
         this.session = new GameSession();
         this.p5 = this.session.p5
-        this.color = this.p5.color(0, 255, 255, 16);
-        this.emptyColor = this.p5.color(123, 234, 100),
-        this.fullColor = this.p5.color(3, 80, 150, 127),
         this.w = this.session.canvasWidth;
         this.h = this.session.canvasHeight;
         this.g = this.p5.createGraphics(this.w,this.h);
-        // for(let n=0; n<32; n++)
-        //     this.posed[n] = {x,y,z,score};
+
+        // style parameters
+        this.thickness = 25;
+        this.randomness = 5;
+        this.transparent = this.p5.color(0,0,0,0);
+        this.emitters = [
+            {index:0, full:this.p5.color(25,150,25,5), empty:this.p5.color(25,150,25,1)},
+            {index:20, full:this.p5.color(150,0,25,5), empty:this.p5.color(150,0,25,1)},
+            {index:19, full:this.p5.color(25,0,150,5), empty:this.p5.color(25,0,150,1)}
+        ];
     }
 
     update() {
@@ -32,41 +32,47 @@ export default class HandPath {
 
     /** */
     render() {
+        // this.g.background(0,0,0,5);
 
         // skip first render so we can get a velocity
         if (this.posed.length) {
 
-            // for each pose estimation
-            for (let n=0; n<this.session.poseLandmarks.length; n++) { // TODO maybe just hands?
-                
-                // determine velocity between frames
-                let vx = this.posed[n].x - this.session.poseLandmarks[n].x;
-                let vy = this.posed[n].y - this.session.poseLandmarks[n].y;
-                let v = Math.sqrt((vx*vx)+(vy*vy));
+            this.g.noStroke();
+            // this.g.blendMode(this.g.BLEND);
+            // this.g.blendMode(this.g.DIFFERENCE);
+            this.g.blendMode(this.g.SCREEN);
 
-                // totally ignoring estimation confidence problems right now.
+            for(let e of this.emitters)
+                if (this.posed[e.index] && this.session.poseLandmarks[e.index]) {
 
-                // track max velocity on the screen right now?
-                // use exponential filter to scale screen effects?
+                    // set the color for the emitter using breath
+                    let c = this.g.lerpColor(e.empty, e.full, this.session.breathingManager.breath);
+                    this.g.fill(c);
 
-                // draw a circle at the estimate, whose radius is proportional to the velocity.
-                // this.g.strokeWeight(0);
-                // this.g.fill(this.color);
-                // this.g.ellipse(this.session.poseLandmarks[n].x, 
-                //     this.session.poseLandmarks[n].y,v);
+                    // determine velocity between frames
+                    let vx = this.posed[e.index].x - this.session.poseLandmarks[e.index].x;
+                    let vy = this.posed[e.index].y - this.session.poseLandmarks[e.index].y;
+                    let v = Math.sqrt((vx*vx)+(vy*vy));
+                    // TODO we should record more points so we can smoothly adjust emitter size...
 
-                this.g.strokeWeight(v/2);
-                let c = this.p5.lerpColor(this.emptyColor, this.fullColor, this.session.breathingManager.breath);
-                this.g.stroke(c);
-                this.g.line(this.posed[n].x, this.posed[n].y, 
-                    this.session.poseLandmarks[n].x, this.session.poseLandmarks[n].y);
-            }
-            
-            // draw it to the screen
+                    // draw a path of circles
+                    for (let t=v; t>0; t--) {
+                        let r = t/v//this.thickness;
+                        let s = 1 - r;
+                        let x = r*this.posed[e.index].x + s*this.session.poseLandmarks[e.index].x;
+                        let y = r*this.posed[e.index].y + s*this.session.poseLandmarks[e.index].y;
+                        let dx = Math.random()*this.randomness;
+                        let dy = Math.random()*this.randomness;
+                        this.g.circle(x+dx,y+dy,this.thickness);
+                    }
+                }
+
+            // draw it to the screen and return blend mode to normal
             this.p5.image(this.g, this.w/2, this.h/2);
+            this.g.blendMode(this.g.BLEND);
         }
 
-        // save previous poses
+        // save previous pose
         for (let n=0; n<this.session.poseLandmarks.length; n++) {
             this.posed[n] = {};
             this.posed[n].x = this.session.poseLandmarks[n].x;
