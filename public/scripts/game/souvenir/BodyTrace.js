@@ -6,7 +6,7 @@ import GameSession from "../../game/GameSession.js";
 */
 export default class BodyTrace {
     // Tried to see what it would look like not using the GameObject base class
-    // if this silhouette need to interact with physics-
+    // if this silhouette needs to interact with physics-
     // or there is a GameState that has to treat everything uniformly through an interface;
     // then this should be a GameObject...
 
@@ -23,7 +23,7 @@ export default class BodyTrace {
     update() {
     }
 
-    /** Every render, a silhouette of the user is drawn into a cumulative image then dimmed.
+    /** Every render, the cumulative image is dimmed then a silhouette of the user is drawn on top.
      * TODO experiment with blend modes and alpha masks! 
      * TODO see if media pipe provides a segmentation mask! */
     render() {
@@ -56,8 +56,8 @@ export default class BodyTrace {
             this.g.stroke(this.color);
 
             // fill the torso
-            let neck = this.midpoint(rightShoulder, leftShoulder);
-            let pelvis = this.midpoint(rightHip, leftHip);
+            let neck = midpoint(rightShoulder, leftShoulder);
+            let pelvis = midpoint(rightHip, leftHip);
             this.g.fill(this.color);
             this.g.triangle(neck[0], neck[1], rightHip.x, rightHip.y, leftHip.x, leftHip.y);
             this.g.triangle(pelvis[0], pelvis[1], rightShoulder.x, rightShoulder.y, leftShoulder.x, leftShoulder.y);
@@ -69,17 +69,17 @@ export default class BodyTrace {
                 ) {
                 // NOTE I saw this sanity check in the CenterOfMass object, but I don't know that I've ever seen it occur. Is this necessary?
                 
-                // use ears to find centerpoint; other facial features are on the front of the face.
-                let head = this.midpoint(pose[8], pose[7]);
+                // use ears to find centerpoint of head; other features are on the front of the face.
+                let head = midpoint(pose[8], pose[7]);
 
-                // measure size of skull
+                // measure size of skull?
                 // let dx = pose[8].x-pose[7].x;
                 // let dy = pose[8].y-pose[7].y;
                 // let d = Math.sqrt(dx*dx + dy*dy);
                 this.g.circle(head[0], head[1], 0.75*w); // cranium
                 this.g.line(neck[0], neck[1], head[0], head[1]); // neck
                 
-                let chin = this.midpoint(pose[10], pose[9]);
+                let chin = midpoint(pose[10], pose[9]);
                 this.g.beginShape(); // face
                 this.g.vertex(pose[5].x, pose[5].y);
                 this.g.vertex(chin[0], chin[1]);
@@ -118,15 +118,16 @@ export default class BodyTrace {
             this.g.endShape();
             // huh, I haven't run into any problems without the null-ish guard...
 
-            // draw it to the screen
+            // draw the cumulative image to the screen
             this.p5.image(this.g, this.w/2, this.h/2);
-            
         }
     }
 
-    // TODO handle resize!
+    // TODO handle screen resize!!!!!!!!!!!!!!!!!!!!!
 
-    midpoint(p1, p2) {
-        return [(p1.x+p2.x)/2, (p1.y+p2.y)/2];
-    }
+    
+}
+
+function midpoint(p1, p2) {
+    return [(p1.x+p2.x)/2, (p1.y+p2.y)/2];
 }
