@@ -39,18 +39,20 @@ export default class Poser {
     constructor(size=8) {
         this.session = new GameSession();
         this.p5 = this.session.p5;
-        this.newer = this.p5.color(200,0,0);
-        this.older = this.p5.color(0,0,200);
+        this.newer = this.p5.color(200,100,100);
+        this.older = this.p5.color(100,100,200);
+        this.color = this.p5.color(150,150,150);
 
         this.measurements = [];//new Array(size);
-        this.sums = new Float32Array(size*4);
-        this.position = new Float32Array(size*4);
-        this.velocity = new Float32Array(size*4);
-        this.acceleration = new Float32Array(size*4);
+        this.sums = new Float32Array(this.landmarks*4);
+        this.position = new Float32Array(this.landmarks*4);
+        this.velocity = new Float32Array(this.landmarks*4);
+        this.acceleration = new Float32Array(this.landmarks*4);
     }
 
     update() {
         this.add(this.session.poseLandmarks);
+        this.estimate();
     }
 
     add(pose) {
@@ -64,9 +66,9 @@ export default class Poser {
             m[i*4 + 3] = pose[i].score;
 
             // update the measurement sum for each pose landmark
-            this.sums[i*4] += pose[i].x;
-            this.sums[i*4 + 1] += pose[i].y;
-            this.sums[i*4 + 2] += pose[i].z;
+            this.sums[i*4] += pose[i].x * pose[i].score;
+            this.sums[i*4 + 1] += pose[i].y * pose[i].score;
+            this.sums[i*4 + 2] += pose[i].z * pose[i].score;
             this.sums[i*4 + 3] += pose[i].score;
         }
         this.measurements.push( m );
@@ -80,9 +82,9 @@ export default class Poser {
 
             // update the running totals correspondingly
             for( let i=0; i<this.landmarks; i++) {
-                this.sums[i*4] -= r[i*4];
-                this.sums[i*4 + 1] -= r[i*4 + 1];
-                this.sums[i*4 + 2] -= r[i*4 + 2];
+                this.sums[i*4] -= r[i*4] * r[i*4 + 3];
+                this.sums[i*4 + 1] -= r[i*4 + 1] * r[i*4 + 3];
+                this.sums[i*4 + 2] -= r[i*4 + 2] * r[i*4 + 3];
                 this.sums[i*4 + 3] -= r[i*4 + 3];
             }
             //TODO I should use a flyweight for all these float32 array rather than reallocating them...
@@ -91,87 +93,95 @@ export default class Poser {
 
     render() {
         this.p5.noFill();
-        this.p5.strokeWeight(1);
         this.p5.strokeCap(this.p5.ROUND);
         this.p5.strokeJoin(this.p5.ROUND);
-        
-        // TODO draw all frames with faint lines
+
+        // draw all frames with faint lines
+        this.p5.strokeWeight(1);
         for (let frame=0; frame<this.measurements.length; frame++) {
             let pose = this.measurements[frame];
 
             // shift color by frame age
             let c = this.p5.lerpColor(this.older, this.newer, frame/this.size);
             this.p5.stroke(c);
-
-            // draw face
-            this.p5.beginShape();
-            this.p5.vertex(pose[8*4], pose[8*4+1]);
-            this.p5.vertex(pose[6*4], pose[6*4+1]);
-            this.p5.vertex(pose[5*4], pose[5*4+1]);
-            this.p5.vertex(pose[4*4], pose[4*4+1]);
-            this.p5.vertex(pose[0*4], pose[0*4+1]);
-            this.p5.vertex(pose[1*4], pose[1*4+1]);
-            this.p5.vertex(pose[2*4], pose[2*4+1]);
-            this.p5.vertex(pose[3*4], pose[3*4+1]);
-            this.p5.vertex(pose[7*4], pose[7*4+1]);
-            this.p5.vertex(pose[9*4], pose[9*4+1]);
-            this.p5.vertex(pose[10*4], pose[10*4+1]);
-            this.p5.endShape(this.p5.CLOSE);
-
-            // draw right arm
-            this.p5.beginShape();
-            this.p5.vertex(pose[22*4], pose[22*4+1]);
-            this.p5.vertex(pose[16*4], pose[16*4+1]);
-            this.p5.vertex(pose[20*4], pose[20*4+1]);
-            this.p5.vertex(pose[18*4], pose[18*4+1]);
-            this.p5.vertex(pose[16*4], pose[16*4+1]);
-            this.p5.vertex(pose[14*4], pose[14*4+1]);
-            this.p5.vertex(pose[12*4], pose[12*4+1]);
-            this.p5.endShape();
             
-            // draw left arm
-            this.p5.beginShape();
-            this.p5.vertex(pose[21*4], pose[21*4+1]);
-            this.p5.vertex(pose[15*4], pose[15*4+1]);
-            this.p5.vertex(pose[19*4], pose[19*4+1]);
-            this.p5.vertex(pose[17*4], pose[17*4+1]);
-            this.p5.vertex(pose[15*4], pose[15*4+1]);
-            this.p5.vertex(pose[13*4], pose[13*4+1]);
-            this.p5.vertex(pose[11*4], pose[11*4+1]);
-            this.p5.endShape();
-
-            // torso
-            this.p5.beginShape();
-            this.p5.vertex(pose[12*4], pose[12*4+1]);
-            this.p5.vertex(pose[11*4], pose[11*4+1]);
-            this.p5.vertex(pose[23*4], pose[23*4+1]);
-            this.p5.vertex(pose[24*4], pose[24*4+1]);
-            this.p5.endShape(this.p5.CLOSE);
-
-            // left leg
-            this.p5.beginShape();
-            this.p5.vertex(pose[23*4], pose[23*4+1]);
-            this.p5.vertex(pose[25*4], pose[25*4+1]);
-            this.p5.vertex(pose[27*4], pose[27*4+1]);
-            this.p5.vertex(pose[29*4], pose[29*4+1]);
-            this.p5.vertex(pose[31*4], pose[31*4+1]);
-            this.p5.vertex(pose[27*4], pose[27*4+1]);
-            this.p5.endShape();
-
-            // right leg
-            this.p5.beginShape();
-            this.p5.vertex(pose[24*4], pose[24*4+1]);
-            this.p5.vertex(pose[26*4], pose[26*4+1]);
-            this.p5.vertex(pose[28*4], pose[28*4+1]);
-            this.p5.vertex(pose[30*4], pose[30*4+1]);
-            this.p5.vertex(pose[32*4], pose[32*4+1]);
-            this.p5.vertex(pose[28*4], pose[28*4+1]);
-            this.p5.endShape();
-        } // TODO should I load landmark connectivity from the configuration? will it ever change?
+            this.renderPose(pose);
+        }
 
         // draw the filter with prominent lines
+        this.p5.strokeWeight(5);
+        this.p5.stroke(this.color);
+        this.renderPose(this.position);
 
         // draw velocity and acceleration vectors at each landmark
+    }
+        
+    renderPose(pose) {
+        // draw face
+        this.p5.beginShape();
+        this.p5.vertex(pose[8*4], pose[8*4+1]);
+        this.p5.vertex(pose[6*4], pose[6*4+1]);
+        this.p5.vertex(pose[5*4], pose[5*4+1]);
+        this.p5.vertex(pose[4*4], pose[4*4+1]);
+        this.p5.vertex(pose[0*4], pose[0*4+1]);
+        this.p5.vertex(pose[1*4], pose[1*4+1]);
+        this.p5.vertex(pose[2*4], pose[2*4+1]);
+        this.p5.vertex(pose[3*4], pose[3*4+1]);
+        this.p5.vertex(pose[7*4], pose[7*4+1]);
+        this.p5.vertex(pose[9*4], pose[9*4+1]);
+        this.p5.vertex(pose[10*4], pose[10*4+1]);
+        this.p5.endShape(this.p5.CLOSE);
+
+        // draw right arm
+        this.p5.beginShape();
+        this.p5.vertex(pose[22*4], pose[22*4+1]);
+        this.p5.vertex(pose[16*4], pose[16*4+1]);
+        this.p5.vertex(pose[20*4], pose[20*4+1]);
+        this.p5.vertex(pose[18*4], pose[18*4+1]);
+        this.p5.vertex(pose[16*4], pose[16*4+1]);
+        this.p5.vertex(pose[14*4], pose[14*4+1]);
+        this.p5.vertex(pose[12*4], pose[12*4+1]);
+        this.p5.endShape();
+        
+        // draw left arm
+        this.p5.beginShape();
+        this.p5.vertex(pose[21*4], pose[21*4+1]);
+        this.p5.vertex(pose[15*4], pose[15*4+1]);
+        this.p5.vertex(pose[19*4], pose[19*4+1]);
+        this.p5.vertex(pose[17*4], pose[17*4+1]);
+        this.p5.vertex(pose[15*4], pose[15*4+1]);
+        this.p5.vertex(pose[13*4], pose[13*4+1]);
+        this.p5.vertex(pose[11*4], pose[11*4+1]);
+        this.p5.endShape();
+
+        // torso
+        this.p5.beginShape();
+        this.p5.vertex(pose[12*4], pose[12*4+1]);
+        this.p5.vertex(pose[11*4], pose[11*4+1]);
+        this.p5.vertex(pose[23*4], pose[23*4+1]);
+        this.p5.vertex(pose[24*4], pose[24*4+1]);
+        this.p5.endShape(this.p5.CLOSE);
+
+        // left leg
+        this.p5.beginShape();
+        this.p5.vertex(pose[23*4], pose[23*4+1]);
+        this.p5.vertex(pose[25*4], pose[25*4+1]);
+        this.p5.vertex(pose[27*4], pose[27*4+1]);
+        this.p5.vertex(pose[29*4], pose[29*4+1]);
+        this.p5.vertex(pose[31*4], pose[31*4+1]);
+        this.p5.vertex(pose[27*4], pose[27*4+1]);
+        this.p5.endShape();
+
+        // right leg
+        this.p5.beginShape();
+        this.p5.vertex(pose[24*4], pose[24*4+1]);
+        this.p5.vertex(pose[26*4], pose[26*4+1]);
+        this.p5.vertex(pose[28*4], pose[28*4+1]);
+        this.p5.vertex(pose[30*4], pose[30*4+1]);
+        this.p5.vertex(pose[32*4], pose[32*4+1]);
+        this.p5.vertex(pose[28*4], pose[28*4+1]);
+        this.p5.endShape();
+        // TODO should I load landmark connectivity from the configuration? will it ever change?
     }
 
     estimate() {
