@@ -4,10 +4,13 @@ import GameSession from "../../game/GameSession.js";
 export default class Poser {
 
     landmarks = 33; // number of pose landmarks from MediaPipe
-    size = 8; // number of frames in the time window that is filtered
+    size = 8; // number of frames in the time window that is filtered, 0-index is the oldest
     measurements = []; // [frame index] [pose index [x,y,z,w]] raw pose numbers
     sums = []; // [pose index [x,y,z,w]] // scratch space to reduce operations 
     state = []; // [{x,y,z,name,score,vx,vy,ax,ay},...]
+    
+    record = false;
+    count = 0;
 
     // v and a obtained using finite differences of the filtered measurements
     // TODO we might want to use a more sophisticated method of differentiation...
@@ -42,13 +45,22 @@ export default class Poser {
         this.inaccurate = this.p5.color(255,0,0);
         this.accurate = this.p5.color(0,255,0);
         this.color = this.p5.color(150,150,150);
-
+        this.record = false;
         this.size = size;
         this.measurements = [];
         this.sums = new Float32Array(this.landmarks*4); // I assume these float arrays will be better for the cache. Preoptimization?
         this.state = [];
         for (let i=0; i<this.landmarks; i++)
             this.state[i] = {name: this.session.poseLandmarks[i].name}
+    }
+
+    record() {
+        this.record = true;
+        this.count = true;
+        this.p5.clearStorage();
+    }
+    stop() {
+        this.record = false;
     }
 
     /** Adds the current pose in the game session to the filter */
@@ -77,7 +89,9 @@ export default class Poser {
         this.measurements.push( m );
 
         // after filtering down the pertinent info should we store a time series for playback or later rendering?
-        // storeItem(time+id, state);
+        if (this.record)
+            this.p5.storeItem('pose_'+this.count, m);
+        // should we record the raw or the filtered pose?
 
         // if the time window is getting too big, remove frames
         while (this.measurements.length > this.size) {

@@ -190,6 +190,10 @@ export default class GameState extends State {
 		this.menuButton.checkReleased();
 	}
 	
+	keyPressed() {
+		console.log(this.p5.key);
+	}
+
 	cleanup() {
 		super.update();
 	}
