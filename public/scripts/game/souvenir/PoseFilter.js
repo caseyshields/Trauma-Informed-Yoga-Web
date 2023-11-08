@@ -17,9 +17,10 @@ export default class Poser {
     sums = []; // [pose index] {x,y,z,w} // scratch space to reduce operations 
 
     // filter state
-    position = []; // [pose index]
+    // position = []; // [pose index]
     // velocity = [];
     // acceleration = [];
+    state = []; // {x,y,z,name,score,vx,vy,ax,ay}
     // v and a obtained using finite differences of the filtered measurements
     // TODO we might want to use a more sophisticated method of differentiation...
 
@@ -47,9 +48,14 @@ export default class Poser {
 
         this.measurements = [];//new Array(size);
         this.sums = new Float32Array(this.landmarks*4);
-        this.position = new Float32Array(this.landmarks*4);
-        this.velocity = new Float32Array(this.landmarks*4);
-        this.acceleration = new Float32Array(this.landmarks*4);
+        this.state = [];
+        for (let i=0; i<this.landmarks; i++)
+            this.state[i] = {name: this.session.poseLandmarks[i].name}
+
+        // this.position = new Float32Array(this.landmarks*4);
+        // this.velocity = new Float32Array(this.landmarks*4);
+        // this.acceleration = new Float32Array(this.landmarks*4);
+        // I assume these float arrays will be better for the cache. Preoptimization?
     }
 
     update() {
@@ -111,9 +117,10 @@ export default class Poser {
         }
 
         // draw the filter with prominent lines
-        this.p5.strokeWeight(3);
-        this.p5.stroke(this.color);
-        this.renderPose(this.position);
+        // this.p5.strokeWeight(3);
+        // this.p5.stroke(this.color);
+        // this.renderPose(this.position);
+        // 
 
         // draw velocity and acceleration vectors at each landmark
         // TODO
@@ -123,8 +130,15 @@ export default class Poser {
         for (let i=0; i<this.landmarks; i++) {
             let w = this.sums[i*4+3] / this.size;
             let c = this.p5.lerpColor(this.inaccurate, this.accurate, w);
-            this.p5.fill(c);
-            this.p5.circle(this.position[i*4], this.position[i*4+1], 10);
+            this.p5.stroke(c);
+            let p = this.state[i];
+
+            // draw the state vectors 4 times larger than actual magnitude
+            this.p5.line(p.x, p.y, p.x+(p.vx*4), p.y+(p.vy*4));
+            this.p5.line(p.x, p.y, p.x+(p.ax*4), p.y+(p.ay*4));
+
+            // draw a circle around the landmark at a scaled magnitude of 1 pixel/frame
+            this.p5.circle(p.x, p.y, 8);
         }
     }
         
@@ -197,16 +211,52 @@ export default class Poser {
     }
 
     estimate() {
-        for (let i=0; i<this.landmarks; i++) {
-            this.position[i*4] = this.sums[i*4] / this.sums[i*4+3];
-            this.position[i*4+1] = this.sums[i*4+1] / this.sums[i*4+3];
-            this.position[i*4+2] = this.sums[i*4+2] / this.sums[i*4+3];
 
-            // TODO velocity and acceleration...
+        // TODO this should only be called once in a row, otherwise it will zero the derivatives...
+        // how can I enforce that programatically?
+
+        // for each pose landmark
+        for (let i=0; i<this.landmarks; i++) {
+            let mark = this.state[i];
+
+            // compute the new weighted measurement
+            let x = this.sums[i*4] / this.sums[i*4+3];
+            let y = this.sums[i*4+1] / this.sums[i*4+3];
+            let z = this.sums[i*4+2] / this.sums[i*4+3];
+            let score = this.sums[i*4+3] / this.size; // not sure if the average score is misleading...
+            
+            // compute new velocity & acceleration using finite differences
+            let vx = (mark.x) ? x-mark.x : 0;
+            let vy = (mark.y) ? y-mark.y : 0;
+            let vz = (mark.z) ? z-mark.z : 0;
+            let ax = (mark.vx) ? vx-mark.vx : 0;
+            let ay = (mark.vy) ? vy-mark.vy : 0;
+            let az = (mark.vz) ? vz-mark.vz : 0;
+
+            // update the pose landmark
+            mark.x = x;
+            mark.y = y;
+            mark.z = z;
+            mark.vx = vx;
+            mark.vy = vy;
+            mark.vz = vz;
+            mark.ax = ax;
+            mark.ay = ay;
+            mark.az = az;
         }
+
+        // // linearly combine all measurements according to their confidence
+        // for (let i=0; i<this.landmarks; i++) {
+        //     this.position[i*4] = this.sums[i*4] / this.sums[i*4+3];
+        //     this.position[i*4+1] = this.sums[i*4+1] / this.sums[i*4+3];
+        //     this.position[i*4+2] = this.sums[i*4+2] / this.sums[i*4+3];
+        //     // TODO what about the zero confidence case?
+
+        //     // TODO velocity and acceleration...
+        // }
     }
 
-    position() { return this.position; }
+    // state() { return this.state; }
 
     /** empties the filter's time window */
     clear() {
