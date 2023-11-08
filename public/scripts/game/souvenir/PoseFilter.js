@@ -24,6 +24,12 @@ export default class Poser {
     // TODO add a configurable flag on whether we record the filtered poses in local storage
     // recordPoses = true;
 
+    // TODO add pose 'yardsticks'. For example, maybe the user needs to control the pitch of a sound
+    // by how high they are holding their hand. We can't map hand position onto pitch
+    // until we know how high they can reach!
+    // Do we track the highest point seen after instructing them to reach high?
+    // How do we adjust if they move closer or further away?
+
     // There are other architectural questions this module raises;
     // For example, the skeleton (which has game physics) is tied to the raw measurements;
     // Shouldn't it be tied to the filter instead? How?
