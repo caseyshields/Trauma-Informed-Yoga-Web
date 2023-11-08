@@ -37,6 +37,7 @@ export default class Poser {
         this.accurate = this.p5.color(0,255,0);
         this.color = this.p5.color(150,150,150);
 
+        this.size = size;
         this.measurements = [];
         this.sums = new Float32Array(this.landmarks*4); // I assume these float arrays will be better for the cache. Preoptimization?
         this.state = [];
@@ -82,7 +83,7 @@ export default class Poser {
                 this.sums[i*4 + 1] -= r[i*4 + 1] * r[i*4 + 3];
                 this.sums[i*4 + 2] -= r[i*4 + 2] * r[i*4 + 3];
                 this.sums[i*4 + 3] -= r[i*4 + 3];
-            } //TODO I should use a flyweight for all these float32 array rather than reallocating them...
+            } //TODO I should use a flyweight or circular buffer for all these float32 arrays rather than reallocating them...
         }
     }
 
@@ -133,7 +134,7 @@ export default class Poser {
             this.measurements.pop();
     }
 
-    /** draw all the measurement poses, then all the filtered landmarks with state vectors, 
+    /** Draw all the measurement poses, then all the filtered landmarks with state vectors, 
      * color coded by confidence. */
     render() {
         

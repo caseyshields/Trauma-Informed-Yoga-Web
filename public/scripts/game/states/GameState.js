@@ -45,7 +45,7 @@ export default class GameState extends State {
 			this.gameSession.skeletonLoaded = true;
 		}
 
-		this.poseFilter = new PoseFilter();
+		this.poseFilter = new PoseFilter(8);
 		this.diaphragm = new Diaphragm(this.gameSession.skeleton);
 		this.bodyTrace = new BodyTrace();// TODO make these constructors configure the appearance!
 		this.handPath = new HandPath();
