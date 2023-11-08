@@ -1,26 +1,14 @@
 import GameSession from "../../game/GameSession.js";
 
-/** Filters a stream of pose estimations from MediaPipe.
- * 
- * There are other architectural questions this module raises;
- * For example, the skeleton (which has game physics) is tied to the raw measurements;
- *  Shouldn't it be tied to the filter instead? How?
- * 
- * Should this be able to draw the raw wireframes as a debug tool?
- * - yes, drawing the time window would look rad.
- */
+/** Filters a stream of pose estimations from MediaPipe. */
 export default class Poser {
 
     landmarks = 33; // number of pose landmarks from MediaPipe
     size = 8; // number of frames in the time window that is filtered
     measurements = []; // [frame index] [pose index [x,y,z,w]] raw pose numbers
-    sums = []; // [pose index] {x,y,z,w} // scratch space to reduce operations 
+    sums = []; // [pose index [x,y,z,w]] // scratch space to reduce operations 
+    state = []; // [{x,y,z,name,score,vx,vy,ax,ay},...]
 
-    // filter state
-    // position = []; // [pose index]
-    // velocity = [];
-    // acceleration = [];
-    state = []; // {x,y,z,name,score,vx,vy,ax,ay}
     // v and a obtained using finite differences of the filtered measurements
     // TODO we might want to use a more sophisticated method of differentiation...
 
@@ -36,7 +24,10 @@ export default class Poser {
     // TODO add a configurable flag on whether we record the filtered poses in local storage
     // recordPoses = true;
 
-
+    // There are other architectural questions this module raises;
+    // For example, the skeleton (which has game physics) is tied to the raw measurements;
+    // Shouldn't it be tied to the filter instead? How?
+    
     constructor(size=8) {
         this.session = new GameSession();
         this.p5 = this.session.p5;
@@ -46,23 +37,20 @@ export default class Poser {
         this.accurate = this.p5.color(0,255,0);
         this.color = this.p5.color(150,150,150);
 
-        this.measurements = [];//new Array(size);
-        this.sums = new Float32Array(this.landmarks*4);
+        this.measurements = [];
+        this.sums = new Float32Array(this.landmarks*4); // I assume these float arrays will be better for the cache. Preoptimization?
         this.state = [];
         for (let i=0; i<this.landmarks; i++)
             this.state[i] = {name: this.session.poseLandmarks[i].name}
-
-        // this.position = new Float32Array(this.landmarks*4);
-        // this.velocity = new Float32Array(this.landmarks*4);
-        // this.acceleration = new Float32Array(this.landmarks*4);
-        // I assume these float arrays will be better for the cache. Preoptimization?
     }
 
+    /** Adds the current pose in the game session to the filter */
     update() {
         this.add(this.session.poseLandmarks);
         this.estimate();
     }
 
+    /** Adds the given pose estimate from MediaPipe to the time window of measurements */
     add(pose) {
 
         // transcribe the measurements for this frame and add it to the time window
@@ -94,18 +82,68 @@ export default class Poser {
                 this.sums[i*4 + 1] -= r[i*4 + 1] * r[i*4 + 3];
                 this.sums[i*4 + 2] -= r[i*4 + 2] * r[i*4 + 3];
                 this.sums[i*4 + 3] -= r[i*4 + 3];
-            }
-            //TODO I should use a flyweight for all these float32 array rather than reallocating them...
+            } //TODO I should use a flyweight for all these float32 array rather than reallocating them...
         }
     }
 
+    /** Computes the new weighted state and updates the derivatives. */
+    estimate() {
+
+        // TODO this should only be called once in a row, otherwise it will zero the derivatives...
+        // how can I enforce that programatically?
+
+        // for each pose landmark
+        for (let i=0; i<this.landmarks; i++) {
+            let mark = this.state[i];
+
+            // compute the new weighted measurement
+            let x = this.sums[i*4] / this.sums[i*4+3];
+            let y = this.sums[i*4+1] / this.sums[i*4+3];
+            let z = this.sums[i*4+2] / this.sums[i*4+3];
+            let score = this.sums[i*4+3] / this.size; // not sure if the average score is misleading...
+            
+            // compute new velocity & acceleration using finite differences
+            let vx = (mark.x) ? x-mark.x : 0;
+            let vy = (mark.y) ? y-mark.y : 0;
+            let vz = (mark.z) ? z-mark.z : 0;
+            let ax = (mark.vx) ? vx-mark.vx : 0;
+            let ay = (mark.vy) ? vy-mark.vy : 0;
+            let az = (mark.vz) ? vz-mark.vz : 0;
+
+            // update the pose landmark
+            mark.score = score;
+            mark.x = x;
+            mark.y = y;
+            mark.z = z;
+            mark.vx = vx;
+            mark.vy = vy;
+            mark.vz = vz;
+            mark.ax = ax;
+            mark.ay = ay;
+            mark.az = az;
+        }
+    }
+
+    state() { return this.state; }
+    // TODO more accessors
+
+    /** empties the filter's time window */
+    clear() {
+        while(this.measurements.length>0)
+            this.measurements.pop();
+    }
+
+    /** draw all the measurement poses, then all the filtered landmarks with state vectors, 
+     * color coded by confidence. */
     render() {
+        
+        // style for all the filter indicators
+        this.p5.strokeWeight(1); 
         this.p5.noFill();
         this.p5.strokeCap(this.p5.ROUND);
         this.p5.strokeJoin(this.p5.ROUND);
 
-        // draw all frames with faint lines
-        this.p5.strokeWeight(1);
+        // draw all measured frames
         for (let frame=0; frame<this.measurements.length; frame++) {
             let pose = this.measurements[frame];
 
@@ -116,22 +154,12 @@ export default class Poser {
             this.renderPose(pose);
         }
 
-        // draw the filter with prominent lines
-        // this.p5.strokeWeight(3);
-        // this.p5.stroke(this.color);
-        // this.renderPose(this.position);
-        // 
+        // For each filtered pose landmark
+        for (const p of this.state) {
 
-        // draw velocity and acceleration vectors at each landmark
-        // TODO
-
-        // indicate pose confidence with color-coded markers at the points
-        this.p5.stroke(this.color);
-        for (let i=0; i<this.landmarks; i++) {
-            let w = this.sums[i*4+3] / this.size;
-            let c = this.p5.lerpColor(this.inaccurate, this.accurate, w);
+            // color code the indicator by confidence score
+            let c = this.p5.lerpColor(this.inaccurate, this.accurate, p.score);
             this.p5.stroke(c);
-            let p = this.state[i];
 
             // draw the state vectors 4 times larger than actual magnitude
             this.p5.line(p.x, p.y, p.x+(p.vx*4), p.y+(p.vy*4));
@@ -141,8 +169,15 @@ export default class Poser {
             this.p5.circle(p.x, p.y, 8);
         }
     }
-        
+    
+    /** Render a pose wireframe from a raw measurement array.
+     * Stored like; [P1x, P1y, P1z, P1score, P2x, P2y, ... ]
+     * @param {Float32Array} pose A measurement array
+    */
     renderPose(pose) {
+
+        // TODO should I load landmark bone connectivity from the configuration? will it ever change?
+
         // draw face
         this.p5.beginShape();
         this.p5.vertex(pose[8*4], pose[8*4+1]);
@@ -207,60 +242,6 @@ export default class Poser {
         this.p5.vertex(pose[32*4], pose[32*4+1]);
         this.p5.vertex(pose[28*4], pose[28*4+1]);
         this.p5.endShape();
-        // TODO should I load landmark connectivity from the configuration? will it ever change?
     }
 
-    estimate() {
-
-        // TODO this should only be called once in a row, otherwise it will zero the derivatives...
-        // how can I enforce that programatically?
-
-        // for each pose landmark
-        for (let i=0; i<this.landmarks; i++) {
-            let mark = this.state[i];
-
-            // compute the new weighted measurement
-            let x = this.sums[i*4] / this.sums[i*4+3];
-            let y = this.sums[i*4+1] / this.sums[i*4+3];
-            let z = this.sums[i*4+2] / this.sums[i*4+3];
-            let score = this.sums[i*4+3] / this.size; // not sure if the average score is misleading...
-            
-            // compute new velocity & acceleration using finite differences
-            let vx = (mark.x) ? x-mark.x : 0;
-            let vy = (mark.y) ? y-mark.y : 0;
-            let vz = (mark.z) ? z-mark.z : 0;
-            let ax = (mark.vx) ? vx-mark.vx : 0;
-            let ay = (mark.vy) ? vy-mark.vy : 0;
-            let az = (mark.vz) ? vz-mark.vz : 0;
-
-            // update the pose landmark
-            mark.x = x;
-            mark.y = y;
-            mark.z = z;
-            mark.vx = vx;
-            mark.vy = vy;
-            mark.vz = vz;
-            mark.ax = ax;
-            mark.ay = ay;
-            mark.az = az;
-        }
-
-        // // linearly combine all measurements according to their confidence
-        // for (let i=0; i<this.landmarks; i++) {
-        //     this.position[i*4] = this.sums[i*4] / this.sums[i*4+3];
-        //     this.position[i*4+1] = this.sums[i*4+1] / this.sums[i*4+3];
-        //     this.position[i*4+2] = this.sums[i*4+2] / this.sums[i*4+3];
-        //     // TODO what about the zero confidence case?
-
-        //     // TODO velocity and acceleration...
-        // }
-    }
-
-    // state() { return this.state; }
-
-    /** empties the filter's time window */
-    clear() {
-        while(this.measurements.length>0)
-            this.measurements.pop();
-    }
 }
