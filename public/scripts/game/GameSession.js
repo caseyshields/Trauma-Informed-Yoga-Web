@@ -1,6 +1,7 @@
 import ParticleManager from "../core/GameObject/Particle/ParticleManager.js";
 import SoundManager from "../core/Sound/SoundManager.js";
 import BreathingManager from "./breathing/BreathingManager.js";
+import PoseFilter from "./PoseFilter.js";
 
 export default class GameSession {
 	constructor() {
@@ -22,6 +23,8 @@ export default class GameSession {
 
 		// array of {x, y, z, score, name} object
 		this.__poseLandmarks = {}; //Pose landmarks
+		this.__poseFilter = new PoseFilter(8);
+		// TODO these seem redundant; can we combine them?
 
 		// instance of Skeleton class
 		this.__skeleton = {}; //player skeleton
@@ -117,6 +120,10 @@ export default class GameSession {
 
 	set poseLandmarks(poseLandmarks) {
 		this.__poseLandmarks = poseLandmarks;
+	}
+
+	get poseFilter() {
+		return this.__poseFilter;
 	}
 
 	get instance() {

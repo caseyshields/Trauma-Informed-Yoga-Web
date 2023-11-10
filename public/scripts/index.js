@@ -60,6 +60,9 @@ var TIYW = function (p) {
 		p.frameRate(30);
 		p.imageMode(p.CENTER);
 
+		// initialize the Pose filter
+		gameSession.poseFilter.setup();
+		// TODO is this the right place for this?
 	};
 
 	//core update function of the game
@@ -71,6 +74,9 @@ var TIYW = function (p) {
 		gameSession.currentState.update();
 		gameSession.particleManager.update();
 		gameSession.soundManager.update();
+		gameSession.poseFilter.update();
+		// TODO should this be integrated with the update of 'poseLandmarks'?
+		// TODO should gameSession just have an update() method? is this unnecessary uncoupling?
 
 		//Renders last and from back to front. Clear before going.
 		p.clear();
@@ -80,6 +86,7 @@ var TIYW = function (p) {
 		gameSession.currentState.render();
 		gameSession.particleManager.render();
 		gameSession.soundManager.render();
+		gameSession.poseFilter.render();
 	};
 
 	//implement your controls inside of your specific state.
@@ -88,6 +95,10 @@ var TIYW = function (p) {
 	};
 
 	p.keyPressed = function () {
+		if (gameSession.currentState.keyPressed)
+			this.gameSession.currentState.keyPressed
+		// TODO why isn't this working?
+		// console.log(p.key);
 		//call gameState code here as needed.
 	};
 
@@ -115,7 +126,6 @@ var TIYW = function (p) {
 		if (gameSession.currentState.mousePressed) {
 			gameSession.currentState.mousePressed();
 		}
-		//call gameState code here as needed.
 	};
 
 	p.mouseReleased = function () {

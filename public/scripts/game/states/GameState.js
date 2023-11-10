@@ -8,7 +8,6 @@ import Diaphragm from "../breathing/Diaphragm.js";
 import BodyTrace from "../souvenir/BodyTrace.js";
 // import BodyTrace from "../souvenir/PoseTrail.js";
 import HandPath from "../souvenir/HandPath.js";
-import PoseFilter from "../souvenir/PoseFilter.js";
 
 /** Example of Gamestate
  *
@@ -30,7 +29,6 @@ export default class GameState extends State {
 	diaphragm = {};
 	bodyTrace = {};
 	handPath = {};
-	poseFilter = {};
 	
 	constructor() {
 		super("Game");
@@ -45,7 +43,6 @@ export default class GameState extends State {
 			this.gameSession.skeletonLoaded = true;
 		}
 
-		this.poseFilter = new PoseFilter(8);
 		this.diaphragm = new Diaphragm(this.gameSession.skeleton);
 		this.bodyTrace = new BodyTrace();// TODO make these constructors configure the appearance!
 		this.handPath = new HandPath();
@@ -112,10 +109,9 @@ export default class GameState extends State {
 	render() {
 		super.render();
 
-		// this.bodyTrace.render();
-		// this.handPath.render();
-		// this.diaphragm.render();
-		this.poseFilter.render();// might have a debug mode...
+		this.bodyTrace.render();
+		this.handPath.render();
+		this.diaphragm.render();
 		
 		//Render skeleton
 		// this.gameSession.skeleton.render();
@@ -158,7 +154,6 @@ export default class GameState extends State {
 	update() {
 		super.update();
 
-		this.poseFilter.update();
 		//this.diaphragm.update();//unnecessary but here for consistency or if something changes...
 		//this.bodyTrace.update();
 		//this.handPath.update();

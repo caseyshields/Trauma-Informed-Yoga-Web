@@ -1,7 +1,7 @@
-import GameSession from "../../game/GameSession.js";
+import GameSession from "./GameSession.js";
 
 /** Filters a stream of pose estimations from MediaPipe. */
-export default class Poser {
+export default class PoseFilter {
 
     landmarks = 33; // number of pose landmarks from MediaPipe
     size = 8; // number of frames in the time window that is filtered, 0-index is the oldest
@@ -38,6 +38,10 @@ export default class Poser {
     // Shouldn't it be tied to the filter instead? How?
     
     constructor(size=8) {
+        this.size = size;
+    }
+    
+    setup() {
         this.session = new GameSession();
         this.p5 = this.session.p5;
         this.newer = this.p5.color(200,100,100);
@@ -46,12 +50,9 @@ export default class Poser {
         this.accurate = this.p5.color(0,255,0);
         this.color = this.p5.color(150,150,150);
         this.record = false;
-        this.size = size;
         this.measurements = [];
         this.sums = new Float32Array(this.landmarks*4); // I assume these float arrays will be better for the cache. Preoptimization?
         this.state = [];
-        for (let i=0; i<this.landmarks; i++)
-            this.state[i] = {name: this.session.poseLandmarks[i].name}
     }
 
     record() {
@@ -59,18 +60,24 @@ export default class Poser {
         this.count = true;
         this.p5.clearStorage();
     }
+    
     stop() {
         this.record = false;
     }
 
     /** Adds the current pose in the game session to the filter */
     update() {
-        this.add(this.session.poseLandmarks);
-        this.estimate();
+        if (this.add(this.session.poseLandmarks))
+            this.estimate();
     }
 
     /** Adds the given pose estimate from MediaPipe to the time window of measurements */
     add(pose) {
+
+        // guard against pose not being initialized since game session exists before mediapipe is initialized.
+        if (!pose || !Array.isArray(pose) || pose.length!=this.landmarks)
+            return false;
+        // TODO this layout with poseLandmarks being a parallel GameSession field seems awkward...
 
         // transcribe the measurements for this frame and add it to the time window
         let m = new Float32Array(pose.length*4);
@@ -105,6 +112,8 @@ export default class Poser {
                 this.sums[i*4 + 3] -= r[i*4 + 3];
             } //TODO I should use a flyweight or circular buffer for all these float32 arrays rather than reallocating them...
         }
+
+        return true;
     }
 
     /** Computes the new weighted state and updates the derivatives. */
@@ -115,6 +124,8 @@ export default class Poser {
 
         // for each pose landmark
         for (let i=0; i<this.landmarks; i++) {
+            if (!this.state[i])
+                this.state[i] = {name: this.session.poseLandmarks[i].name}
             let mark = this.state[i];
 
             // compute the new weighted measurement
