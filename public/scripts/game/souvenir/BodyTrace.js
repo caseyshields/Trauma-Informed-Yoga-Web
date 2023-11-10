@@ -14,7 +14,8 @@ export default class BodyTrace {
     constructor() {
         this.session = new GameSession();
         this.p5 = this.session.p5
-        this.color = this.p5.color(0, 255, 255, 64); // TODO make configurable;
+        this.full = this.p5.color(250, 250, 250); // TODO make configurable;
+        this.empty = this.p5.color(50, 50, 50); // TODO make configurable;
         this.w = this.session.canvasWidth;
         this.h = this.session.canvasHeight;
         this.g = this.p5.createGraphics(this.w,this.h);
@@ -29,7 +30,7 @@ export default class BodyTrace {
     render() {
 
         // dim the cumulative image
-        this.g.background(0, 0, 0, 5);
+        this.g.background(0, 0, 0, 20);
 
         // for now just don't draw components if we're missing landmarks
         // but eventually we should contemplate a more sophisticated sol'n
@@ -49,16 +50,19 @@ export default class BodyTrace {
             let w = (Math.sqrt(d1) + Math.sqrt(d2)) / 12;
             // TODO I'm sure this can be improved; it doesn't give good results when the torso is seen from above.
 
+            // adjust color of the avatar by the current breath
+            let c = this.g.lerpColor(this.empty, this.full, this.session.breathingManager.breath);
+            
             // use a large stroke weight to simulate the thickness of the limbs
             this.g.strokeWeight(w);
             this.g.strokeCap(this.g.ROUND);
             this.g.strokeJoin(this.g.ROUND);
-            this.g.stroke(this.color);
+            this.g.stroke(c);
 
             // fill the torso
             let neck = midpoint(rightShoulder, leftShoulder);
             let pelvis = midpoint(rightHip, leftHip);
-            this.g.fill(this.color);
+            this.g.fill(c);
             this.g.triangle(neck[0], neck[1], rightHip.x, rightHip.y, leftHip.x, leftHip.y);
             this.g.triangle(pelvis[0], pelvis[1], rightShoulder.x, rightShoulder.y, leftShoulder.x, leftShoulder.y);
 

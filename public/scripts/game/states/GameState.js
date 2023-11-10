@@ -110,8 +110,8 @@ export default class GameState extends State {
 		super.render();
 
 		this.bodyTrace.render();
+		// this.diaphragm.render();
 		this.handPath.render();
-		this.diaphragm.render();
 		
 		//Render skeleton
 		// this.gameSession.skeleton.render();
