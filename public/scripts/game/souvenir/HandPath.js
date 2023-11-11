@@ -16,13 +16,10 @@ export default class HandPath {
         this.g = this.p5.createGraphics(this.w,this.h);
 
         // style parameters
-        this.thickness = 25;
-        this.randomness = 5;
-        this.transparent = this.p5.color(0,0,0,0);
         this.emitters = [
-            {index:0, full:this.p5.color(25,150,25,5), empty:this.p5.color(25,150,25,1)},
-            {index:20, full:this.p5.color(150,0,25,5), empty:this.p5.color(150,0,25,1)},
-            {index:19, full:this.p5.color(25,0,150,5), empty:this.p5.color(25,0,150,1)}
+            {index:0, small:16, large:48, empty:this.p5.color(25,150,25,5), full:this.p5.color(100,100,100,1), randomness:5},
+            {index:20, small:16, large:48, empty:this.p5.color(150,0,25,5), full:this.p5.color(100,100,100,1), randomness:5},
+            {index:19, small:16, large:48, empty:this.p5.color(25,0,150,5), full:this.p5.color(100,100,100,1), randomness:5}
         ];
     }
 
@@ -45,8 +42,9 @@ export default class HandPath {
             for(let e of this.emitters)
                 if (this.posed[e.index] && this.session.poseLandmarks[e.index]) {
 
-                    // set the color for the emitter using breath
+                    // set the color and size for the emitter using breath
                     let c = this.g.lerpColor(e.empty, e.full, this.session.breathingManager.breath);
+                    let d = e.small + (1-this.session.breathingManager.breath)*(e.large-e.small)
                     this.g.fill(c);
 
                     // determine velocity between frames
@@ -61,9 +59,9 @@ export default class HandPath {
                         let s = 1 - r;
                         let x = r*this.posed[e.index].x + s*this.session.poseLandmarks[e.index].x;
                         let y = r*this.posed[e.index].y + s*this.session.poseLandmarks[e.index].y;
-                        let dx = Math.random()*this.randomness;
-                        let dy = Math.random()*this.randomness;
-                        this.g.circle(x+dx,y+dy,this.thickness);
+                        let rx = Math.random() * e.randomness;
+                        let ry = Math.random() * e.randomness;
+                        this.g.circle(x+rx, y+ry, d);
                     }
                 }
 
