@@ -13,6 +13,8 @@ SETUP should be abstracted to be made easier to use.
 //Instantiate our Game Session - this will be our parent for all game data.
 let gameSession = new GameSession();
 
+let RenderPoseFilter = true; // Displays the pose filter for debugging
+
 //Define how our P5 sketch will look. Treat this as the "Main".
 var TIYW = function (p) {
 	//Executed before beginning setup
@@ -85,7 +87,8 @@ var TIYW = function (p) {
 		gameSession.currentState.render();
 		gameSession.particleManager.render();
 		gameSession.soundManager.render();
-		gameSession.pose.render();
+		if (RenderPoseFilter)
+			gameSession.pose.render();
 	};
 
 	//implement your controls inside of your specific state.
