@@ -35,6 +35,9 @@ export default class GameState extends State {
 		super("Game");
 	}
 
+	// TODO load style from some configuration
+	// TODO allow the user to edit it in game
+
 	setup() {
 		super.setup();
 
@@ -44,13 +47,17 @@ export default class GameState extends State {
 			this.gameSession.skeletonLoaded = true;
 		}
 
-		this.diaphragm = new Diaphragm(this.gameSession.skeleton);
-		this.silhouette = new Silhouette();// TODO make these constructors configure the appearance!
+		this.diaphragm = new Diaphragm( this.gameSession.skeleton );
+		this.silhouette = new Silhouette( {
+			// thickness: undefined,
+			empty: [50,50,50],
+			full: [250, 250, 250]
+		});
 		this.smoke = new SmokeTrails([
 			{index:0, small:16, large:32, fuzz:4, empty:[25,150,25,5], full:[100,100,100,1]},
 			{index:20, small:16, large:32, fuzz:4, empty:[150,0,25,5], full:[100,100,100,1]},
 			{index:19, small:16, large:32, fuzz:4, empty:[25,0,150,5], full:[100,100,100,1]}
-		]); // TODO load from some configuration, allow the user to edit it...
+		]);
 
 		//Instantiate backbutton
 		let backButtonLayout = {
@@ -120,6 +127,7 @@ export default class GameState extends State {
 		
 		//Render skeleton
 		// this.gameSession.skeleton.render();
+		// TODO I'm rendering the filter instead! Should the Skeleton be updated to also use the Filter?
 
 		//Test target
 		this.testTarget.render();
@@ -159,8 +167,7 @@ export default class GameState extends State {
 	update() {
 		super.update();
 
-		//this.diaphragm.update();//unnecessary but here for consistency or if something changes...
-		//this.silhouette.update();
+		//this.diaphragm.update(); // unnecessary but here for consistency or if something changes...
 
 		//Update skeleton
 		this.gameSession.skeleton.update();

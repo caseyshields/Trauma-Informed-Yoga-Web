@@ -1,32 +1,40 @@
 import GameSession from "../GameSession.js"; 
 
-/** Renders the user's pose as a silhouette with motion blur. 
- * TODO should I just make the skeleton look like the silhouette and supply it this
- * 'motion blur' image context? Such an organization would have less repetition...
-*/
+// Tried to see what it would look like not using the GameObject base class
+// if this silhouette needs to interact with physics-
+// or there is a GameState that has to treat everything uniformly through an interface;
+// then this should be a GameObject...
+
+/** Renders the user's pose as a silhouette with motion blur. */
 export default class Silhouette {
-    // Tried to see what it would look like not using the GameObject base class
-    // if this silhouette needs to interact with physics-
-    // or there is a GameState that has to treat everything uniformly through an interface;
-    // then this should be a GameObject...
 
-    /** TODO make constructor accept a style object! */
-    constructor() {
-        this.session = new GameSession();
-        this.p5 = this.session.p5
-        this.full = this.p5.color(250, 250, 250); // TODO make configurable;
-        this.empty = this.p5.color(50, 50, 50); // TODO make configurable;
-        this.w = this.session.canvasWidth;
-        this.h = this.session.canvasHeight;
-        this.g = this.p5.createGraphics(this.w,this.h);
-    } // TODO adopt naming conventions for private fields
+    // TODO see if media pipe provides a segmentation mask! It is mentioned in Google's MediaPipe docs...
 
-    update() {
+    // TODO should I just make the skeleton look like the silhouette and supply it this
+    // 'motion blur' image context? Such an organization would have less repetition...
+
+    static Default = {
+        // thickness: undefined,
+        empty: [50,50,50],
+        full: [250, 250, 250]
     }
 
-    /** Every render, the cumulative image is dimmed then a silhouette of the user is drawn on top.
-     * TODO experiment with blend modes and alpha masks! 
-     * TODO see if media pipe provides a segmentation mask! */
+    /** @constructor
+     * @param {Number} style.thickness Stroke thickness used when drawing the silhouette
+     * @param {Number[]} style.empty RGB(A) color channels of the silhouette when breath is empty
+     * @param {Number[]} style.full RGB(A) color channels of the silhouette when breath is full
+     */
+    constructor( style = Silhouette.Default ) {
+        this._session = new GameSession();
+        this._style = style;
+        this._style.full = this._session.p5.color(...this._style.full);
+        this._style.empty = this._session.p5.color(...this._style.empty);
+        this.g = this._session.p5.createGraphics(this._session.canvasWidth, this._session.canvasHeight);
+    }
+
+    // TODO handle screen resize!!!!!!!!!!!!!!!!!!!!!
+
+    /** Every render, the cumulative image is dimmed then a silhouette of the user is drawn on top. */
     render() {
 
         // dim the cumulative image
@@ -36,27 +44,29 @@ export default class Silhouette {
         // but eventually we should contemplate a more sophisticated sol'n
         // that includes time filtering, outlier rejection, estimation, etc...    
 
-        // TODO switch to using the filtered position!
-
         // draw the avatar if we can see the torso
-        let pose = this.session.pose.state; // array of {x, y, z, score, name}
+        let pose = this._session.pose.state; // array of {x, y, z, score, name}
         let leftHip = pose[23];
         let rightHip = pose[24];
         let leftShoulder = pose[11];
         let rightShoulder = pose[12];
         if( leftHip && rightHip && leftShoulder && rightShoulder ) {
 
-            // Try to estimate limb width from the current size of the torso...
-            let d1 = Math.pow(leftHip.x - rightShoulder.x, 2) + Math.pow(leftHip.y - rightShoulder.y, 2);
-            let d2 = Math.pow(rightHip.x - leftShoulder.x, 2) + Math.pow(rightHip.y - leftShoulder.y, 2);
-            let w = (Math.sqrt(d1) + Math.sqrt(d2)) / 12;
-            // TODO I'm sure this can be improved; it doesn't give good results when the torso is seen from above.
+            // use a large stroke weight to simulate the thickness of the limbs
+            let w = this._style.thickness;
+            if (!w) {
+                // Try to estimate limb width from the current size of the torso...
+                let d1 = Math.pow(leftHip.x - rightShoulder.x, 2) + Math.pow(leftHip.y - rightShoulder.y, 2);
+                let d2 = Math.pow(rightHip.x - leftShoulder.x, 2) + Math.pow(rightHip.y - leftShoulder.y, 2);
+                w = (Math.sqrt(d1) + Math.sqrt(d2)) / 12;
+            } // TODO I'm sure this can be improved; it doesn't give good results when the torso is seen from above.
+            this.g.strokeWeight(w);
 
             // adjust color of the avatar by the current breath
-            let c = this.g.lerpColor(this.empty, this.full, this.session.breathingManager.breath);
+            let c = this.g.lerpColor(this._style.empty, this._style.full, 
+                this._session.breathingManager.breath);
             
-            // use a large stroke weight to simulate the thickness of the limbs
-            this.g.strokeWeight(w);
+            // default line styling
             this.g.strokeCap(this.g.ROUND);
             this.g.strokeJoin(this.g.ROUND);
             this.g.stroke(c);
@@ -77,12 +87,7 @@ export default class Silhouette {
                 
                 // use ears to find centerpoint of head; other features are on the front of the face.
                 let head = midpoint(pose[8], pose[7]);
-
-                // measure size of skull?
-                // let dx = pose[8].x-pose[7].x;
-                // let dy = pose[8].y-pose[7].y;
-                // let d = Math.sqrt(dx*dx + dy*dy);
-                this.g.circle(head[0], head[1], 0.75*w); // cranium
+                this.g.circle(head[0], head[1], 0.8*w); // cranium
                 this.g.line(neck[0], neck[1], head[0], head[1]); // neck
                 
                 let chin = midpoint(pose[10], pose[9]);
@@ -125,12 +130,11 @@ export default class Silhouette {
             // huh, I haven't run into any problems without the null-ish guard...
 
             // draw the cumulative image to the screen
-            this.p5.image(this.g, this.w/2, this.h/2);
+            this._session.p5.image(this.g, this._session.canvasWidth/2, this._session.canvasHeight/2);
         }
     }
 
-    // TODO handle screen resize!!!!!!!!!!!!!!!!!!!!!
-
+    get style() {return this._style;}
     
 }
 
