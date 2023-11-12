@@ -39,7 +39,7 @@ export default class Silhouette {
         // TODO switch to using the filtered position!
 
         // draw the avatar if we can see the torso
-        let pose = this.session.poseLandmarks;// array of {x, y, z, score, name}
+        let pose = this.session.pose.state; // array of {x, y, z, score, name}
         let leftHip = pose[23];
         let rightHip = pose[24];
         let leftShoulder = pose[11];
