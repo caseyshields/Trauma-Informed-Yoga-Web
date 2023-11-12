@@ -5,9 +5,9 @@ import MenuButton from "../buttons/MenuButton.js";
 import Target from "../form/Target.js";
 import Narrator from "../narrator/Narrator.js";
 import Diaphragm from "../breathing/Diaphragm.js";
-import BodyTrace from "../souvenir/BodyTrace.js";
-// import BodyTrace from "../souvenir/PoseTrail.js";
-import HandPath from "../souvenir/HandPath.js";
+import Silhouette from "../souvenir/Silhouette.js";
+// import Silhouette from "../souvenir/PoseTrail.js";
+import SmokeTrails from "../souvenir/SmokeTrails.js";
 
 /** Example of Gamestate
  *
@@ -27,8 +27,9 @@ export default class GameState extends State {
 	testTarget1 = {};
 	narrator = {};
 	diaphragm = {};
-	bodyTrace = {};
-	handPath = {};
+	silhouette = {};
+	smoke = {}; 
+	// why are fields instantiated with anonymous classes?
 	
 	constructor() {
 		super("Game");
@@ -44,8 +45,8 @@ export default class GameState extends State {
 		}
 
 		this.diaphragm = new Diaphragm(this.gameSession.skeleton);
-		this.bodyTrace = new BodyTrace();// TODO make these constructors configure the appearance!
-		this.handPath = new HandPath();
+		this.silhouette = new Silhouette();// TODO make these constructors configure the appearance!
+		this.smoke = new SmokeTrails();
 
 		//Instantiate backbutton
 		let backButtonLayout = {
@@ -109,9 +110,9 @@ export default class GameState extends State {
 	render() {
 		super.render();
 
-		this.bodyTrace.render();
+		this.silhouette.render();
 		// this.diaphragm.render();
-		this.handPath.render();
+		this.smoke.render();
 		
 		//Render skeleton
 		// this.gameSession.skeleton.render();
@@ -155,8 +156,7 @@ export default class GameState extends State {
 		super.update();
 
 		//this.diaphragm.update();//unnecessary but here for consistency or if something changes...
-		//this.bodyTrace.update();
-		//this.handPath.update();
+		//this.silhouette.update();
 
 		//Update skeleton
 		this.gameSession.skeleton.update();

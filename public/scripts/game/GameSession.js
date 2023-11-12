@@ -17,6 +17,8 @@ export default class GameSession {
 		//Instance Variables
 		this.__p5 = {}; //P5 instance
 		this.__canvas = {}; //P5 Canvas
+		// TODO Can we import these directly from P5? 
+		// It is possible for setup() phase constructors to reference this while it is empty!
 
 		// reference to mediapipe manager
 		this.__mediapipe = {};

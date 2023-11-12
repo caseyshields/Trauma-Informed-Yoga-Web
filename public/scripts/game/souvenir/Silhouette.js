@@ -1,10 +1,10 @@
-import GameSession from "../../game/GameSession.js"; 
+import GameSession from "../GameSession.js"; 
 
 /** Renders the user's pose as a silhouette with motion blur. 
  * TODO should I just make the skeleton look like the silhouette and supply it this
  * 'motion blur' image context? Such an organization would have less repetition...
 */
-export default class BodyTrace {
+export default class Silhouette {
     // Tried to see what it would look like not using the GameObject base class
     // if this silhouette needs to interact with physics-
     // or there is a GameState that has to treat everything uniformly through an interface;
@@ -35,6 +35,8 @@ export default class BodyTrace {
         // for now just don't draw components if we're missing landmarks
         // but eventually we should contemplate a more sophisticated sol'n
         // that includes time filtering, outlier rejection, estimation, etc...    
+
+        // TODO switch to using the filtered position!
 
         // draw the avatar if we can see the torso
         let pose = this.session.poseLandmarks;// array of {x, y, z, score, name}
