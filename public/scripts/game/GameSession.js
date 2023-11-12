@@ -23,7 +23,7 @@ export default class GameSession {
 
 		// array of {x, y, z, score, name} object
 		this.__poseLandmarks = {}; //Pose landmarks
-		this.__poseFilter = new PoseFilter(8);
+		this.__pose = new PoseFilter(8);
 		// TODO these seem redundant; can we combine them?
 
 		// instance of Skeleton class
@@ -122,8 +122,8 @@ export default class GameSession {
 		this.__poseLandmarks = poseLandmarks;
 	}
 
-	get poseFilter() {
-		return this.__poseFilter;
+	get pose() {
+		return this.__pose;
 	}
 
 	get instance() {

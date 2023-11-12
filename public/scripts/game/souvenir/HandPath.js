@@ -1,8 +1,6 @@
 import GameSession from "../GameSession.js"; 
 
-/** Different parts of the pose emit different hues, modified by breath
- * note: will have all the same architectural problems discussed in BodyTrace.
- */
+/** Different parts of the pose emit different hues, modified by breath */
 export default class HandPath {
 
     // records the pose of the last frame
@@ -17,9 +15,12 @@ export default class HandPath {
 
         // style parameters
         this.emitters = [
-            {index:0, small:16, large:48, empty:this.p5.color(25,150,25,5), full:this.p5.color(100,100,100,1), randomness:5},
-            {index:20, small:16, large:48, empty:this.p5.color(150,0,25,5), full:this.p5.color(100,100,100,1), randomness:5},
-            {index:19, small:16, large:48, empty:this.p5.color(25,0,150,5), full:this.p5.color(100,100,100,1), randomness:5}
+            {index:0, small:16, large:32, randomness:4,
+                empty:this.p5.color(25,150,25,5), full:this.p5.color(100,100,100,1)},
+            {index:20, small:16, large:32, randomness:4,
+                empty:this.p5.color(150,0,25,5), full:this.p5.color(100,100,100,1)},
+            {index:19, small:16, large:32, randomness:4,
+                empty:this.p5.color(25,0,150,5), full:this.p5.color(100,100,100,1)}
         ];
     }
 
@@ -31,55 +32,34 @@ export default class HandPath {
     render() {
         // this.g.background(0,0,0,5);
 
-        // skip first render so we can get a velocity
-        if (this.posed.length) {
+        // general state machine styling
+        this.g.noStroke();
+        this.g.blendMode(this.g.SCREEN); // BLEND // DIFFERENCE
 
-            this.g.noStroke();
-            // this.g.blendMode(this.g.BLEND);
-            // this.g.blendMode(this.g.DIFFERENCE);
-            this.g.blendMode(this.g.SCREEN);
+        // for each valid configured pose landmark
+        for(let e of this.emitters) {
+            let mark = this.session.pose.state[e.index];
+            if (mark) {
 
-            for(let e of this.emitters)
-                if (this.posed[e.index] && this.session.poseLandmarks[e.index]) {
+                // set the color and size for the emitter using current breath volume
+                let c = this.g.lerpColor(e.empty, e.full, this.session.breathingManager.breath);
+                let d = e.small + (1-this.session.breathingManager.breath)*(e.large-e.small)
+                this.g.fill(c);
 
-                    // set the color and size for the emitter using breath
-                    let c = this.g.lerpColor(e.empty, e.full, this.session.breathingManager.breath);
-                    let d = e.small + (1-this.session.breathingManager.breath)*(e.large-e.small)
-                    this.g.fill(c);
-
-                    // determine velocity between frames
-                    let vx = this.posed[e.index].x - this.session.poseLandmarks[e.index].x;
-                    let vy = this.posed[e.index].y - this.session.poseLandmarks[e.index].y;
-                    let v = Math.sqrt((vx*vx)+(vy*vy));
-                    // TODO we should record more points so we can smoothly adjust emitter size...
-
-                    // draw a path of circles
-                    for (let t=v; t>0; t--) {
-                        let r = t/v//this.thickness;
-                        let s = 1 - r;
-                        let x = r*this.posed[e.index].x + s*this.session.poseLandmarks[e.index].x;
-                        let y = r*this.posed[e.index].y + s*this.session.poseLandmarks[e.index].y;
-                        let rx = Math.random() * e.randomness;
-                        let ry = Math.random() * e.randomness;
-                        this.g.circle(x+rx, y+ry, d);
-                    }
+                // draw a path of circles whose density is proportional to the velocity
+                let v = this.g.mag(mark.vx, mark.vy);
+                for (let t=v; t>0; t--) {
+                    let r = t/v
+                    let x = mark.x - r*mark.vx + Math.random()*e.randomness;
+                    let y = mark.y - r*mark.vy + Math.random()*e.randomness;
+                    this.g.circle(x, y, d);
                 }
-
-            // draw it to the screen and return blend mode to normal
-            this.p5.image(this.g, this.w/2, this.h/2);
-            this.g.blendMode(this.g.BLEND);
+            }
         }
 
-        // save previous pose
-        for (let n=0; n<this.session.poseLandmarks.length; n++) {
-            this.posed[n] = {};
-            this.posed[n].x = this.session.poseLandmarks[n].x;
-            this.posed[n].y = this.session.poseLandmarks[n].y;
-            this.posed[n].z = this.session.poseLandmarks[n].z;
-            this.posed[n].score = this.session.poseLandmarks[n].score;
-        }
+        // draw it to the screen
+        this.p5.image(this.g, this.w/2, this.h/2);
     }
 
     // TODO handle resize!
-
 }
