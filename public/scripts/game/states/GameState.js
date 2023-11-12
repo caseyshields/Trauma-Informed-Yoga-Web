@@ -46,7 +46,11 @@ export default class GameState extends State {
 
 		this.diaphragm = new Diaphragm(this.gameSession.skeleton);
 		this.silhouette = new Silhouette();// TODO make these constructors configure the appearance!
-		this.smoke = new SmokeTrails();
+		this.smoke = new SmokeTrails([
+			{index:0, small:16, large:32, fuzz:4, empty:[25,150,25,5], full:[100,100,100,1]},
+			{index:20, small:16, large:32, fuzz:4, empty:[150,0,25,5], full:[100,100,100,1]},
+			{index:19, small:16, large:32, fuzz:4, empty:[25,0,150,5], full:[100,100,100,1]}
+		]); // TODO load from some configuration, allow the user to edit it...
 
 		//Instantiate backbutton
 		let backButtonLayout = {

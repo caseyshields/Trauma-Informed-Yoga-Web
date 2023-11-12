@@ -12,9 +12,9 @@ export default class Smoke {
     /** @constructor 
      * @param {Trail[]} config An array  of smoke trail configurations
      * @param {Number} Trail.index index of a pose landmark in the current filtered GameSession pose
-     * @param {Number} Trail.small
-     * @param {Number} Trail.
-     * @param {Number} Trail.
+     * @param {Number} Trail.small size of smoke when breath is empty
+     * @param {Number} Trail.large size of smoke when breath is full
+     * @param {Number} Trail.fuzz amount to randomly perturb smoke
      * @param {Number[]} Trail.empty The rgb(a) color channels of the smoke when breath is empty
      * @param {Number[]} Trail.full The rgb(a) color channels of the smoke when breath is full
     */
