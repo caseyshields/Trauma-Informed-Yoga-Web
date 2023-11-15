@@ -18,6 +18,10 @@ export default class Skeleton extends GameObject {
 
 	config = null;
 
+   // TODO get from configuration?
+   renderSkeleton = true;
+   renderConfidence = true;
+
 	constructor() {
       console.log("Skeleton Created.");
 		super(0, 0, 0, 0, 0, 0);
@@ -33,6 +37,10 @@ export default class Skeleton extends GameObject {
 			this.gameSession.poseLandmarks[11], //leftShoulder
 			this.gameSession.poseLandmarks[12] //rightSHoulder
 		);
+
+      // TODO make this configurable?
+      this.right = this.gameSession.p5.color(0,255,0);
+      this.wrong = this.gameSession.p5.color(255,0,0);
 	}
 
 	async configBones() {
@@ -63,7 +71,18 @@ export default class Skeleton extends GameObject {
 
 	//Adds bone to the canvas
 	render() {
-		for (const bone of this.bones) bone.render();
+      if (this.renderSkeleton)
+		   for (const bone of this.bones) bone.render();
+
+      // render dots color-coded to convey confidence scores
+      if (this.renderConfidence) {
+         this.p5.strokeWeight(3);
+         for (let pose of this.gameSession.poseLandmarks) {
+            let c = this.p5.lerpColor(this.wrong, this.right, pose.score);
+            this.p5.fill( c );
+            this.p5.circle(pose.x, pose.y, 15);
+         }
+      }
 
 		//render center of mass
 		if (this.centerOfMass) {

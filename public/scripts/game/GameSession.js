@@ -1,6 +1,7 @@
 import ParticleManager from "../core/GameObject/Particle/ParticleManager.js";
 import SoundManager from "../core/Sound/SoundManager.js";
 import BreathingManager from "./breathing/BreathingManager.js";
+import PoseFilter from "./PoseFilter.js";
 
 export default class GameSession {
 	constructor() {
@@ -16,12 +17,16 @@ export default class GameSession {
 		//Instance Variables
 		this.__p5 = {}; //P5 instance
 		this.__canvas = {}; //P5 Canvas
+		// TODO Can we import these directly from P5? 
+		// It is possible for setup() phase constructors to reference this while it is empty!
 
 		// reference to mediapipe manager
 		this.__mediapipe = {};
 
 		// array of {x, y, z, score, name} object
 		this.__poseLandmarks = {}; //Pose landmarks
+		this.__pose = new PoseFilter(8);
+		// TODO these seem redundant; can we combine them?
 
 		// instance of Skeleton class
 		this.__skeleton = {}; //player skeleton
@@ -117,6 +122,10 @@ export default class GameSession {
 
 	set poseLandmarks(poseLandmarks) {
 		this.__poseLandmarks = poseLandmarks;
+	}
+
+	get pose() {
+		return this.__pose;
 	}
 
 	get instance() {

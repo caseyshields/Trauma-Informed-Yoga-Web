@@ -13,6 +13,8 @@ SETUP should be abstracted to be made easier to use.
 //Instantiate our Game Session - this will be our parent for all game data.
 let gameSession = new GameSession();
 
+let RenderPoseFilter = true; // Displays the pose filter for debugging
+
 //Define how our P5 sketch will look. Treat this as the "Main".
 var TIYW = function (p) {
 	//Executed before beginning setup
@@ -60,6 +62,9 @@ var TIYW = function (p) {
 		p.frameRate(30);
 		p.imageMode(p.CENTER);
 
+		// initialize the Pose filter
+		gameSession.pose.setup();
+		// TODO is this the right place for this?
 	};
 
 	//core update function of the game
@@ -71,6 +76,8 @@ var TIYW = function (p) {
 		gameSession.currentState.update();
 		gameSession.particleManager.update();
 		gameSession.soundManager.update();
+		gameSession.pose.update(); // TODO should this be updated with 'poseLandmarks'?
+		// TODO should gameSession just have an update() method? is this unnecessary coupling?
 
 		//Renders last and from back to front. Clear before going.
 		p.clear();
@@ -80,6 +87,8 @@ var TIYW = function (p) {
 		gameSession.currentState.render();
 		gameSession.particleManager.render();
 		gameSession.soundManager.render();
+		if (RenderPoseFilter)
+			gameSession.pose.render();
 	};
 
 	//implement your controls inside of your specific state.
@@ -88,6 +97,10 @@ var TIYW = function (p) {
 	};
 
 	p.keyPressed = function () {
+		if (gameSession.currentState.keyPressed)
+			this.gameSession.currentState.keyPressed
+		// TODO why isn't this working?
+		// console.log(p.key);
 		//call gameState code here as needed.
 	};
 
@@ -115,7 +128,6 @@ var TIYW = function (p) {
 		if (gameSession.currentState.mousePressed) {
 			gameSession.currentState.mousePressed();
 		}
-		//call gameState code here as needed.
 	};
 
 	p.mouseReleased = function () {

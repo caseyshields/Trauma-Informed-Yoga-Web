@@ -1,7 +1,7 @@
 /* 
  * State Class 
  * 
- * The state class allows us to group different rendering and update functions of relevant gameobjects
+ * The state class allows us to group different rendering and update functions of relevant game objects
  * into a single object to be loaded at the top-level of the application. These can be thought of as
  * "scenes" in other engines, though a bit more integration is needed in the entry point of the application.
  * 

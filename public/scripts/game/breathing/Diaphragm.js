@@ -10,7 +10,7 @@ export default class Diaphragm extends GameObject{
     style = {
 		stroke: this.p5.color(255, 223, 0),
         emptyColor: this.p5.color(123, 234, 100),
-        fullColor: this.p5.color(3, 80, 150),
+        fullColor: this.p5.color(3, 80, 150, 127),
 		strokeWeight: 2,
         ellipseWidth: 50,
         ellipseHeight: 50
@@ -53,12 +53,12 @@ export default class Diaphragm extends GameObject{
         // figure out the diaphragm's size, location and color
         let p = this.skeleton.centerOfMass.position;
         let value = this.gameSession.breathingManager.breath;
-        let size = this.style.ellipseHeight * (1+value);
+        let size = this.style.ellipseHeight + (this.gameSession.canvasHeight*value);
         let color = this.p5.lerpColor(this.style.emptyColor, this.style.fullColor, value);
 
         // set the p5 state and draw the diaphragm
-        this.p5.stroke(this.style.stroke);
-		this.p5.strokeWeight(this.style.strokeWeight);
+        this.p5.stroke( this.style.stroke );
+		this.p5.strokeWeight( this.style.strokeWeight );
         this.p5.fill( color );
 		this.p5.ellipse( p.x, p.y, size, size );
     }

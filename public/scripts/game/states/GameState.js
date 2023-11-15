@@ -5,6 +5,9 @@ import MenuButton from "../buttons/MenuButton.js";
 import Target from "../form/Target.js";
 import Narrator from "../narrator/Narrator.js";
 import Diaphragm from "../breathing/Diaphragm.js";
+import Silhouette from "../souvenir/Silhouette.js";
+// import Silhouette from "../souvenir/PoseTrail.js";
+import SmokeTrails from "../souvenir/SmokeTrails.js";
 
 /** Example of Gamestate
  *
@@ -24,11 +27,16 @@ export default class GameState extends State {
 	testTarget1 = {};
 	narrator = {};
 	diaphragm = {};
+	silhouette = {};
+	smoke = {}; 
+	// why are fields instantiated with anonymous classes?
 	
 	constructor() {
 		super("Game");
-		
 	}
+
+	// TODO load style from some configuration
+	// TODO allow the user to edit it in game
 
 	setup() {
 		super.setup();
@@ -39,7 +47,17 @@ export default class GameState extends State {
 			this.gameSession.skeletonLoaded = true;
 		}
 
-		this.diaphragm = new Diaphragm(this.gameSession.skeleton);
+		this.diaphragm = new Diaphragm( this.gameSession.skeleton );
+		this.silhouette = new Silhouette( {
+			// thickness: undefined,
+			empty: [50,50,50],
+			full: [250, 250, 250]
+		});
+		this.smoke = new SmokeTrails([
+			{index:0, small:16, large:32, fuzz:4, empty:[25,150,25,5], full:[100,100,100,1]},
+			{index:20, small:16, large:32, fuzz:4, empty:[150,0,25,5], full:[100,100,100,1]},
+			{index:19, small:16, large:32, fuzz:4, empty:[25,0,150,5], full:[100,100,100,1]}
+		]);
 
 		//Instantiate backbutton
 		let backButtonLayout = {
@@ -103,10 +121,13 @@ export default class GameState extends State {
 	render() {
 		super.render();
 
-		this.diaphragm.render();
-
+		this.silhouette.render();
+		// this.diaphragm.render();
+		this.smoke.render();
+		
 		//Render skeleton
-		this.gameSession.skeleton.render();
+		// this.gameSession.skeleton.render();
+		// TODO I'm rendering the filter instead! Should the Skeleton be updated to also use the Filter?
 
 		//Test target
 		this.testTarget.render();
@@ -146,7 +167,7 @@ export default class GameState extends State {
 	update() {
 		super.update();
 
-		//this.diaphragm.update();//unnecessary but here for consistency or if something changes...
+		//this.diaphragm.update(); // unnecessary but here for consistency or if something changes...
 
 		//Update skeleton
 		this.gameSession.skeleton.update();
@@ -175,6 +196,10 @@ export default class GameState extends State {
 		this.menuButton.checkReleased();
 	}
 	
+	keyPressed() {
+		console.log(this.p5.key);
+	}
+
 	cleanup() {
 		super.update();
 	}
