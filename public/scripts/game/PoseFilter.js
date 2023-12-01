@@ -7,12 +7,12 @@ export default class PoseFilter {
     size = 8; // number of frames in the time window that is filtered, 0-index is the oldest
     measurements = []; // [frame index] [pose index [x,y,z,w]] raw pose numbers
     sums = []; // [pose index [x,y,z,w]] // scratch space to reduce operations 
-    state = []; // [{x,y,z,name,score,vx,vy,ax,ay},...]
+    state = []; // filtered output state; [{x,y,z,name,score,vx,vy,ax,ay},...]
     
     record = false;
     count = 0;
 
-    // v and a obtained using finite differences of the filtered measurements
+    // velocity and acceleration obtained using finite differences of the filtered measurements
     // TODO we might want to use a more sophisticated method of differentiation...
 
     // TODO add a way to discard outliers; confidence scores below .25 appear to be trash!
@@ -44,11 +44,10 @@ export default class PoseFilter {
     setup() {
         this.session = new GameSession();
         this.p5 = this.session.p5;
-        this.newer = this.p5.color(200,100,100);
-        this.older = this.p5.color(100,100,200);
-        this.inaccurate = this.p5.color(255,0,0);
-        this.accurate = this.p5.color(0,255,0);
-        this.color = this.p5.color(150,150,150);
+        this.newer = this.p5.color(200,100,100); // newest landmark measurement color
+        this.older = this.p5.color(100,100,200); // oldest landmark measurement color
+        this.inaccurate = this.p5.color(255,0,0); // landmarks with low confidence score
+        this.accurate = this.p5.color(0,255,0); // landmarks with high confidence score
         this.record = false;
         this.measurements = [];
         this.sums = new Float32Array(this.landmarks*4); // I assume these float arrays will be better for the cache. Preoptimization?
@@ -71,13 +70,13 @@ export default class PoseFilter {
             this.estimate();
     }
 
-    /** Adds the given pose estimate from MediaPipe to the time window of measurements */
+    /** Adds the given pose estimate from MediaPipe to the time window of measurements 
+     * @returns {boolean} false when input is invalid */
     add(pose) {
 
         // guard against pose not being initialized since game session exists before mediapipe is initialized.
         if (!pose || !Array.isArray(pose) || pose.length!=this.landmarks)
             return false;
-        // TODO this layout with poseLandmarks being a parallel GameSession field seems awkward...
 
         // transcribe the measurements for this frame and add it to the time window
         let m = new Float32Array(pose.length*4);
