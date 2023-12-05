@@ -45,6 +45,8 @@ section.credits {
       "navigation entries";
 
     /* General styling */
+    color: var(--primary-color);
+    font-size: var(--text-size);
     border: 2px var(--primary-color) solid;
     background-color: var(--secondary-color);
     font-family: Oswald;
@@ -59,10 +61,8 @@ section.credits {
   }
   
   section.credits h1 {
-    color: var(--primary-color);
     text-align: center;
     font-size: var(--header-size);
-    font-weight: 400;
   }
 
   /* Navigation bar for the credits page*/
@@ -70,10 +70,8 @@ section.credits {
     grid-area: navigation;
   }
 
-  section.credits h2 {
-    color: var;
-    font-size: var(--text-size);
-  }
+  /* section.credits h2 {
+  } */
 
   /* A definition list is used for the credit entries. Not sure if this is semantically proper. */
   section.credits > dl {
@@ -86,14 +84,9 @@ section.credits {
 
   section.credits dt {
     color: var(--tertiary-color);
-    font-size: var(--text-size);
-    font-weight: 400;
   }
 
   section.credits dd {
-    color: var;
-    font-size: var(--text-size);
-    font-weight: 400;
     margin-left:0;
     margin-bottom: calc( 1.5 * var(--text-size) );
   }

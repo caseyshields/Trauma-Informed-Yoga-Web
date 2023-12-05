@@ -17,7 +17,7 @@
   <!-- Font import from CDN -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald">
 
-  <link href="./credits.css" rel="stylesheet"/>
+  <link href="./credits/credits.css" rel="stylesheet"/>
   <script src="../../public/scripts/libs/p5/p5.min.js"></script>
   <script type="module" src="./breath.js"></script>
   <!-- <script src="../addons/p5.sound.js"></script> -->
@@ -31,7 +31,8 @@
 
 <script type="module">
   import Breath from "./breath.js";
-  import Credits from "./credits.js";
+  import Credits from "./credits/credits.js";
+  import About from "./about/about.js";
 
   // Here is the configuration data for the credit section
   const data = [
@@ -52,6 +53,7 @@
     let canvas; // where the P5 graphics are drawn
     let breathing; // a component for tracking breath
     let credits; // a component for displaying credits
+    let about;
 
     p5.setup = function() {
 
@@ -68,6 +70,8 @@
       // find the main element, then create and add the credits section
       let main = p5.select("#sketch");
       credits = new Credits(p5, main, data);
+
+      let about = new About(p5, main);
 
       // make a checkbox that can show and hide the credit page
       let check = p5.createCheckbox('menu', true );
