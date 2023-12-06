@@ -43,8 +43,6 @@ main {
     "header header"
     "game about";
     
-    /* justify-: center; */
-    
     color: var(--primary-color);
     background-color: var(--secondary-color);
     font-family: Oswald;
@@ -55,7 +53,41 @@ header {
     align-self: center;
     text-align: center;
     font-size: var(--header-size);
+    animation-name: breathing;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
 }
+
+/* Roughly supposed to mimic the game's breathing timer; */
+@keyframes breathing {
+    0% {
+        /* font-size: var(--header-size); */
+        scale: 1 1;
+        color: var(--primary-color);
+    }
+    25% {
+        /* font-size: calc( 1.2 * var(--header-size)); */
+        scale: 1 1.5;
+        color: var(--tertiary-color);
+    }
+    50% {
+        /* font-size: calc( 1.2 * var(--header-size)); */
+        scale: 1 1.5;
+        color: var(--tertiary-color);
+    }
+    75% {
+        /* font-size: var(--header-size); */
+        scale: 1 1;
+        color: var(--primary-color);
+    }
+    100% {
+        /* font-size: var(--header-size); */
+        scale: 1 1;
+        color: var(--primary-color);
+    }
+}
+
 section {
     grid-area: game;
     padding-left: var(--text-size);
@@ -88,4 +120,5 @@ button {
 button:hover {
     color: var(--tertiary-color);
 }
+
 </style>
