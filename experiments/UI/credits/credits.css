@@ -41,7 +41,7 @@ section.credits {
     grid-template-columns: 20% 1fr;
     grid-template-rows: 80px 1fr;
     grid-template-areas:
-      "header header"
+      "back header"
       "navigation entries";
 
     /* General styling */
