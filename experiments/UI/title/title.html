@@ -1,16 +1,19 @@
-<!-- Concept for a title screen -->
+<!--
+    Concept for a title screen. Not a great design, but gives a starting point! 
+    This is just meant to be a scratch space to try out ideas.
+    It doesn't even need to be hosted; you can just open the file directly with your browser.
+-->
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald">
-<link href="./credits.css" rel="stylesheet"/>
-
+<!-- Here is the markup a component will eventually generate;
+    Feel free to edit this! -->
 <main>
     <header>
         <h1>Soothing Systems</h1>
     </header>
     <section>
-        <button>Initialize</button>
         <button disabled>Free</button>
         <button disabled>Guided</button>
+        <button>Initialize</button>
     </section>
     <aside>
         <button>How This Game Works</button>
@@ -20,7 +23,15 @@
     </aside>
 </main>
 
+<!-- We need this font... -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald">
+
+<!-- This is the css we'll eventually put into the game menus. 
+    Don't worry about naming conventions so much; 
+    we can properly scope everything when we put it in the game. -->
 <style>
+
+/* Variables are set at the document root */
 :root {
   --primary-color: #D9D9D9;
   --secondary-color: #1b1b1b;
@@ -30,6 +41,7 @@
   --text-size: 1rem;
 }
 
+/* The main page fills the screen and is divided into 3 sections */
 main {
     position: absolute;
     left: 0;
@@ -48,6 +60,8 @@ main {
     font-family: Oswald;
     font-size: var(--text-size);
 }
+
+/* The header holds the game title */
 header {
     grid-area: header;
     align-self: center;
@@ -58,36 +72,32 @@ header {
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
 }
-
-/* Roughly supposed to mimic the game's breathing timer; */
+/* Roughly supposed to mimic the game's breathing timer.
+    Most every CSS property can be animated in this way */
 @keyframes breathing {
     0% {
-        /* font-size: var(--header-size); */
         scale: 1 1;
         color: var(--primary-color);
     }
     25% {
-        /* font-size: calc( 1.2 * var(--header-size)); */
         scale: 1 1.5;
         color: var(--tertiary-color);
     }
     50% {
-        /* font-size: calc( 1.2 * var(--header-size)); */
         scale: 1 1.5;
         color: var(--tertiary-color);
     }
     75% {
-        /* font-size: var(--header-size); */
         scale: 1 1;
         color: var(--primary-color);
     }
     100% {
-        /* font-size: var(--header-size); */
         scale: 1 1;
         color: var(--primary-color);
     }
 }
 
+/* The game menu allows you to initialize and start the game */
 section {
     grid-area: game;
     padding-left: var(--text-size);
@@ -97,6 +107,8 @@ section {
     gap: calc( 0.5 * var(--text-size) );
     align-items: flex-start;
 }
+
+/* The about menu has links to various resources */
 aside {
     grid-area: about;
     padding-right: var(--text-size);
@@ -106,6 +118,8 @@ aside {
     gap: calc( 0.5 * var(--text-size) );
     align-items: flex-end;
 }
+
+/* Here's an example of button styling */
 button {
     color: var(--primary-color);
     background-color: var(--secondary-color);
@@ -115,10 +129,23 @@ button {
     padding: var(--text-size);
     margin-bottom: var(--text-size);
     width: 35vw;
+
+    /* you can animate transitions to property changes too; */
+    transition-property: color, border-color, font-size;
+    transition-duration: 2s, 1s, 2s;
+    transition-delay: 0s, 0s, 0s;
 }
 
 button:hover {
     color: var(--tertiary-color);
+    border-color: var(--tertiary-color);
+    font-size: larger;
+}
+
+button:disabled, button:hover:disabled {
+    color: grey;
+    font-size: var(--text-size);
+    border-color: grey;
 }
 
 </style>
