@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>P5 DOM Interaction Example</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      background-color: #1b1b1b;
+      color: aliceblue;
+    }
+  </style>
+  
+  <!-- Font import from CDN -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald">
+
+  <link href="./credits/credits.css" rel="stylesheet"/>
+  <script src="../../public/scripts/libs/p5/p5.min.js"></script>
+  <script type="module" src="./breath.js"></script>
+  <!-- <script src="../addons/p5.sound.js"></script> -->
+
+</head>
+
+<body>
+  <main id="sketch">
+  </main>
+</body>
+
+<script type="module">
+  import Breath from "./breath.js";
+  import Credits from "./credits/credits.js";
+  import About from "./about/about.js";
+
+  // Here is the configuration data for the credit section
+  const data = [
+      {name:'Sam Shields', role:'Producer, Research, Gameplay Programmer'},
+      {name:'Casey Shields', role:'Gameplay Programmer'},
+      {name:'Likha Pulido', role:'Sound Design & Implementation'},
+      {name:'Andrew Li', role:'UI/UX Designer'},
+      {name:'Franky Dominguez', role:'Research'},
+      {name:'Ramon Rubio', role:'Project Management'}
+  ]
+  // TODO load this from some file
+  // TODO break these into named, navigable sections...
+
+  // Create the P5 instance and relevant components
+  const s = (p5) => {
+    let width = 512;
+    let height = 512;
+    let canvas; // where the P5 graphics are drawn
+    let breathing; // a component for tracking breath
+    let credits; // a component for displaying credits
+    let about;
+
+    p5.setup = function() {
+
+      // Configure the P5 canvas
+      p5.pixelDensity(1);
+      p5.frameRate(30);
+      canvas = p5.createCanvas(width, height);
+      canvas.elt.addEventListener('contextmenu', (e)=>e.preventDefault());
+      
+      // create and start the breathing guide
+      breathing = new Breath(1500,1500,1500,1500);
+      breathing.play();
+
+      // find the main element, then create and add the credits section
+      let main = p5.select("#sketch");
+      credits = new Credits(p5, main, data);
+
+      let about = new About(p5, main);
+
+      // make a checkbox that can show and hide the credit page
+      let check = p5.createCheckbox('menu', true );
+        check.changed( (e)=>{
+            if (check.checked())
+                credits.show();
+            else credits.hide();
+        });
+    }
+
+    // Just do something in the background so we can demonstrate overlaying the credits
+    p5.draw = function() {
+      const emptyColor = p5.color(0,128,64,255);
+      const fullColor = p5.color(0,255,255, 128);
+      const radius = 100;
+      const amp = 100;
+
+      breathing.update(p5.deltaTime);
+      let value = breathing.value;
+
+      p5.background(0,0,0,50);
+      p5.stroke(0,0);
+      p5.fill( p5.lerpColor(emptyColor, fullColor, (value+1)/2) );
+      p5.circle(width/2, height/2, radius + (amp*value));
+    }
+
+  }
+  let sketch = new p5(s, "#sketch")
+</script>
+
+</html>
