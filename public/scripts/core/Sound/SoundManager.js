@@ -1,6 +1,7 @@
 import NarratorSound from "../../game/sounds/NarratorSound.js";
 import SparkleSound from "../../game/sounds/SparkleSound.js";
 import WaveSound from "../../game/sounds/WaveSound.js";
+import BreathingSound from "../../game/sounds/BreathingSound.js";
 import Manager from "../Manager/Manager.js";
 
 //Sound manager is event driven, meaning that other methods request for it
@@ -32,6 +33,9 @@ export default class SoundManager extends Manager {
 
         this.narratorSound = new NarratorSound();
         this.narratorSound.setup();
+
+        this.breathingSound = new BreathingSound();
+        this.breathingSound.setup();
     }
 
     update(){
