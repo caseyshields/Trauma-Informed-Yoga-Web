@@ -3,23 +3,6 @@ const component = 'credits';
 
 /** Proof of concept for programmatically creating game menus in the DOM.
  * Creates a credits page with the following semantic structure;<pre>
-<section class="credit">
-    <header><h1> Credits </h1></header>
-    <nav> todo
-        <a href="">topic 1</a>
-        <a href="">topic 2</a>
-        ...
-    </nav>
-    <dl>
-        <dt> name 1 </dt>
-        <dd> role 1 </dd>
-        <dt> name 2 </dt>
-        <dd> role 2 </dd>
-        <dt> name 3 </dt>
-        <dd> role 3 </dd>
-        ...
-    </dl>
-</section>
 </pre>*/
 export default class credits {
 
@@ -30,9 +13,9 @@ export default class credits {
 
     // DOM elements of the credits page
     section;
-    header;
-    navigation;
-    list;
+    back;
+    aside;
+    article;
 
     // TODO get the navigation bar working! 
     // maybe add document anchors for each section
@@ -54,25 +37,25 @@ export default class credits {
         this.section.parent(parent);
         // this.section.id('');
 
-        this.header = p5.createElement('header');
-        this.header.parent(this.section);
-        this.header.child( p5.createElement('h1', 'Credits') );
+        // this.back = p5.createElement('div');
+        // this.back.parent(this.section);
+        // this.back.child( p5.createElement('img', '') );
 
-        this.navigation = p5.createElement('nav');
-        this.navigation.parent(this.section);
-        this.navigation.child( p5.createElement('h2', 'Gameplay') );
-        this.navigation.child( p5.createElement('h2', 'Design') );
-        this.navigation.child( p5.createElement('h2', 'Sound') );
-        this.navigation.child( p5.createElement('h2', 'Research') );
+        this.aside = p5.createElement('aside');
+        this.aside.parent(this.section);
+        this.aside.child( p5.createElement('h3', 'Gameplay') );
+        this.aside.child( p5.createElement('h3', 'Design') );
+        this.aside.child( p5.createElement('h3', 'Sound') );
+        this.aside.child( p5.createElement('h3', 'Research') );
 
-        this.list = p5.createElement('dl');
-        this.list.parent(this.section);
-
+        this.article = p5.createElement('article');
+        this.article.parent(this.section);
+        this.article.child( p5.createElement('h1', 'Credits') );
         for (let credit of data) {
-            let term = p5.createElement('dt', credit.name);
-            let def = p5.createElement('dd', credit.role)
-            this.list.child(term);
-            this.list.child(def);
+            let name = p5.createElement('h2', credit.name);
+            let role = p5.createElement('h3', credit.role)
+            this.article.child(name);
+            this.article.child(role);
         }
     }
 
