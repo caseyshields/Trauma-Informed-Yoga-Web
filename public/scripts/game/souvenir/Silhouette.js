@@ -14,7 +14,7 @@ export default class Silhouette {
     // 'motion blur' image context? Such an organization would have less repetition...
 
     static Default = {
-        // thickness: undefined,
+        thickness: 0,
         empty: [50,50,50],
         full: [250, 250, 250]
     }
