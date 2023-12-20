@@ -1,4 +1,4 @@
-import Manager from "../Manager/Manager.js";
+import Manager from "../../core/Manager/Manager.js";
 
 /** Settings Manager
  * Controls input settings for all game related states relevant to runtime.
