@@ -2,6 +2,7 @@ import ParticleManager from "../core/GameObject/Particle/ParticleManager.js";
 import SoundManager from "../core/Sound/SoundManager.js";
 import BreathingManager from "./breathing/BreathingManager.js";
 import PoseFilter from "./PoseFilter.js";
+import SettingsManager from "./settings/SettingsManager.js";
 
 export default class GameSession {
 	constructor() {
@@ -19,6 +20,8 @@ export default class GameSession {
 		this.__canvas = {}; //P5 Canvas
 		// TODO Can we import these directly from P5? 
 		// It is possible for setup() phase constructors to reference this while it is empty!
+
+		this.__settingsManager = new SettingsManager();
 
 		// reference to mediapipe manager
 		this.__mediapipe = {};
@@ -82,6 +85,14 @@ export default class GameSession {
 		} else {
 			console.log(`ERROR: ${stateName} not loaded as current state in session.`);
 		}
+	}
+
+	get settingsManager() {
+		return this.__settingsManager;
+	}
+
+	set settingsManager(settingsManager) {
+		this.__settingsManager = settingsManager;
 	}
 
 	get states() {

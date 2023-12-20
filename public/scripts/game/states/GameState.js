@@ -41,6 +41,8 @@ export default class GameState extends State {
 	setup() {
 		super.setup();
 
+		this.initializeGameFromSettings();
+
 		//Make sure skeleton is already loaded, load if not
 		if(!this.gameSession.skeletonLoaded){
 			this.gameSession.skeleton = new Skeleton();
@@ -184,6 +186,16 @@ export default class GameState extends State {
 		this.menuButton.update();
 
 		this.narrator.update();
+	}
+
+	initializeGameFromSettings() {
+		//Look at settings manager
+
+		//Set relevant audio systems
+
+		//Set relevant visual systems
+
+		//Set relevant mechanics systems (form, narrator, targets, particles...)
 	}
 
 	mousePressed(){

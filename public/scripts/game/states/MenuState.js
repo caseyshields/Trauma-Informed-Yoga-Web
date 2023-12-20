@@ -17,11 +17,15 @@ export default class MenuState extends State {
 
 	constructor() {
 		super("Menu");
+
+		
 		
 	}
 
 	setup() {
 		super.setup();
+
+		this.initializeMenuFromSettings();
 
         //Instantiate backbutton
 		let backButtonLayout = {
@@ -64,6 +68,16 @@ export default class MenuState extends State {
 			this.gameSession.canvasWidth * .05,
 			this.gameSession.canvasWidth * .05
 		);
+
+		this.updateSettingsFromMenuUI();
+	}
+
+	initializeMenuFromSettings(){
+		//TODO: Read settings manager defaults or current values to set current menu values
+	}
+
+	updateSettingsFromMenuUI(){
+		//TODO: Read new user inputs and update the settings manager accordingly
 	}
 
     mousePressed(){
