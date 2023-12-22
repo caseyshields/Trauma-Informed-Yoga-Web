@@ -35,6 +35,11 @@ export default class State {
         console.log("Setting up " + this.name + " state.");
     }
 
+    // called before this state is deactivated
+    setdown() {
+
+    }
+
     //make updates to any relevant model/data
     update(){
 

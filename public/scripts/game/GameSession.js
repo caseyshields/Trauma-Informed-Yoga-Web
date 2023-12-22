@@ -55,7 +55,7 @@ export default class GameSession {
 		this.__states = [];
 
 		//Current state
-		this.__currentState = {};
+		this.__currentState;
 
 		console.log("Session Created Successfully.");
 	}
@@ -67,6 +67,8 @@ export default class GameSession {
 
 	//simplifies state setup. calls setup and then loads the state into currentState.
 	setCurrentState(state) {
+		if (this.currentState)
+			this.currentState.setdown();
 		//TODO: Make this safe to add non-pre-existing states
 		this.currentState = state;
 		this.currentState.setup();
