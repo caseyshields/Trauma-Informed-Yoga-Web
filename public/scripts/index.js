@@ -1,6 +1,7 @@
 import GameSession from "./game/GameSession.js";
 import GameState from "./game/states/GameState.js";
 import LoadingState from "./game/states/LoadingState.js";
+import TitleState from "./game/states/TitleState.js";
 import MenuState from "./game/states/MenuState.js";
 import AboutState from "./game/states/AboutState.js";
 import InfoState from "./game/states/InfoState.js";
@@ -36,7 +37,9 @@ var TIYW = function (p) {
 		gameSession.canvas = canvas;
 
 		//Library loading and camera initialization
-		let loadingState = new LoadingState();
+		// let loadingState = new LoadingState();
+		// gameSession.addStateToGame(loadingState);
+		let loadingState = new TitleState();
 		gameSession.addStateToGame(loadingState);
 
 		//Instantiate all relevant game states and add them to the session.
