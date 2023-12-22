@@ -1,8 +1,11 @@
 import GameSession from "../GameSession.js";
 
+const MaxParticles = 50;
+
 /** Different parts of the pose emit smoke of different hues in time with breath */
 export default class Smoke {
 
+    
     static Default = [
         {index:0, small:16, large:32, fuzz:4, empty:[25,150,25,5], full:[100,100,100,1]},
         {index:20, small:16, large:32, fuzz:4, empty:[150,0,25,5], full:[100,100,100,1]},
@@ -42,7 +45,7 @@ export default class Smoke {
 
         // general state machine styling
         this._g.noStroke();
-        this._g.blendMode(this._g.SCREEN); // BLEND // DIFFERENCE
+        // this._g.blendMode(this._g.SCREEN); // BLEND // DIFFERENCE
 
         // for each valid configured pose landmark
         for(let e of this._trails) {
@@ -56,6 +59,8 @@ export default class Smoke {
 
                 // draw a path of circles whose density is roughly proportional to the velocity
                 let v = this._g.mag(mark.vx, mark.vy);
+                if (v > MaxParticles) 
+                    v = MaxParticles;
                 for (let n=v; n>0; n--) {
                     let r = n/v
                     let x = mark.x - r*mark.vx + Math.random()*e.fuzz;
