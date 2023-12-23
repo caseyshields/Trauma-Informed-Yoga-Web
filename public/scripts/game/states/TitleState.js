@@ -67,11 +67,13 @@ export default class LoadingState extends State {
         this.aside = this.__p5.createElement('aside');
         this.aside.parent(this.section);
 		this.resourceButton = this.__p5.createElement('button', 'TSY Resources');
+		this.resourceButton.attribute('disabled', true);
 		this.resourceButton.parent(this.aside);
 		this.resourceButton.mousePressed(()=>{
 			// this.gameSession.setCurrentStateByName('');
 		});
 		this.yogaButton = this.__p5.createElement('button', 'Yoga: Culture and Practices');
+		this.yogaButton.attribute('disabled', true);
 		this.yogaButton.parent(this.aside);
 		this.yogaButton.mousePressed(()=>{
 			// this.gameSession.setCurrentStateByName('');
@@ -79,9 +81,10 @@ export default class LoadingState extends State {
 		this.creditButton = this.__p5.createElement('button', 'Academic Credits');
 		this.creditButton.parent(this.aside);
 		this.creditButton.mousePressed(()=>{
-			// this.gameSession.setCurrentStateByName('');
+			this.gameSession.setCurrentStateByName('Credits');
 		});
 		this.howButton = this.__p5.createElement('button', 'How This Game Works');
+		this.howButton.attribute('disabled', true);
 		this.howButton.parent(this.aside);
 		this.howButton.mousePressed(()=>{
 			// this.gameSession.setCurrentStateByName('');

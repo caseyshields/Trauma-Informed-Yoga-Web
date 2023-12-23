@@ -1,6 +1,7 @@
 import GameSession from "./game/GameSession.js";
 import GameState from "./game/states/GameState.js";
-import LoadingState from "./game/states/LoadingState.js";
+// import LoadingState from "./game/states/LoadingState.js";
+import CreditState from "./game/states/CreditState.js";
 import TitleState from "./game/states/TitleState.js";
 import MenuState from "./game/states/MenuState.js";
 import AboutState from "./game/states/AboutState.js";
@@ -52,11 +53,14 @@ var TIYW = function (p) {
 
 		//Instantiate scene for about page
 		let aboutState = new AboutState();
-		gameSession.addStateToGame(AboutState);
+		gameSession.addStateToGame(aboutState);
 
 		//Instantiate scene for info page
 		let infoState = new InfoState();
 		gameSession.addStateToGame(infoState);
+
+		let creditState = new CreditState();
+		gameSession.addStateToGame( creditState );
 
 		//Set initial game state as loading, call setup method
 		gameSession.setCurrentState(loadingState);
