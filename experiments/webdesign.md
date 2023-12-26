@@ -24,6 +24,9 @@ Visual Studio code is a great place to start.
 It has a variety of community developed extensions that can help your work flow. To get started, click the blocks icon on the left menubar, then find and install these extensions;
   - **Live Preview**, Microsoft
     - makes it trivial to host static web pages for testing
+    - Go to Settings -> User -> extensions -> Live Preview
+      - <code>Port Number</code> change to something like <code>3001</code> so it doesn't conflict with Nodemon hosting!
+      - <code>Open Preview Target</code>: I like to launch the external browser by default. The preview is more representative and the debug tools work better.
   - **Markdown Preview Mermaid Support**, Matt Bierner
     - Mermaid allows you to generate SVG diagrams from simple grammars. Very useful for documentation, and also Github Markdown supports it.
     - Here's the [github markup documentation](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams)
@@ -146,7 +149,7 @@ Here's another one of hers, a cool way to automate Mondrian paintings in CSS;
  - https://labs.jensimmons.com/2017/01-011.html
  - https://www.youtube.com/watch?v=qNtJ5p3h2A4
 
-An oldie but goldie. Shows how CSS can be totally separate from content.While not as popular a philosophy nowadays because of how modern component frameworks are scoped, I really like the (possibly utopian) idea of Markup being purely semantic and designers still being able to do absolutely anything with it; 
+An oldie but goldie. Shows how CSS can be totally separate from content. While not as popular a philosophy nowadays because of how modern component frameworks are scoped, I really like the (possibly utopian) idea of Markup being purely semantic and designers still being able to do absolutely anything with it; 
  - https://www.csszengarden.com/
 
 Code pen is a neat place to try out css. Here is a typography designer with amazing demos;
