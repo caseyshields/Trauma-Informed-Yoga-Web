@@ -66,6 +66,11 @@ export default class LoadingState extends State {
 
         this.aside = this.__p5.createElement('aside');
         this.aside.parent(this.section);
+		// alternately we might consider putting info links in a dropdown...
+		// this.aside = this.p5.createElement('details');
+		// this.aside.parent(this.section);
+		// this.aside.child(this.p5.createElement('summary', 'About'));
+
 		this.resourceButton = this.__p5.createElement('button', 'TSY Resources');
 		this.resourceButton.attribute('disabled', true);
 		this.resourceButton.parent(this.aside);
