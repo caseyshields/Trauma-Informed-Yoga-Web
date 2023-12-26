@@ -35,7 +35,7 @@ section.credits {
   }
 
   /* back button goes in the top right corner, hardcoded to match figma design */
-  section.credits > div {
+  section.credits > img, section.credits > svg {
     grid-area: back;
 
     align-self: center;

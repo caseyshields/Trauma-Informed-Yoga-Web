@@ -12,7 +12,7 @@ const DefaultCredits = [
 ]
 
 /**  */
-export default class LoadingState extends State {
+export default class CreditsState extends State {
 
     // P5 DOM elements;
     section;
@@ -38,9 +38,24 @@ export default class LoadingState extends State {
         this.section.class( 'credits' );
         this.section.attribute('style','display:none;');
 
-        this.back = this.p5.createElement('div');
+        // option 1; we use svg assets which is simpler to invoke;
+        this.back = this.p5.createElement('img');
+        this.back.attribute('src', '../../../assets/images/back.svg');
         this.back.parent(this.section);
-        // this.back.child( this.p5.createElement('img', '') );
+
+        // option 2; we use embedded svg which can be styled by CSS;
+        // this.back = this.p5.createElement('svg');
+        // this.back.attribute('width','38');
+        // this.back.attribute('height','39');
+        // this.back.attribute('viewbox','0 0 38 39');
+        // this.back.attribute('xmlns','http://www.w3.org/2000/svg');
+        // this.back.parent(this.section);
+        // let use = this.p5.createElement('use');
+        // //use.attribute('href','#backArrow');
+        // use.attribute('xlink:href','#backArrow');
+        // use.parent(this.back);
+        // I'm having trouble getting it to work; but the advantage would be CSS styling for color and stroke would apply to it...
+
         this.back.mousePressed(()=>{
             this.gameSession.setCurrentStateByName('Loading');
         });
