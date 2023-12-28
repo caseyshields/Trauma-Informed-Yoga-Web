@@ -51,6 +51,12 @@ export default class GameState extends State {
 		this.menu.mousePressed( ()=>{
 			// this.gameSession.setCurrentStateByName('config');
 		});
+
+		this.screenshot = this.p5.createElement( 'button', 'Screenshot' );
+		this.screenshot.parent( this.section );
+		this.screenshot.mousePressed( ()=>{
+			this.p5.saveCanvas("screenshot.jpg");
+		});
 	}
 
 	// TODO load style from some configuration
