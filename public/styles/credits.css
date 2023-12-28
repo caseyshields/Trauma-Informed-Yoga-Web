@@ -1,0 +1,76 @@
+
+/* The entire menu can just be laid atop the canvas, and be made reactive with basic CSS. */
+section.credits {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+
+    /* General styling */
+    color: var(--primary-color);
+    font-size: var(--text-size);
+    background-color: var(--secondary-color);
+    font-family: Oswald;
+    overflow: hidden;
+    
+    /* Grid layout which will resize to any screen size 
+       Browser developer tool can draw this on the screen and interactively update while you edit! */
+    display: grid;
+    grid-template-columns: 20% 1fr;
+    grid-template-rows: 80px 1fr;
+    grid-template-areas:
+      "back credits"
+      "navigation credits";
+    align-content: top;
+    justify-content: center;
+  }
+
+  /* back button goes in the top right corner, hardcoded to match figma design */
+  section.credits > img, section.credits > svg {
+    grid-area: back;
+
+    align-self: center;
+    justify-self: center;
+    border: var(--primary-color) 4px solid;
+    padding: 5px;
+    background: black;
+    margin: var(--text-size);
+  }
+
+  /* Navigation bar for the credits page*/
+  section.credits > aside {
+    grid-area: navigation;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* space-around */
+  }
+
+  /* The article contains the roles */
+  section.credits > article {
+    grid-area: credits;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: auto;
+  }
+  
+  section.credits h1 {
+    text-align: center;
+    font-size: var(--header-size);
+  }
+
+  section.credits h2 {
+    text-align: center;
+    color: var(--tertiary-color);
+    font-size: var(--text-size);
+  }
+
+  section.credits h3 {
+    text-align: center;
+    font-size: calc( 0.8 * var(--text-size) );
+    margin-top: 0;
+  }
