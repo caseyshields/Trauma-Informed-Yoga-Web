@@ -1,15 +1,5 @@
 /* Styling for Title page */
 
-/* Variables are set at the document root */
-/* :root {
---primary-color: #D9D9D9;
---secondary-color: #1b1b1b;
---tertiary-color: #3dec1c;
-
---header-size: 2rem;
---text-size: 1rem;
-} */
-
 /* The main page fills the screen and is divided into 3 sections */
 section.title {
     position: absolute;
@@ -53,11 +43,11 @@ section.title h1 {
         color: var(--primary-color);
     }
     25% {
-        scale: 1 1.5;
+        scale: 1 2;
         color: var(--tertiary-color);
     }
     50% {
-        scale: 1 1.5;
+        scale: 1 2;
         color: var(--tertiary-color);
     }
     75% {

@@ -9,7 +9,7 @@ const DefaultCredits = [
     {name:'Andrew Li', role:'UI/UX Designer'},
     {name:'Franky Dominguez', role:'Research'},
     {name:'Ramon Rubio', role:'Project Management'}
-]
+] // TODO should they be broken into categories?
 
 /**  */
 export default class CreditsState extends State {
@@ -45,9 +45,9 @@ export default class CreditsState extends State {
 
         // option 2; we use embedded svg which can be styled by CSS;
         // this.back = this.p5.createElement('svg');
-        // this.back.attribute('width','38');
-        // this.back.attribute('height','39');
-        // this.back.attribute('viewbox','0 0 38 39');
+        // this.back.attribute('width','32');
+        // this.back.attribute('height','32');
+        // this.back.attribute('viewbox','0 0 32 32');
         // this.back.attribute('xmlns','http://www.w3.org/2000/svg');
         // this.back.parent(this.section);
         // let use = this.p5.createElement('use');
@@ -92,7 +92,6 @@ export default class CreditsState extends State {
 		this.section.attribute('style', 'display:none;');
 	}
 
-	/** Make the game start buttons visible when the camera loads */
 	update() {
 		super.update();
 	}

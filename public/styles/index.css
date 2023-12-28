@@ -10,18 +10,21 @@ body {
 	color: white !important;
 }
 
+/* This is overridden by the tag attributes P5 supplies when it hooks onto the canvas... */
 canvas{
-	height:100%;
-  width:100%;
+	height: 100%;
+  width: 100%;
 }
 
-/* #canvas {
-  position:absolute;
+/* I'm so confused; why does this make the Video input element visible?
+#canvas {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
 	height: 100%;
 } */
+
 
 /* Variables are set at the document root */
 :root {
@@ -34,7 +37,7 @@ canvas{
 }
 
 
-/* We'll style all buttons the same way */
+/* We'll style all buttons the same way for now? */
 button {
   color: var(--primary-color);
   background-color: var(--secondary-color);
@@ -47,7 +50,7 @@ button {
 
   /* you can animate transitions to property changes too; */
   transition-property: color, border-color, font-size;
-  transition-duration: 2s, 1s, 2s;
+  transition-duration: 1s, 1s, 1s;
   transition-delay: 0s, 0s, 0s;
 }
 
