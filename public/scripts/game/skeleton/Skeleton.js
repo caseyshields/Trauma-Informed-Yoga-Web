@@ -38,6 +38,9 @@ export default class Skeleton extends GameObject {
 			this.gameSession.poseLandmarks[12] //rightSHoulder
 		);
 
+      //get 2D length of arm for use in measurements
+      this.__armLength = 0;
+
       // TODO make this configurable?
       this.right = this.gameSession.p5.color(0,255,0);
       this.wrong = this.gameSession.p5.color(255,0,0);
@@ -67,6 +70,8 @@ export default class Skeleton extends GameObject {
 			this.gameSession.poseLandmarks[11], //leftShoulder
 			this.gameSession.poseLandmarks[12] //rightSHoulder
 		);
+
+      this.armLength = this.calculateArmLength();
 	}
 
 	//Adds bone to the canvas
@@ -123,6 +128,23 @@ export default class Skeleton extends GameObject {
 		return null;
 	}
 
+   calculateArmLength() {
+      //TODO: Make these hardcoded to avoid searching skeleton
+      let rightUpperArmBone = this.getBone("Right Upperarm");
+      let rightForearmBone = this.getBone("Right Forearm");
+      let shoulders = this.getBone("Shoulders");
+      let shoulderDist = this.distanceBetweenPoints(shoulders.vertices[0], shoulders.vertices[1])/2;
+      let shoulderToElbowDist = this.distanceBetweenPoints(rightUpperArmBone.vertices[0], rightUpperArmBone.vertices[1]);
+      let elbowToWristDist = this.distanceBetweenPoints(rightForearmBone.vertices[0], rightForearmBone.vertices[1]);
+      return shoulderToElbowDist + elbowToWristDist + shoulderDist;
+      
+   }
+
+   distanceBetweenPoints(pointA, pointB){
+      var distance = Math.sqrt((Math.pow(pointA.x-pointB.x,2))+(Math.pow(pointA.y-pointB.y,2)));
+      return distance;
+   }
+
 	get centerOfMass() {
 		return this.centerOfMass;
 	}
@@ -130,6 +152,14 @@ export default class Skeleton extends GameObject {
 	set centerOfMass(centerOfMass) {
 		this.centerOfMass = centerOfMass;
 	}
+
+   get armLength() {
+      return this.__armLength;
+   }
+
+   set armLength(armLength) {
+      this.__armLength = armLength;
+   }
 
 	//This is a big nasty method because we are hardcoding
 	//based on fig 4. https://google.github.io/mediapipe/solutions/pose#javascript-solution-api

@@ -8,6 +8,7 @@ import Diaphragm from "../breathing/Diaphragm.js";
 import Silhouette from "../souvenir/Silhouette.js";
 // import Silhouette from "../souvenir/PoseTrail.js";
 import SmokeTrails from "../souvenir/SmokeTrails.js";
+import FormManager from "../form/FormManager.js";
 
 /** Example of Gamestate
  *
@@ -43,11 +44,17 @@ export default class GameState extends State {
 
 		this.initializeGameFromSettings();
 
+				//reference to form manager
+		this.gameSession.formManager = new FormManager();
+		this.gameSession.formManager.setup();
+		
+
 		//Make sure skeleton is already loaded, load if not
 		if(!this.gameSession.skeletonLoaded){
 			this.gameSession.skeleton = new Skeleton();
 			this.gameSession.skeletonLoaded = true;
 		}
+
 
 		this.diaphragm = new Diaphragm( this.gameSession.skeleton );
 		this.silhouette = new Silhouette( {
@@ -103,21 +110,11 @@ export default class GameState extends State {
 		this.menuButton = new MenuButton(menuButtonLayout, menuButtonStyle, false, "Menu");
 		this.menuButton.setup();
 
-		//TODO: Test target out
-		let testBone = this.gameSession.skeleton.getBone("Left Innerpalm");
-		//find target item
-		this.testTarget = new Target(300, -300, 50, testBone, 10000, false, this.gameSession.skeleton);
-		
-		//TODO: Test target out
-		let testBone1 = this.gameSession.skeleton.getBone("Right Innerpalm");
-		//find target item
-		this.testTarget1 = new Target(-300, -300, 50, testBone1, 10000, false, this.gameSession.skeleton);
-	
-		//TODO: Test background waves out
-		this.gameSession.soundManager.waveSound.startLoop();
-
 		this.narrator = new Narrator();
 		this.narrator.setup();
+
+		//TODO: Test background waves out
+		this.gameSession.soundManager.waveSound.startLoop();
 	}
 
 	render() {
@@ -131,9 +128,7 @@ export default class GameState extends State {
 		// this.gameSession.skeleton.render();
 		// TODO I'm rendering the filter instead! Should the Skeleton be updated to also use the Filter?
 
-		//Test target
-		this.testTarget.render();
-		this.testTarget1.render();
+		this.gameSession.formManager.render();
 
 		//UI
 		this.backButton.render();
@@ -178,8 +173,7 @@ export default class GameState extends State {
 		this.gameSession.breathingManager.update();
 
 		//Test Target
-		this.testTarget.update();
-		this.testTarget1.update();
+		this.gameSession.formManager.update();
 
 		//UI
 		this.backButton.update();

@@ -11,7 +11,7 @@ import GameObject from "../../core/GameObject/GameObject.js";
 export default class Narrator extends GameObject {
 
     style = {
-		text: "If you'd like, look inwards.",
+		text: "This is a technical demo.",
 		textRatio: 20, // this is from the width of the button: text size = width / ratio
 		textSize: 1,
 		textFill: this.p5.color(255, 255, 255),
@@ -74,7 +74,7 @@ export default class Narrator extends GameObject {
                 this.renderingFragment = false;
                 this.fragmentText = "";
                 //TODO: change how this is presented
-                this.style.text = "Would you like to try raising your arms?";
+                this.style.text = "If you'd like, try touching the targets with both hands.";
                 
             }
         }

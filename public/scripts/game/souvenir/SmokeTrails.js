@@ -42,7 +42,7 @@ export default class Smoke {
 
         // general state machine styling
         this._g.noStroke();
-        this._g.blendMode(this._g.SCREEN); // BLEND // DIFFERENCE
+        //this._g.blendMode(this._g.SCREEN); // BLEND // DIFFERENCE
 
         // for each valid configured pose landmark
         for(let e of this._trails) {
@@ -56,6 +56,9 @@ export default class Smoke {
 
                 // draw a path of circles whose density is roughly proportional to the velocity
                 let v = this._g.mag(mark.vx, mark.vy);
+                if(v >= 30){
+                    v = 30;
+                }
                 for (let n=v; n>0; n--) {
                     let r = n/v
                     let x = mark.x - r*mark.vx + Math.random()*e.fuzz;
