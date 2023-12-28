@@ -8,21 +8,16 @@
 		<!-- Mobile viewport -->
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-		<!-- Bootstrap is used for layout and non-game page elements -->
-		<!-- <link rel="stylesheet" type="text/css" href="/styles/bootstrap.min.css" /> -->
-
 		<!-- Font import from CDN -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald">
-
 
 		<!-- Custom CSS -->
 		<link rel="stylesheet" type="text/css" href="/styles/index.css" />
 		<link rel="stylesheet" type="text/css" href="/styles/title.css" />
 		<link rel="stylesheet" type="text/css" href="/styles/credits.css" />
+		<link rel="stylesheet" type="text/css" href="/styles/game.css" />
 
 		<!-- JAVASCRIPT IMPORTS -->
-		<!-- Bootstrap for form and nav elements-->
-		<!-- <script type="text/javascript" src="/scripts/libs/bootstrap/bootstrap.bundle.min.js"></script> -->
 
 		<!-- Tone is used for audio synthesis -->
 		<script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.js"></script>
@@ -41,17 +36,14 @@
 	</head>
 
 	<body>
-		<!-- <div class="tiy_container">
-			<div class="row">
-				<div class="col-12 canvas-col" id="canvas-col"> -->
-					<div id="canvas"></div>
-				<!-- </div>
-			</div>
-		</div> -->
+		<div id="canvas"></div>
 		<video id="input_video" class="input_video"></video>
 	</body>
 
-	<!-- Embedded SVG assets. Unlike svg images, a subset of CSS attributes can be applied to them as if they were normal DOM elements. -->
+	<!-- Embedded SVG assets. 
+		Unlike svg images, a subset of CSS attributes can be applied to them as if they were normal DOM elements.
+		Not currently being used because there is some subtlety of adding SVG DOM elements I am forgetting...
+	-->
 	<svg xmlns="http://www.w3.org/2000/svg">
 		<defs>
 			<path id="backArrow"
@@ -63,4 +55,6 @@
 				d="" />
 		</defs>
 	</svg>
+	<!-- You should be able to use it elsewhere on the page with something like;
+		<svg xmlns="http://www.w3.org/2000/svg"> <use xlink:href="#backArrow"></use> </svg> -->
 </html>

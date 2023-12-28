@@ -6,7 +6,7 @@ import Target from "../form/Target.js";
 import Narrator from "../narrator/Narrator.js";
 import Diaphragm from "../breathing/Diaphragm.js";
 import Silhouette from "../souvenir/Silhouette.js";
-// import Silhouette from "../souvenir/PoseTrail.js";
+// import SmokeTrails from "../souvenir/PoseTrail.js";
 import SmokeTrails from "../souvenir/SmokeTrails.js";
 
 /** Example of Gamestate
@@ -33,6 +33,24 @@ export default class GameState extends State {
 	
 	constructor() {
 		super("Game");
+
+		this.section = this.p5.createElement( 'section' );
+		this.section.class( 'game' );
+		this.section.attribute('style', 'display:none');
+
+		this.back = this.p5.createElement( 'img' );
+		this.back.attribute('src', '../../../assets/images/back.svg');
+		this.back.parent( this.section );
+		this.back.mousePressed( ()=>{
+			this.gameSession.setCurrentStateByName('Loading');
+		});
+
+		this.menu = this.p5.createElement( 'img' );
+		this.menu.attribute('src', '../../../assets/images/menu.svg');
+		this.menu.parent( this.section );
+		this.menu.mousePressed( ()=>{
+			// this.gameSession.setCurrentStateByName('config');
+		});
 	}
 
 	// TODO load style from some configuration
@@ -40,6 +58,7 @@ export default class GameState extends State {
 
 	setup() {
 		super.setup();
+		this.section.removeAttribute('style');
 
 		this.initializeGameFromSettings();
 
@@ -62,46 +81,46 @@ export default class GameState extends State {
 		]);
 
 		//Instantiate backbutton
-		let backButtonLayout = {
-			x: this.gameSession.canvasWidth * .05,
-			y: this.gameSession.canvasHeight * .05,
-			width: this.gameSession.canvasWidth * .05,
-			height: this.gameSession.canvasWidth * .05
-		}
+		// let backButtonLayout = {
+		// 	x: this.gameSession.canvasWidth * .05,
+		// 	y: this.gameSession.canvasHeight * .05,
+		// 	width: this.gameSession.canvasWidth * .05,
+		// 	height: this.gameSession.canvasWidth * .05
+		// }
 
-		let backButtonStyle = {
-			stroke: this.p5.color(255, 255, 255),
-			strokeWeight: 5,
-			fill: this.p5.color(0, 0, 0),
-			hoverFill: this.p5.color(123, 123, 123),
-			pressedFill: this.p5.color(255, 255, 255),
-			loadingFill: this.p5.color(62, 62, 62),
-			disabledFill: this.p5.color(125, 0, 0),
-		}
+		// let backButtonStyle = {
+		// 	stroke: this.p5.color(255, 255, 255),
+		// 	strokeWeight: 5,
+		// 	fill: this.p5.color(0, 0, 0),
+		// 	hoverFill: this.p5.color(123, 123, 123),
+		// 	pressedFill: this.p5.color(255, 255, 255),
+		// 	loadingFill: this.p5.color(62, 62, 62),
+		// 	disabledFill: this.p5.color(125, 0, 0),
+		// }
 
-		this.backButton = new BackButton(backButtonLayout, backButtonStyle, false, "Loading");
-		this.backButton.setup();
+		// this.backButton = new BackButton(backButtonLayout, backButtonStyle, false, "Loading");
+		// this.backButton.setup();
 
-		//Instantiate menubutton
-		let menuButtonLayout = {
-			x: this.gameSession.canvasWidth * .9,
-			y: this.gameSession.canvasHeight * .9,
-			width: this.gameSession.canvasWidth * .05,
-			height: this.gameSession.canvasWidth * .05
-		}
+		// //Instantiate menubutton
+		// let menuButtonLayout = {
+		// 	x: this.gameSession.canvasWidth * .9,
+		// 	y: this.gameSession.canvasHeight * .9,
+		// 	width: this.gameSession.canvasWidth * .05,
+		// 	height: this.gameSession.canvasWidth * .05
+		// }
 
-		let menuButtonStyle = {
-			stroke: this.p5.color(255, 255, 255),
-			strokeWeight: 5,
-			fill: this.p5.color(0, 0, 0),
-			hoverFill: this.p5.color(123, 123, 123),
-			pressedFill: this.p5.color(255, 255, 255),
-			loadingFill: this.p5.color(62, 62, 62),
-			disabledFill: this.p5.color(125, 0, 0),
-		}
+		// let menuButtonStyle = {
+		// 	stroke: this.p5.color(255, 255, 255),
+		// 	strokeWeight: 5,
+		// 	fill: this.p5.color(0, 0, 0),
+		// 	hoverFill: this.p5.color(123, 123, 123),
+		// 	pressedFill: this.p5.color(255, 255, 255),
+		// 	loadingFill: this.p5.color(62, 62, 62),
+		// 	disabledFill: this.p5.color(125, 0, 0),
+		// }
 
-		this.menuButton = new MenuButton(menuButtonLayout, menuButtonStyle, false, "Menu");
-		this.menuButton.setup();
+		// this.menuButton = new MenuButton(menuButtonLayout, menuButtonStyle, false, "Menu");
+		// this.menuButton.setup();
 
 		//TODO: Test target out
 		let testBone = this.gameSession.skeleton.getBone("Left Innerpalm");
@@ -120,6 +139,11 @@ export default class GameState extends State {
 		this.narrator.setup();
 	}
 
+	setdown() {
+		this.section.attribute('style', 'display:none;');
+		//TODO also deactivate sound, narrator, skeleton, poses etc!
+	}
+
 	render() {
 		super.render();
 
@@ -136,32 +160,31 @@ export default class GameState extends State {
 		this.testTarget1.render();
 
 		//UI
-		this.backButton.render();
-		this.menuButton.render();
+		// this.backButton.render();
+		// this.menuButton.render();
 
 		//TODO: Make generic and add logic to exist across multiple states... singleton.
 		//Test Narrator
 		this.narrator.render();
-
 	}
 
 	resize() {
 		super.resize();
 		//TODO: I'm almost sure there's a better way for us to structure resize
 		
-		this.backButton.resize(
-			this.gameSession.canvasWidth * .05,
-			this.gameSession.canvasHeight * .05,
-			this.gameSession.canvasWidth * .05,
-			this.gameSession.canvasWidth * .05
-		);
+		// this.backButton.resize(
+		// 	this.gameSession.canvasWidth * .05,
+		// 	this.gameSession.canvasHeight * .05,
+		// 	this.gameSession.canvasWidth * .05,
+		// 	this.gameSession.canvasWidth * .05
+		// );
 
-		this.menuButton.resize(
-			this.gameSession.canvasWidth * .9,
-			this.gameSession.canvasHeight * .05,
-			this.gameSession.canvasWidth * .05,
-			this.gameSession.canvasWidth * .05
-		);
+		// this.menuButton.resize(
+		// 	this.gameSession.canvasWidth * .9,
+		// 	this.gameSession.canvasHeight * .05,
+		// 	this.gameSession.canvasWidth * .05,
+		// 	this.gameSession.canvasWidth * .05
+		// );
 
 		this.narrator.resize();
 	}
@@ -182,8 +205,8 @@ export default class GameState extends State {
 		this.testTarget1.update();
 
 		//UI
-		this.backButton.update();
-		this.menuButton.update();
+		// this.backButton.update();
+		// this.menuButton.update();
 
 		this.narrator.update();
 	}
@@ -199,13 +222,13 @@ export default class GameState extends State {
 	}
 
 	mousePressed(){
-		this.backButton.checkPressed();
-		this.menuButton.checkPressed();
+		// this.backButton.checkPressed();
+		// this.menuButton.checkPressed();
 	}
 
 	mouseReleased(){
-		this.backButton.checkReleased();
-		this.menuButton.checkReleased();
+		// this.backButton.checkReleased();
+		// this.menuButton.checkReleased();
 	}
 	
 	keyPressed() {

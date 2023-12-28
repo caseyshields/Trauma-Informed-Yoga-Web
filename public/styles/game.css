@@ -1,0 +1,40 @@
+section.game {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+
+    /* General styling */
+    color: var(--primary-color);
+    font-size: var(--text-size);
+    background-color: none;
+    font-family: Oswald;
+    overflow: hidden;
+}
+
+section.game img {
+    align-self: center;
+    justify-self: center;
+    border: var(--primary-color) 4px solid;
+    padding: 5px;
+    background: black;
+    margin: var(--text-size);
+}
+
+section.game img:first-of-type {
+    position: absolute;
+    left: 5%;
+    top: 5%;
+    /* width: 5%;
+    height: 5%; */
+}
+
+section.game img:last-of-type {
+    position: absolute;
+    right: 5%;
+    top: 5%;
+    /* width: 5%;
+    height: 5%; */
+}
+
