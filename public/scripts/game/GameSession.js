@@ -1,6 +1,7 @@
 import ParticleManager from "../core/GameObject/Particle/ParticleManager.js";
 import SoundManager from "../core/Sound/SoundManager.js";
 import BreathingManager from "./breathing/BreathingManager.js";
+import FormManager from "./form/FormManager.js";
 import PoseFilter from "./PoseFilter.js";
 import SettingsManager from "./settings/SettingsManager.js";
 
@@ -56,6 +57,9 @@ export default class GameSession {
 
 		//Current state
 		this.__currentState;
+
+		//reference to form manager
+		this.__formManager = {};
 
 		console.log("Session Created Successfully.");
 	}
@@ -233,6 +237,14 @@ export default class GameSession {
 
 	set mediapipe(mediapipe) {
 		this.__mediapipe = mediapipe;
+	}
+
+	get formManager(){
+		return this.__formManager;
+	}
+
+	set formManager(formManager){
+		this.__formManager = formManager;
 	}
 	
 }

@@ -1,5 +1,7 @@
-import VectorGameObject from "../../core/VectorGameObject.js";
 import Target from "./Target.js";
+import TargetQueue from "./TargetQueue.js";
+import VectorGameObject from "../../core/GameObject/VectorGameObject.js";
+import GameObject from "../../core/GameObject/GameObject.js";
 
 /**Abstract class used for arranging targets in sequence
  * 
@@ -7,13 +9,18 @@ import Target from "./Target.js";
  * A chain progresses linearly, checking if a target has its fulfillment conditions
  * complete before moving on.
  * 
+ * Target Queue = list of targets for form completion
+ * 
  */
-export default class Form extends VectorGameObject{
+export default class Form extends GameObject {
 
     layers = []; //array representing order of layers
     
     constructor(){
-        super(0, 0, {}, true, 5, 255, 0, 1, 1, false);
+        super();
+        this.__targetQueue = new TargetQueue();
+        this.__currentTargets = {};
+        this.__isLoaded = false;
 
     }
 
@@ -27,5 +34,37 @@ export default class Form extends VectorGameObject{
 
     update(){
 
+        //Peek at current target Queue
+
+        //if all targets are marked as complete, move to next set of targets
+
+    }
+
+    loadTargetQueue(){
+
+    }
+
+    get targetQueue(){
+        return this.__targetQueue;
+    }
+
+    set targetQueue(targetQueue){
+        this.__targetQueue = targetQueue;
+    }
+
+    get currentTargets(){
+        return this.__currentTargets;
+    }
+
+    set currentTargets(currentTargets){
+        this.__currentTargets = currentTargets;
+    }
+
+    get isLoaded(){
+        return this.__isLoaded;
+    }
+
+    set isLoaded(isLoaded){
+        this.__isLoaded = isLoaded;
     }
 }

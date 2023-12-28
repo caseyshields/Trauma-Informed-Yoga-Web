@@ -61,6 +61,7 @@ export default class Smoke {
                 let v = this._g.mag(mark.vx, mark.vy);
                 if (v > MaxParticles) 
                     v = MaxParticles;
+
                 for (let n=v; n>0; n--) {
                     let r = n/v
                     let x = mark.x - r*mark.vx + Math.random()*e.fuzz;
