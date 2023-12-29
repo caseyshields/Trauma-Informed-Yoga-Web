@@ -1,7 +1,5 @@
 import State from "../../core/State/State.js";
 import Skeleton from "../skeleton/Skeleton.js";
-import BackButton from "../buttons/BackButton.js";
-import MenuButton from "../buttons/MenuButton.js";
 import Target from "../form/Target.js";
 import Narrator from "../narrator/Narrator.js";
 import Diaphragm from "../breathing/Diaphragm.js";

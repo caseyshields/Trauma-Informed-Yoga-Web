@@ -3,9 +3,7 @@ import GameState from "./game/states/GameState.js";
 // import LoadingState from "./game/states/LoadingState.js";
 import CreditState from "./game/states/CreditState.js";
 import TitleState from "./game/states/TitleState.js";
-import MenuState from "./game/states/MenuState.js";
-import AboutState from "./game/states/AboutState.js";
-import InfoState from "./game/states/InfoState.js";
+// import MenuState from "./game/states/MenuState.js";
 import ConfigState from "./game/states/ConfigState.js";
 
 /**TODOS:
@@ -48,21 +46,12 @@ var TIYW = function (p) {
 		let gameState = new GameState();
 		gameSession.addStateToGame(gameState);
 
-		//Instantiate scene for game configurations
-		let menuState = new MenuState();
-		gameSession.addStateToGame(menuState);
-
-		//Instantiate scene for about page
-		let aboutState = new AboutState();
-		gameSession.addStateToGame(aboutState);
-
-		//Instantiate scene for info page
-		let infoState = new InfoState();
-		gameSession.addStateToGame(infoState);
-
 		let creditState = new CreditState();
 		gameSession.addStateToGame( creditState );
 
+		//Instantiate scene for game configurations
+		// let menuState = new MenuState();
+		// gameSession.addStateToGame(menuState);
 		let configState = new ConfigState();
 		gameSession.addStateToGame( configState );
 

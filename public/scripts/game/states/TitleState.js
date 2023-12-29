@@ -168,3 +168,22 @@ export default class LoadingState extends State {
 	}
 
 }
+// cameraButtonStyle = {
+// 	stroke: this.p5.color(230, 251, 255),
+// 	strokeWeight: 5,
+// 	fill: this.p5.color(51, 51, 51),
+// 	hoverFill: this.p5.color(76, 76, 76),
+// 	pressedFill: this.p5.color(102, 102, 102),
+// 	loadingFill: this.p5.color(0, 128, 255),
+// 	disabledFill: null,
+// };
+
+// let backButtonStyle = {
+// 	stroke: this.p5.color(255, 255, 255),
+// 	strokeWeight: 5,
+// 	fill: this.p5.color(0, 0, 0),
+// 	hoverFill: this.p5.color(123, 123, 123),
+// 	pressedFill: this.p5.color(255, 255, 255),
+// 	loadingFill: this.p5.color(62, 62, 62),
+// 	disabledFill: this.p5.color(125, 0, 0),
+// }
