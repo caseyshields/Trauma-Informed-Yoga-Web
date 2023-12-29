@@ -1,0 +1,14 @@
+section.config fieldset {
+    display: grid;
+    grid-template-columns: 25% auto;
+}
+
+section.config label {
+    grid-column: 1/2;
+    text-align: center;
+}
+
+section.config input, select {
+    grid-column: 2/3;
+    width: 100%;
+}

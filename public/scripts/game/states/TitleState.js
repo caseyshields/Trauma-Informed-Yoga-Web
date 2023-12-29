@@ -2,9 +2,7 @@ import State from "../../core/State/State.js";
 import Mediapipe from "../../core/Plugin/Mediapipe.js";
 import Skeleton from "../skeleton/Skeleton.js";
 /** Initial state used to welcome a user into the game and
- * load libraries in the background.
- *
- */
+ * load libraries in the background. */
 
 export default class LoadingState extends State {
 
@@ -73,25 +71,25 @@ export default class LoadingState extends State {
 
 		this.resourceButton = this.__p5.createElement('button', 'TSY Resources');
 		this.resourceButton.attribute('disabled', true);
-		this.resourceButton.parent(this.aside);
+		this.resourceButton.parent( this.aside );
 		this.resourceButton.mousePressed(()=>{
 			// this.gameSession.setCurrentStateByName('');
 		});
 		this.yogaButton = this.__p5.createElement('button', 'Yoga: Culture and Practices');
 		this.yogaButton.attribute('disabled', true);
-		this.yogaButton.parent(this.aside);
-		this.yogaButton.mousePressed(()=>{
+		this.yogaButton.parent( this.aside );
+		this.yogaButton.mousePressed( ()=>{
 			// this.gameSession.setCurrentStateByName('');
 		});
 		this.creditButton = this.__p5.createElement('button', 'Academic Credits');
-		this.creditButton.parent(this.aside);
-		this.creditButton.mousePressed(()=>{
+		this.creditButton.parent( this.aside );
+		this.creditButton.mousePressed( ()=>{
 			this.gameSession.setCurrentStateByName('Credits');
 		});
 		this.howButton = this.__p5.createElement('button', 'How This Game Works');
 		this.howButton.attribute('disabled', true);
-		this.howButton.parent(this.aside);
-		this.howButton.mousePressed(()=>{
+		this.howButton.parent( this.aside );
+		this.howButton.mousePressed( ()=>{
 			// this.gameSession.setCurrentStateByName('');
 		});
 	}

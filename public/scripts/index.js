@@ -6,6 +6,7 @@ import TitleState from "./game/states/TitleState.js";
 import MenuState from "./game/states/MenuState.js";
 import AboutState from "./game/states/AboutState.js";
 import InfoState from "./game/states/InfoState.js";
+import ConfigState from "./game/states/ConfigState.js";
 
 /**TODOS:
 SETUP should be abstracted to be made easier to use.
@@ -61,6 +62,9 @@ var TIYW = function (p) {
 
 		let creditState = new CreditState();
 		gameSession.addStateToGame( creditState );
+
+		let configState = new ConfigState();
+		gameSession.addStateToGame( configState );
 
 		//Set initial game state as loading, call setup method
 		gameSession.setCurrentState(loadingState);

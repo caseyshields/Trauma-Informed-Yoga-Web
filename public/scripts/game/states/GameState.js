@@ -50,7 +50,7 @@ export default class GameState extends State {
 		this.menu.attribute('src', '../../../assets/images/menu.svg');
 		this.menu.parent( this.section );
 		this.menu.mousePressed( ()=>{
-			// this.gameSession.setCurrentStateByName('config');
+			this.gameSession.setCurrentStateByName('Config');
 		});
 
 		this.screenshot = this.p5.createElement( 'button', 'Screenshot' );
