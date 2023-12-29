@@ -1,18 +1,55 @@
 import State from "../../core/State/State.js";
 
+let landmarks = [
+    'nose',
+    'left eye (inner)',
+    'left eye',
+    'left eye (outer)',
+    'right eye (inner)',
+    'right eye',
+    'right eye (outer)',
+    'left ear',
+    'right ear',
+    'mouth (left)',
+    'mouth (right)',
+    'left shoulder',
+    'right shoulder',
+    'left elbow',
+    'right elbow',
+    'left wrist',
+    'right wrist',
+    'left pinky',
+    'right pinky',
+    'left index',
+    'right index',
+    'left thumb',
+    'right thumb',
+    'left hip',
+    'right hip',
+    'left knee',
+    'right knee',
+    'left ankle',
+    'right ankle',
+    'left heel',
+    'right heel',
+    'left foot index',
+    'right foot index'
+];
+
 let DefaultConfiguration = {
     silhouette : {
         thickness: { name: 'thickness', type: 'range', min:0, max:100, value: 0 },
-        exhale_color: { name: 'exhale color', type: 'color', value: [50,50,50] },
-        inhale_color: { name: 'inhale color', type: 'color', value: [250,250,250] }
+        exhale_color: { name: 'exhale color', type: 'color', value: '#323232'},//[50,50,50] },
+        inhale_color: { name: 'inhale color', type: 'color', value: '#fafafa'},//[250,250,250] }
     }, // TODO get rid of extra name
     smokeTrails : {
         landmark : { name:'landmark', type:'select', values:landmarks, value:'nose' },
         exhale_size: { name:'exhale size', type:'range', min:0, max:64, value:16 },
         inhale_size: { name:'inhale size', type:'range', min:0, max:64, value:32 },
         fuzz: { name:'fuzz', type: 'range', min:0, max:32, value:4 },
-        exhale_color: { name:'exhale color', type:'color', value:[25,150,25,5] },
-        inhale_color: { name:'inhale color', type:'color', value:[100,100,100,1] }
+        exhale_color: { name:'exhale color', type:'color', value:'#199619'},//[25,150,25,5] },
+        inhale_color: { name:'inhale color', type:'color', value:'#646464'},//[100,100,100,1] }
+        // TODO add opacity!!!
     }
 }
 
@@ -51,7 +88,7 @@ export default class ConfigState extends State {
         // configuration objects 
         for (let topic in config) {
             let fieldset = this.p5.createElement('fieldset');
-            fieldset.parent(form);
+            fieldset.parent(this.form);
             let legend = this.p5.createElement('legend', topic);
             legend.parent(fieldset);
 
@@ -59,16 +96,17 @@ export default class ConfigState extends State {
             for (let name in subset) {
                 let entry = subset[name]; 
 
-                let label = p5.createElement('label', entry.name);
+                let label = this.p5.createElement('label', entry.name);
                 label.attribute('for', name);
                 label.parent( fieldset );
                 
                 if (entry.type=='range') {
-                    let slide = this.p5.createElement('range');
-                    slide.attribute(id, name);
-                    slide.attribute(min, entry.min);
-                    slide.attribute(max, entry.max);
-                    slide.attribute(value, entry.value);
+                    let slide = this.p5.createElement('input');
+                    slide.attribute('id', name);
+                    slide.attribute('type', 'range');
+                    slide.attribute('min', entry.min);
+                    slide.attribute('max', entry.max);
+                    slide.attribute('value', entry.value);
                     slide.parent( fieldset );
                 }
                 else if (entry.type=='select') {
@@ -77,7 +115,7 @@ export default class ConfigState extends State {
                     select.attribute('id', name);
                     select.parent(fieldset);
                     for (let value of entry.values) {
-                        let option = p5.createElement('option', value);
+                        let option = this.p5.createElement('option', value);
                         option.attribute('value', value);
                         if (value==entry.value)
                             option.attribute('selected', true);
