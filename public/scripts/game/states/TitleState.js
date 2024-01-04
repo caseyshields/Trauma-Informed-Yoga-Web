@@ -61,6 +61,11 @@ export default class LoadingState extends State {
             this.initMediaPipe();
 			this.initButton.attribute('disabled', true);
         });
+		this.configButton = this.p5.createElement('button', 'Configuration');
+		this.configButton.parent( this.article );
+		this.configButton.mousePressed( ()=>{
+			this.gameSession.setCurrentStateByName('Config');
+		})
 
         this.aside = this.__p5.createElement('aside');
         this.aside.parent(this.section);
