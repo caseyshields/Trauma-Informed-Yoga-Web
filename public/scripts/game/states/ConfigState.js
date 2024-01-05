@@ -102,9 +102,9 @@ export default class ConfigState extends State {
                 label.parent( fieldset );
                 
 
-                // if (Array.isArray(entry)) {
-
-                // }
+                if (Array.isArray(entry)) {
+                    //TODO recurse on arrays?
+                }
                 if (entry.type=='range') {
                     let slide = this.p5.createElement('input');
                     slide.attribute('id', name);
@@ -133,6 +133,14 @@ export default class ConfigState extends State {
                     input.attribute( 'type', 'color');
                     input.attribute( 'value', arrayToHex( entry.value ) );
                     input.parent( fieldset );
+                }
+                else if (entry.type=='checkbox') {
+                    let check = this.p5.createElement( 'input' );
+                    check.attribute('id', name);
+                    check.attribute('type', 'checkbox');
+                    if (entry.value)
+                        check.attribute('checked', true);
+                    check.parent(fieldset);
                 }
                 
             }
