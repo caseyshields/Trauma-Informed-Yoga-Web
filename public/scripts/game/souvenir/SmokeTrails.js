@@ -1,17 +1,75 @@
 import GameSession from "../GameSession.js";
 
 const MaxParticles = 50;
+const landmarks = [
+    'nose',
+    'left eye (inner)',
+    'left eye',
+    'left eye (outer)',
+    'right eye (inner)',
+    'right eye',
+    'right eye (outer)',
+    'left ear',
+    'right ear',
+    'mouth (left)',
+    'mouth (right)',
+    'left shoulder',
+    'right shoulder',
+    'left elbow',
+    'right elbow',
+    'left wrist',
+    'right wrist',
+    'left pinky',
+    'right pinky',
+    'left index',
+    'right index',
+    'left thumb',
+    'right thumb',
+    'left hip',
+    'right hip',
+    'left knee',
+    'right knee',
+    'left ankle',
+    'right ankle',
+    'left heel',
+    'right heel',
+    'left foot index',
+    'right foot index'
+];
 
 /** Different parts of the pose emit smoke of different hues in time with breath */
 export default class Smoke {
+    
+    static DefaultConfiguration = {
+        emitters : [
+            {
+                landmark : { type:'select', values:landmarks, value:'nose' },
+                exhale_size: { type:'range', min:0, max:64, value:16 },
+                inhale_size: { type:'range', min:0, max:64, value:32 },
+                fuzz: { type: 'range', min:0, max:32, value:4 },
+                exhale_color: { type:'color', value:[25,150,25,5] },//'#199619'},//
+                inhale_color: { type:'color', value:[100,100,100,1] },//'#646464'},//
+                exhale_opacity: { type:'range', min:0, max:16, value:4}
+            },{
+                landmark : { type:'select', values:landmarks, value:'left wrist' },
+                exhale_size: { type:'range', min:0, max:64, value:16 },
+                inhale_size: { type:'range', min:0, max:64, value:32 },
+                fuzz: { type: 'range', min:0, max:32, value:4 },
+                exhale_color: { type:'color', value:[150,0,25,5] },
+                inhale_color: { type:'color', value:[100,100,100,1] },
+                exhale_opacity: { type:'range', min:0, max:16, value:4}
+            },{
+                landmark : { type:'select', values:landmarks, value:'right wrist' },
+                exhale_size: { type:'range', min:0, max:64, value:16 },
+                inhale_size: { type:'range', min:0, max:64, value:32 },
+                fuzz: { type: 'range', min:0, max:32, value:4 },
+                exhale_color: { type:'color', value:[25,0,150,5] },
+                inhale_color: { type:'color', value:[100,100,100,1] },
+                exhale_opacity: { type:'range', min:0, max:16, value:4}
+            }
+        ]
+    }
 
-    
-    static Default = [
-        {index:0, small:16, large:32, fuzz:4, empty:[25,150,25,5], full:[100,100,100,1]},
-        {index:20, small:16, large:32, fuzz:4, empty:[150,0,25,5], full:[100,100,100,1]},
-        {index:19, small:16, large:32, fuzz:4, empty:[25,0,150,5], full:[100,100,100,1]}
-    ]; // TODO trying to use a format that is easily compatible with JSON config files..
-    
     /** @constructor 
      * @param {Trail[]} config An array  of smoke trail configurations
      * @param {Number} Trail.index index of a pose landmark in the current filtered GameSession pose
@@ -21,7 +79,7 @@ export default class Smoke {
      * @param {Number[]} Trail.empty The rgb(a) color channels of the smoke when breath is empty
      * @param {Number[]} Trail.full The rgb(a) color channels of the smoke when breath is full
     */
-    constructor( config = Smoke.Default ) {
+    constructor( config = Smoke.DefaultConfiguration ) {
         this._session = new GameSession();
 
         // create a separate graphics context where we render the smoke
@@ -29,12 +87,8 @@ export default class Smoke {
             this._session.canvasWidth, 
             this._session.canvasHeight);
 
-        // set emitter configuration, elaborate on some raw color values
-        this._trails = config;
-        for(let t of this._trails) {
-            t.empty = this._g.color(...t.empty);
-            t.full = this._g.color(...t.full);
-        }
+        // set emitter configuration
+        this._config = config;
     }
 
     // TODO handle resize events by resizing our graphics context too!
@@ -48,13 +102,22 @@ export default class Smoke {
         // this._g.blendMode(this._g.SCREEN); // BLEND // DIFFERENCE
 
         // for each valid configured pose landmark
-        for(let e of this._trails) {
-            let mark = this._session.pose.state[e.index];
+        for(let e of this._config.emitters) {
+            
+            // find the emitter's landmark's index
+            let index = landmarks.indexOf(e.landmark.value);
+            if (index==-1)
+                continue;
+
+            // lookup the corresponding filtered landmark
+            let mark = this._session.pose.state[index];
             if (mark) {
 
                 // set the color and size for the emitter using current breath volume
-                let c = this._g.lerpColor(e.empty, e.full, this._session.breathingManager.breath);
-                let d = e.small + (1-this._session.breathingManager.breath)*(e.large-e.small)
+                let empty = this._g.color(...e.exhale_color.value);
+                let full = this._g.color(...e.inhale_color.value);
+                let c = this._g.lerpColor(empty, full, this._session.breathingManager.breath);
+                let d = e.exhale_size.value + (1-this._session.breathingManager.breath)*(e.inhale_size.value-e.exhale_size.value);
                 this._g.fill(c);
 
                 // draw a path of circles whose density is roughly proportional to the velocity
@@ -64,8 +127,8 @@ export default class Smoke {
 
                 for (let n=v; n>0; n--) {
                     let r = n/v
-                    let x = mark.x - r*mark.vx + Math.random()*e.fuzz;
-                    let y = mark.y - r*mark.vy + Math.random()*e.fuzz;
+                    let x = mark.x - r*mark.vx + Math.random()*e.fuzz.value;
+                    let y = mark.y - r*mark.vy + Math.random()*e.fuzz.value;
                     this._g.circle(x, y, d);
                 }
             }
@@ -82,8 +145,8 @@ export default class Smoke {
 
     /** 
      * @returns {Trail[]} an array of current smoke trial properties */
-    get trails() {return this._trails;}
+    get configuration() {return this._config;}
     // TODO is this sufficient for updating in-game? for example;
     // smoke.trail[2].fuzz = 8;
 
-}
+    }

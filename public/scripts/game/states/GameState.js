@@ -78,18 +78,9 @@ export default class GameState extends State {
 			this.gameSession.skeletonLoaded = true;
 		}
 
-
 		this.diaphragm = new Diaphragm( this.gameSession.skeleton );
-		this.silhouette = new Silhouette( {
-			// thickness: undefined,
-			empty: [50,50,50],
-			full: [250, 250, 250]
-		});
-		this.smoke = new SmokeTrails([
-			{index:0, small:16, large:32, fuzz:4, empty:[25,150,25,5], full:[100,100,100,1]},
-			{index:20, small:16, large:32, fuzz:4, empty:[150,0,25,5], full:[100,100,100,1]},
-			{index:19, small:16, large:32, fuzz:4, empty:[25,0,150,5], full:[100,100,100,1]}
-		]);
+		this.silhouette = new Silhouette( Silhouette.DefaultConfiguration );
+		this.smoke = new SmokeTrails( SmokeTrails.DefaultConfiguration );
 
 		//Instantiate backbutton
 		// let backButtonLayout = {
