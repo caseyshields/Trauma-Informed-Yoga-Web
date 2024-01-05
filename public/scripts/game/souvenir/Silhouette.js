@@ -9,9 +9,7 @@ import GameSession from "../GameSession.js";
 export default class Silhouette {
 
     // TODO see if media pipe provides a segmentation mask! It is mentioned in Google's MediaPipe docs...
-
-    // TODO should I just make the skeleton look like the silhouette and supply it this
-    // 'motion blur' image context? Such an organization would have less repetition...
+    // TODO handle screen resize!!!!!!!!!!!!!!!!!!!!!
 
     static DefaultConfiguration = {
         thickness: { type: 'range', min:0, max:100, value: 0 },
@@ -30,17 +28,11 @@ export default class Silhouette {
         this.g = this._session.p5.createGraphics(this._session.canvasWidth, this._session.canvasHeight);
     }
 
-    // TODO handle screen resize!!!!!!!!!!!!!!!!!!!!!
-
     /** Every render, the cumulative image is dimmed then a silhouette of the user is drawn on top. */
     render() {
 
         // dim the cumulative image
         this.g.background(0, 0, 0, 20);
-
-        // for now just don't draw components if we're missing landmarks
-        // but eventually we should contemplate a more sophisticated sol'n
-        // that includes time filtering, outlier rejection, estimation, etc...    
 
         // draw the avatar if we can see the torso
         let pose = this._session.pose.state; // array of {x, y, z, score, name}

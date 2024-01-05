@@ -100,6 +100,7 @@ export default class Smoke {
         // general state machine styling
         this._g.noStroke();
         // this._g.blendMode(this._g.SCREEN); // BLEND // DIFFERENCE
+        // NOTE: enabling blend mode appears to be VERY expensive on some platforms...
 
         // for each valid configured pose landmark
         for(let e of this._config.emitters) {
@@ -144,9 +145,7 @@ export default class Smoke {
     // what if we want to use alpha masks and composite or something?
 
     /** 
-     * @returns {Trail[]} an array of current smoke trial properties */
+     * @returns {Emitter[]} an array of current smoke trial properties */
     get configuration() {return this._config;}
-    // TODO is this sufficient for updating in-game? for example;
-    // smoke.trail[2].fuzz = 8;
 
     }
