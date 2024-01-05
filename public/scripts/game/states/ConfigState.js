@@ -38,17 +38,17 @@ let landmarks = [
 
 let DefaultConfiguration = {
     silhouette : {
-        thickness: { name: 'thickness', type: 'range', min:0, max:100, value: 0 },
-        exhale_color: { name: 'exhale color', type: 'color', value:[50,50,50] },//'#323232'},//
-        inhale_color: { name: 'inhale color', type: 'color', value:[250,250,250] }//'#fafafa'},//
-    }, // TODO get rid of extra name
+        thickness: { type: 'range', min:0, max:100, value: 0 },
+        exhale_color: { type: 'color', value:[50,50,50] },//'#323232'},//
+        inhale_color: { type: 'color', value:[250,250,250] }//'#fafafa'},//
+    },
     smokeTrails : {
-        landmark : { name:'landmark', type:'select', values:landmarks, value:'nose' },
-        exhale_size: { name:'exhale size', type:'range', min:0, max:64, value:16 },
-        inhale_size: { name:'inhale size', type:'range', min:0, max:64, value:32 },
-        fuzz: { name:'fuzz', type: 'range', min:0, max:32, value:4 },
-        exhale_color: { name:'exhale color', type:'color', value:[25,150,25,5] },//'#199619'},//
-        inhale_color: { name:'inhale color', type:'color', value:[100,100,100,1] }//'#646464'},//
+        landmark : { type:'select', values:landmarks, value:'nose' },
+        exhale_size: { type:'range', min:0, max:64, value:16 },
+        inhale_size: { type:'range', min:0, max:64, value:32 },
+        fuzz: { type: 'range', min:0, max:32, value:4 },
+        exhale_color: { type:'color', value:[25,150,25,5] },//'#199619'},//
+        inhale_color: { type:'color', value:[100,100,100,1] }//'#646464'},//
         // TODO add opacity!!!
     }
 }
@@ -97,10 +97,14 @@ export default class ConfigState extends State {
             for (let name in subset) {
                 let entry = subset[name]; 
 
-                let label = this.p5.createElement('label', entry.name);
+                let label = this.p5.createElement('label', name);
                 label.attribute('for', name);
                 label.parent( fieldset );
                 
+
+                // if (Array.isArray(entry)) {
+
+                // }
                 if (entry.type=='range') {
                     let slide = this.p5.createElement('input');
                     slide.attribute('id', name);
