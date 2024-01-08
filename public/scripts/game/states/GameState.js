@@ -64,13 +64,14 @@ export default class GameState extends State {
 		super.setup();
 		this.section.removeAttribute('style');
 
+		// TODO Figure out how to add all souvenirs' configurations to setting manager
+		// needs to generalize to any configurable thing; audio, forms, etc...
 		this.initializeGameFromSettings();
 
-				//reference to form manager
+		// reference to form manager
 		this.gameSession.formManager = new FormManager();
 		this.gameSession.formManager.setup();
 		
-
 		//Make sure skeleton is already loaded, load if not
 		if(!this.gameSession.skeletonLoaded){
 			this.gameSession.skeleton = new Skeleton();
@@ -80,6 +81,7 @@ export default class GameState extends State {
 		this.diaphragm = new Diaphragm( this.gameSession.skeleton );
 		this.silhouette = new Silhouette( Silhouette.DefaultConfiguration );
 		this.smoke = new SmokeTrails( SmokeTrails.DefaultConfiguration );
+		// TODO get configuration from settings manager?
 
 		this.narrator = new Narrator();
 		this.narrator.setup();
@@ -160,4 +162,10 @@ export default class GameState extends State {
 		return this.__gameBackground;
 	}
 
+	get configuration() {
+		return {
+			silhouette : this.silhouette.configuration,
+			smoke : this.smoke.configuration
+		};
+	}
 }
