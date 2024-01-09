@@ -1,58 +1,5 @@
 import State from "../../core/State/State.js";
 
-let landmarks = [
-    'nose',
-    'left eye (inner)',
-    'left eye',
-    'left eye (outer)',
-    'right eye (inner)',
-    'right eye',
-    'right eye (outer)',
-    'left ear',
-    'right ear',
-    'mouth (left)',
-    'mouth (right)',
-    'left shoulder',
-    'right shoulder',
-    'left elbow',
-    'right elbow',
-    'left wrist',
-    'right wrist',
-    'left pinky',
-    'right pinky',
-    'left index',
-    'right index',
-    'left thumb',
-    'right thumb',
-    'left hip',
-    'right hip',
-    'left knee',
-    'right knee',
-    'left ankle',
-    'right ankle',
-    'left heel',
-    'right heel',
-    'left foot index',
-    'right foot index'
-];
-
-let DefaultConfiguration = {
-    silhouette : {
-        thickness: { type: 'range', min:0, max:100, value: 0 },
-        exhale_color: { type: 'color', value:[50,50,50] },//'#323232'},//
-        inhale_color: { type: 'color', value:[250,250,250] }//'#fafafa'},//
-    },
-    smokeTrails : {
-        landmark : { type:'select', values:landmarks, value:'nose' },
-        exhale_size: { type:'range', min:0, max:64, value:16 },
-        inhale_size: { type:'range', min:0, max:64, value:32 },
-        fuzz: { type: 'range', min:0, max:32, value:4 },
-        exhale_color: { type:'color', value:[25,150,25,5] },//'#199619'},//
-        inhale_color: { type:'color', value:[100,100,100,1] }//'#646464'},//
-        // TODO add opacity!!!
-    }
-}
-
 /**  */
 export default class ConfigState extends State {
 
@@ -64,7 +11,7 @@ export default class ConfigState extends State {
     /** @constructor Creates DOM elements for the Credit page component.
      * @param {Object[]} data An object of configuration objects
      */
-    constructor(config=DefaultConfiguration) {
+    constructor() {
         super( 'Config' );
 
         this.section = this.p5.createElement( 'section' );
@@ -81,17 +28,43 @@ export default class ConfigState extends State {
 
         let h1 = this.p5.createElement('h1', 'Configuration');
         h1.parent(this.section);
+    }
+
+    /** Called when this state is activated by the Game Session. Makes the Title screen visible */
+	setup() {
+		super.setup();
+
+        // destroy the form if it had been made previously
+        if (this.form!=undefined)
+            this.form.remove();
+        
+        // get the configuration and make a UI to edit it
+        let configuration = this.gameSession.settingsManager.getConfiguration();
+        this.generateForm( configuration, this.section );
 
         // TODO add a nav bar that lets you move between configurations for different effects...
-        this.form = this.p5.createElement( 'form' );
-        this.form.parent( this.section );
+
+        // make the UI visible by removing the style attribute; 'display:none;'
+        this.section.removeAttribute('style');
+	}
+
+	/** Called when the current state is changed from this state. Makes the Title screen invisible. */
+	setdown() {
+		this.section.attribute('style', 'display:none;');
+	}
+
+    /**  */
+    generateForm(config, parent) {
         
+        this.form = this.p5.createElement( 'form' );
+        this.form.parent( parent );
+
         // configuration objects 
         for (let topic in config) {
-            let fieldset = this.p5.createElement('fieldset');
-            fieldset.parent(this.form);
+            let fieldset = this.p5.createElement( 'fieldset' );
+            fieldset.parent( this.form );
             let legend = this.p5.createElement('legend', topic);
-            legend.parent(fieldset);
+            legend.parent( fieldset );
 
             let subset = config[topic];
             for (let name in subset) {
@@ -152,17 +125,7 @@ export default class ConfigState extends State {
     /** @returns {p5.Element} The Dom section containing the credit page */
     get section() {return this.section;}
 
-	/** Called when this state is activated by the Game Session. Makes the Title screen visible */
-	setup() {
-		super.setup();
-        this.section.removeAttribute('style');
-	}
-
-	/** Called when the current state is changed from this state. Makes the Title screen invisible. */
-	setdown() {
-		this.section.attribute('style', 'display:none;');
-	}
-
+	
 	update() {
 		super.update();
 	}

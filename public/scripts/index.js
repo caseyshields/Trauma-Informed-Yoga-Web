@@ -1,9 +1,7 @@
 import GameSession from "./game/GameSession.js";
 import GameState from "./game/states/GameState.js";
-// import LoadingState from "./game/states/LoadingState.js";
 import CreditState from "./game/states/CreditState.js";
 import TitleState from "./game/states/TitleState.js";
-// import MenuState from "./game/states/MenuState.js";
 import ConfigState from "./game/states/ConfigState.js";
 
 /**TODOS:

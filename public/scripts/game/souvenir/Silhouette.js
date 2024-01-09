@@ -11,7 +11,7 @@ export default class Silhouette {
     // TODO see if media pipe provides a segmentation mask! It is mentioned in Google's MediaPipe docs...
     // TODO handle screen resize!!!!!!!!!!!!!!!!!!!!!
 
-    static DefaultConfiguration = {
+    static DefaultSettings = {
         thickness: { type: 'range', min:0, max:100, value: 0 },
         exhale_color: { type: 'color', value:[50,50,50] },//'#323232'},//
         inhale_color: { type: 'color', value:[250,250,250] }//'#fafafa'},//
@@ -22,9 +22,9 @@ export default class Silhouette {
      * @param {Number[]} style.empty RGB(A) color channels of the silhouette when breath is empty
      * @param {Number[]} style.full RGB(A) color channels of the silhouette when breath is full
      */
-    constructor( config = Silhouette.DefaultConfiguration ) {
+    constructor( settings = Silhouette.DefaultSettings ) {
         this._session = new GameSession();
-        this._config = config;
+        this._config = settings;
         this.g = this._session.p5.createGraphics(this._session.canvasWidth, this._session.canvasHeight);
     }
 
@@ -125,7 +125,7 @@ export default class Silhouette {
         }
     }
 
-    get configuration() {return this._config;}
+    get settings() { return this._config;}
     
 }
 

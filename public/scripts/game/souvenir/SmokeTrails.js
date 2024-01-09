@@ -40,7 +40,7 @@ const landmarks = [
 /** Different parts of the pose emit smoke of different hues in time with breath */
 export default class Smoke {
     
-    static DefaultConfiguration = {
+    static DefaultSettings = {
         emitters : [
             {
                 landmark : { type:'select', values:landmarks, value:'nose' },
@@ -71,7 +71,7 @@ export default class Smoke {
     }
 
     /** @constructor 
-     * @param {Trail[]} config An array  of smoke trail configurations
+     * @param {Trail[]} settings An array  of smoke trail configurations
      * @param {Number} Trail.index index of a pose landmark in the current filtered GameSession pose
      * @param {Number} Trail.small size of smoke when breath is empty
      * @param {Number} Trail.large size of smoke when breath is full
@@ -79,7 +79,7 @@ export default class Smoke {
      * @param {Number[]} Trail.empty The rgb(a) color channels of the smoke when breath is empty
      * @param {Number[]} Trail.full The rgb(a) color channels of the smoke when breath is full
     */
-    constructor( config = Smoke.DefaultConfiguration ) {
+    constructor( settings = Smoke.DefaultSettings ) {
         this._session = new GameSession();
 
         // create a separate graphics context where we render the smoke
@@ -88,7 +88,7 @@ export default class Smoke {
             this._session.canvasHeight);
 
         // set emitter configuration
-        this._config = config;
+        this._config = settings;
     }
 
     // TODO handle resize events by resizing our graphics context too!
@@ -145,7 +145,7 @@ export default class Smoke {
     // what if we want to use alpha masks and composite or something?
 
     /** 
-     * @returns {Emitter[]} an array of current smoke trial properties */
-    get configuration() {return this._config;}
+     * @returns {Object} The configuration of the smoke trails */
+    get settings() {return this._config;}
 
     }

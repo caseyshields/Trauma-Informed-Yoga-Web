@@ -55,6 +55,22 @@ export default class GameState extends State {
 		this.screenshot.mousePressed( ()=>{
 			this.p5.saveCanvas("screenshot.jpg");
 		});
+
+		//Make sure skeleton is already loaded, load if not
+		if(!this.gameSession.skeletonLoaded){
+			this.gameSession.skeleton = new Skeleton();
+			this.gameSession.skeletonLoaded = true;
+		}
+
+		// Create the various Graphics objects
+		this.diaphragm = new Diaphragm( this.gameSession.skeleton );
+		this.silhouette = new Silhouette( Silhouette.DefaultConfiguration );
+		this.smoke = new SmokeTrails( SmokeTrails.DefaultConfiguration );
+
+		// register them with the SettingsManager
+		this.gameSession.settingsManager.register( this.diaphragm );
+		this.gameSession.settingsManager.register( this.silhouette );
+		this.gameSession.settingsManager.register( this.smoke );
 	}
 
 	// TODO load style from some configuration
@@ -71,17 +87,6 @@ export default class GameState extends State {
 		// reference to form manager
 		this.gameSession.formManager = new FormManager();
 		this.gameSession.formManager.setup();
-		
-		//Make sure skeleton is already loaded, load if not
-		if(!this.gameSession.skeletonLoaded){
-			this.gameSession.skeleton = new Skeleton();
-			this.gameSession.skeletonLoaded = true;
-		}
-
-		this.diaphragm = new Diaphragm( this.gameSession.skeleton );
-		this.silhouette = new Silhouette( Silhouette.DefaultConfiguration );
-		this.smoke = new SmokeTrails( SmokeTrails.DefaultConfiguration );
-		// TODO get configuration from settings manager?
 
 		this.narrator = new Narrator();
 		this.narrator.setup();

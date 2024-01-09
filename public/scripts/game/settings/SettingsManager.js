@@ -23,6 +23,11 @@ import Manager from "../../core/Manager/Manager.js";
  * Anyways, If we're going this route, it does presuppose a registration, where all the configurable 
  * objects and systems get collated in a single list and we can handle Configuration change events.
  * The Settings manager is prob the best place for this!
+ * 
+ * ... Though I could see this being rolled in with the Config State! But that might complicate some 
+ * lifecycle stuff. ie States need an instantiation order...
+ * because this manager exists in the singleton GameSession, and should exist before 
+ * any game state is created. 
  */
 export default class SettingsManager extends Manager {
 
@@ -43,6 +48,7 @@ export default class SettingsManager extends Manager {
 
     constructor(){
         super();
+        this._register = [];
     }
 
     setup(){
@@ -53,10 +59,52 @@ export default class SettingsManager extends Manager {
 
     }
 
-    //Settings Manager shouldn't render
+    // Settings Manager shouldn't render
     render(){
 
     }
 
+    /** 
+     * @param {String} name Name of the configurable object
+     * @param {Object} A game object or system that implements get and set for it's 'configuration'.
+     */
+    register(name, configurable) {
+        // let c = Object.assign({},configurable.configuration);
+        this._register[name] = configurable;
+    }
 
+    unregister(name) {
+        delete this._register[name];
+    }
+
+    // Returns the configuration descriptions of every registered game system.
+    getConfiguration() {
+        let configuration = {}
+        for (let name in this._register) {
+            configuration[name] = this._register[name].settings
+        }
+        return this.configuration; 
+    }
+
+    // TODO right now we directly stor links to the active configuration of all objects!
+    // The wisdom of this is questionable. If we do introduce intermediate copies, then we'd
+    // need an update step like this;
+    // updateConfiguration() {
+    //     for (let name in this.configuration) {
+    //         let configurable = this.configuration[name];
+    //         configurable.settings = 
+    //     }
+    // }
+    // not sure this provides us much robustness against leaked state;
+    // every object that implements getters/setters for its internals leaks its state already...
+
+    initializeGameFromSettings() {
+		//Look at settings manager
+
+		//Set relevant audio systems
+
+		//Set relevant visual systems
+
+		//Set relevant mechanics systems (form, narrator, targets, particles...)
+	}
 }
