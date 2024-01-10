@@ -37,10 +37,14 @@ export default class ConfigState extends State {
         // destroy the form if it had been made previously
         if (this.form!=undefined)
             this.form.remove();
+
+        // create a new one we can synchronize with the current state of the configuration
+        this.form = this.p5.createElement( 'form' );
+        this.form.parent( parent );
         
         // get the configuration and make a UI to edit it
         let configuration = this.gameSession.settingsManager.getConfiguration();
-        this.generateForm( configuration, this.section );
+        this.generateForm( configuration, this.form );
 
         // TODO add a nav bar that lets you move between configurations for different effects...
 
@@ -55,70 +59,81 @@ export default class ConfigState extends State {
 
     /**  */
     generateForm(config, parent) {
+
+        // Iterate through the component configurations
+        for (let topic in config) {                
+            let component = config[topic];
         
-        this.form = this.p5.createElement( 'form' );
-        this.form.parent( parent );
-
-        // configuration objects 
-        for (let topic in config) {
-            let fieldset = this.p5.createElement( 'fieldset' );
-            fieldset.parent( this.form );
-            let legend = this.p5.createElement('legend', topic);
-            legend.parent( fieldset );
-
-            let subset = config[topic];
-            for (let name in subset) {
-                let entry = subset[name]; 
-
-                let label = this.p5.createElement('label', name);
-                label.attribute('for', name);
-                label.parent( fieldset );
-                
-
-                if (Array.isArray(entry)) {
-                    //TODO recurse on arrays?
-                }
-                if (entry.type=='range') {
-                    let slide = this.p5.createElement('input');
-                    slide.attribute('id', name);
-                    slide.attribute('type', 'range');
-                    slide.attribute('min', entry.min);
-                    slide.attribute('max', entry.max);
-                    slide.attribute('value', entry.value);
-                    slide.parent( fieldset );
-                }
-                else if (entry.type=='select') {
-                    let select = this.p5.createElement('select');
-                    select.attribute('name', name);
-                    select.attribute('id', name);
-                    select.parent(fieldset);
-                    for (let value of entry.values) {
-                        let option = this.p5.createElement('option', value);
-                        option.attribute('value', value);
-                        if (value==entry.value)
-                            option.attribute('selected', true);
-                        option.parent(select);
-                    }
-                }
-                else if (entry.type=='color') {
-                    let input = this.p5.createElement( 'input' );
-                    input.attribute( 'id', name);
-                    input.attribute( 'type', 'color');
-                    input.attribute( 'value', arrayToHex( entry.value ) );
-                    input.parent( fieldset );
-                }
-                else if (entry.type=='checkbox') {
-                    let check = this.p5.createElement( 'input' );
-                    check.attribute('id', name);
-                    check.attribute('type', 'checkbox');
-                    if (entry.value)
-                        check.attribute('checked', true);
-                    check.parent(fieldset);
-                }
-                
+            // recurse on the elements of an array
+            if (Array.isArray(component)) {
+                for (item in component)
+                    generateForm(component, fieldset);
+                // TODO add controls for adding and removing items!!!
             }
-        } // TODO should I make this recurse on nested objects?
-        // TODO add way to configure arrays of topics
+
+            // each component's configuration is an object
+            else if (typeof component ==='object') { 
+
+                // create a named border for the component
+                let fieldset = this.p5.createElement( 'fieldset' );
+                fieldset.parent( parent );
+                let legend = this.p5.createElement('legend', topic);
+                legend.parent( fieldset );
+
+                // The component config contains parameter description objects
+                for (let name in component) {
+                    let entry = component[name]; 
+
+                    // create a label for the field
+                    let label = this.p5.createElement('label', name);
+                    label.attribute('for', name);
+                    label.parent( fieldset );
+
+                    // create the appropriate input for the type of parameter
+                    if (entry.type=='range') {
+                        let slide = this.p5.createElement('input');
+                        slide.attribute('id', name);
+                        slide.attribute('type', 'range');
+                        slide.attribute('min', entry.min);
+                        slide.attribute('max', entry.max);
+                        slide.attribute('value', entry.value);
+                        slide.parent( fieldset );
+                    }
+                    else if (entry.type=='select') {
+                        let select = this.p5.createElement('select');
+                        select.attribute('name', name);
+                        select.attribute('id', name);
+                        select.parent(fieldset);
+                        for (let value of entry.values) {
+                            let option = this.p5.createElement('option', value);
+                            option.attribute('value', value);
+                            if (value==entry.value)
+                                option.attribute('selected', true);
+                            option.parent(select);
+                        }
+                    }
+                    else if (entry.type=='color') {
+                        let input = this.p5.createElement( 'input' );
+                        input.attribute( 'id', name);
+                        input.attribute( 'type', 'color');
+                        input.attribute( 'value', arrayToHex( entry.value ) );
+                        input.parent( fieldset );
+                    }
+                    else if (entry.type=='checkbox') {
+                        let check = this.p5.createElement( 'input' );
+                        check.attribute('id', name);
+                        check.attribute('type', 'checkbox');
+                        if (entry.value)
+                            check.attribute('checked', true);
+                        check.parent(fieldset);
+                    }
+                    
+                }
+            }
+
+            else console.error(
+                'Config objects must contain an object describing the parameter');
+        }
         // TODO add way to configure array fields...
     }
 

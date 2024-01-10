@@ -83,7 +83,7 @@ export default class SettingsManager extends Manager {
         for (let name in this._register) {
             configuration[name] = this._register[name].settings
         }
-        return this.configuration; 
+        return this.configuration;
     }
 
     // TODO right now we directly stor links to the active configuration of all objects!
