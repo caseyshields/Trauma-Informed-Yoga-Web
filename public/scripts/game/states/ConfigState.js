@@ -1,16 +1,18 @@
 import State from "../../core/State/State.js";
 
-/**  */
+/** A configuration panel that directly updates the configurable parameters of components that are registered with the setting manager. */
 export default class ConfigState extends State {
 
-    // P5 DOM elements;
     section;
     header;
     form;
 
-    /** @constructor Creates DOM elements for the Credit page component.
-     * @param {Object[]} data An object of configuration objects
-     */
+    // TODO add a nav bar that lets you move between configurations for different effects...
+    // TODO add a way to store the configuration in browser
+    // TODO add a way to restore defaults
+    // TODO this shows all registered components; if we have multiple game modes will we want to have separate config panels for them?
+
+    /** @constructor */
     constructor() {
         super( 'Config' );
 
@@ -23,42 +25,38 @@ export default class ConfigState extends State {
 		this.back.parent( this.section );
 		this.back.mousePressed( ()=>{
 			this.gameSession.setCurrentStateByName('Game');
-            // TODO we may need config to go back to game or title screen!...
+            // TODO we may need config to go back to game or title screen!... we might want to add stack operations to current game state?
 		});
 
         let h1 = this.p5.createElement('h1', 'Configuration');
         h1.parent(this.section);
     }
 
-    /** Called when this state is activated by the Game Session. Makes the Title screen visible */
+    /** Called when this state is activated by the Game Session. Makes the Title screen visible and build the configuration controls*/
 	setup() {
 		super.setup();
 
-        // destroy the form if it had been made previously
-        if (this.form!=undefined)
-            this.form.remove();
+        // create the configuration form if it doesn't already exist
+        if (this.form===undefined) {
+            this.form = this.p5.createElement( 'form' );
+            this.form.parent( this.section );
+            
+            // get the configuration
+            let configuration = this.gameSession.settingsManager.getConfiguration();
+            
+            // Make controls for each component
+            for (let topic in configuration) {                
+                let component = configuration[topic];
+            
+                // create a named border for the component
+                let fieldset = this.p5.createElement( 'fieldset' );
+                fieldset.parent( this.form );
+                let legend = this.p5.createElement('legend', topic);
+                legend.parent( fieldset );    
 
-        // create a new one we can synchronize with the current state of the configuration
-        this.form = this.p5.createElement( 'form' );
-        this.form.parent( this.section );
-        
-        // get the configuration
-        let configuration = this.gameSession.settingsManager.getConfiguration();
-        
-        // Make controls for each component
-        for (let topic in configuration) {                
-            let component = configuration[topic];
-        
-            // create a named border for the component
-            let fieldset = this.p5.createElement( 'fieldset' );
-            fieldset.parent( this.form );
-            let legend = this.p5.createElement('legend', topic);
-            legend.parent( fieldset );    
-
-            this.generateComponent(component, fieldset)
+                this.generateComponent(component, fieldset)
+            }   
         }
-
-        // TODO add a nav bar that lets you move between configurations for different effects...
 
         // make the UI visible by removing the style attribute; 'display:none;'
         this.section.removeAttribute('style');
@@ -67,7 +65,6 @@ export default class ConfigState extends State {
 	/** Called when the current state is changed from this state. Makes the Title screen invisible. */
 	setdown() {
 		this.section.attribute('style', 'display:none;');
-        // destroy UI here?
 	}
 
     generateComponent(component, fieldset, count=0) {
@@ -75,6 +72,7 @@ export default class ConfigState extends State {
         for (let name in component) {
             let entry = component[name];
             
+            // hacky way to track array indices...
             if (count>0)
                 name = name+'_'+count;
 
@@ -83,11 +81,10 @@ export default class ConfigState extends State {
                 let count=1;
                 for (let item of entry)
                     this.generateComponent(item, fieldset, count++);
-                this.p5.createElement('br').parent(fieldset);
                 // TODO add controls for adding and removing items!!!
             }
 
-            else {//if (typeof component ==='object') { 
+            else {
 
                 // create a label for the field
                 let label = this.p5.createElement('label', name+' = '+entry.value.toString());
@@ -151,12 +148,7 @@ export default class ConfigState extends State {
                 }
                 else
                     console.error('Unrecognized configuration parameter type: '+entry.type);
-                
-                
             }
-
-            // else console.error(
-            //     'Config objects must contain an object describing the parameter');
         }
         // TODO add way to configure array fields...
     }
@@ -181,18 +173,7 @@ export default class ConfigState extends State {
 		super.cleanup();
 		//TODO: Delete all unnecessary data to prevent leaks/namespace collisions
 		// remove DOM elements?
-		// this.section.remove();
+        // this.section.remove();
 	}
 
-}
-
-function arrayToHex( value ) {
-    let hex='#';
-    for (let n=0; n<3; n++) {
-        let s = value[n].toString(16);
-        while (s.length<2)
-            s = '0'+s;
-        hex += s;
-    }
-    return hex;
 }

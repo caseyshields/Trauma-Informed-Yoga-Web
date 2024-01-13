@@ -86,7 +86,7 @@ export default class SettingsManager extends Manager {
         return configuration;
     }
 
-    // TODO right now we directly stor links to the active configuration of all objects!
+    // TODO right now we directly store links to the active configuration of all objects!
     // The wisdom of this is questionable. If we do introduce intermediate copies, then we'd
     // need an update step like this;
     // updateConfiguration() {
@@ -98,13 +98,16 @@ export default class SettingsManager extends Manager {
     // not sure this provides us much robustness against leaked state;
     // every object that implements getters/setters for its internals leaks its state already...
 
-    initializeGameFromSettings() {
-		//Look at settings manager
 
-		//Set relevant audio systems
+    // each configurable component will now be responsible for initializing itself...
+    // right now this is just a hardcoded default, but we should probably try to pull it from browser storage...
+    // initializeGameFromSettings() {
+	// 	//Look at settings manager
 
-		//Set relevant visual systems
+	// 	//Set relevant audio systems
 
-		//Set relevant mechanics systems (form, narrator, targets, particles...)
-	}
+	// 	//Set relevant visual systems
+
+	// 	//Set relevant mechanics systems (form, narrator, targets, particles...)
+	// }
 }

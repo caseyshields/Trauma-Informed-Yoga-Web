@@ -35,8 +35,6 @@ var TIYW = function (p) {
 		gameSession.canvas = canvas;
 
 		//Library loading and camera initialization
-		// let loadingState = new LoadingState();
-		// gameSession.addStateToGame(loadingState);
 		let loadingState = new TitleState();
 		gameSession.addStateToGame(loadingState);
 
@@ -48,8 +46,6 @@ var TIYW = function (p) {
 		gameSession.addStateToGame( creditState );
 
 		//Instantiate scene for game configurations
-		// let menuState = new MenuState();
-		// gameSession.addStateToGame(menuState);
 		let configState = new ConfigState();
 		gameSession.addStateToGame( configState );
 

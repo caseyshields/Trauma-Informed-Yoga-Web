@@ -12,10 +12,22 @@ section.config {
     font-size: var(--text-size);
 }
 
-/* section.config h1 {
+section.config > h1 {
+    font-size: var(--header-size);
     width: 100%;
     text-align: center;
-} */
+}
+
+section.config img {
+    border: var(--primary-color) 4px solid;
+    padding: 5px;
+    background: black;
+    margin: var(--text-size);
+    position: absolute;
+    left: 5%;
+    top: 5%;
+}
+
 
 section.config fieldset {
     display: grid;
