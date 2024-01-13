@@ -1,12 +1,9 @@
 import State from "../../core/State/State.js";
 import Skeleton from "../skeleton/Skeleton.js";
-import BackButton from "../buttons/BackButton.js";
-import MenuButton from "../buttons/MenuButton.js";
 import Target from "../form/Target.js";
 import Narrator from "../narrator/Narrator.js";
 import Diaphragm from "../breathing/Diaphragm.js";
 import Silhouette from "../souvenir/Silhouette.js";
-// import SmokeTrails from "../souvenir/PoseTrail.js";
 import SmokeTrails from "../souvenir/SmokeTrails.js";
 import FormManager from "../form/FormManager.js";
 
@@ -50,7 +47,7 @@ export default class GameState extends State {
 		this.menu.attribute('src', '../../../assets/images/menu.svg');
 		this.menu.parent( this.section );
 		this.menu.mousePressed( ()=>{
-			// this.gameSession.setCurrentStateByName('config');
+			this.gameSession.setCurrentStateByName('Config');
 		});
 
 		this.screenshot = this.p5.createElement( 'button', 'Screenshot' );
@@ -58,6 +55,22 @@ export default class GameState extends State {
 		this.screenshot.mousePressed( ()=>{
 			this.p5.saveCanvas("screenshot.jpg");
 		});
+
+		//Make sure skeleton is already loaded, load if not
+		if(!this.gameSession.skeletonLoaded){
+			this.gameSession.skeleton = new Skeleton();
+			this.gameSession.skeletonLoaded = true;
+		}
+
+		// Create the various Graphics objects
+		this.diaphragm = new Diaphragm( this.gameSession.skeleton );
+		this.silhouette = new Silhouette( Silhouette.DefaultConfiguration );
+		this.smoke = new SmokeTrails( SmokeTrails.DefaultConfiguration );
+
+		// register them with the SettingsManager
+		// this.gameSession.settingsManager.register( 'diaphragm', this.diaphragm );
+		this.gameSession.settingsManager.register( 'silhouette', this.silhouette );
+		this.gameSession.settingsManager.register( 'smoke', this.smoke );
 	}
 
 	// TODO load style from some configuration
@@ -67,73 +80,13 @@ export default class GameState extends State {
 		super.setup();
 		this.section.removeAttribute('style');
 
+		// TODO Figure out how to add all souvenirs' configurations to setting manager
+		// needs to generalize to any configurable thing; audio, forms, etc...
 		this.initializeGameFromSettings();
 
-				//reference to form manager
+		// reference to form manager
 		this.gameSession.formManager = new FormManager();
 		this.gameSession.formManager.setup();
-		
-
-		//Make sure skeleton is already loaded, load if not
-		if(!this.gameSession.skeletonLoaded){
-			this.gameSession.skeleton = new Skeleton();
-			this.gameSession.skeletonLoaded = true;
-		}
-
-
-		this.diaphragm = new Diaphragm( this.gameSession.skeleton );
-		this.silhouette = new Silhouette( {
-			// thickness: undefined,
-			empty: [50,50,50],
-			full: [250, 250, 250]
-		});
-		this.smoke = new SmokeTrails([
-			{index:0, small:16, large:32, fuzz:4, empty:[25,150,25,5], full:[100,100,100,1]},
-			{index:20, small:16, large:32, fuzz:4, empty:[150,0,25,5], full:[100,100,100,1]},
-			{index:19, small:16, large:32, fuzz:4, empty:[25,0,150,5], full:[100,100,100,1]}
-		]);
-
-		//Instantiate backbutton
-		// let backButtonLayout = {
-		// 	x: this.gameSession.canvasWidth * .05,
-		// 	y: this.gameSession.canvasHeight * .05,
-		// 	width: this.gameSession.canvasWidth * .05,
-		// 	height: this.gameSession.canvasWidth * .05
-		// }
-
-		// let backButtonStyle = {
-		// 	stroke: this.p5.color(255, 255, 255),
-		// 	strokeWeight: 5,
-		// 	fill: this.p5.color(0, 0, 0),
-		// 	hoverFill: this.p5.color(123, 123, 123),
-		// 	pressedFill: this.p5.color(255, 255, 255),
-		// 	loadingFill: this.p5.color(62, 62, 62),
-		// 	disabledFill: this.p5.color(125, 0, 0),
-		// }
-
-		// this.backButton = new BackButton(backButtonLayout, backButtonStyle, false, "Loading");
-		// this.backButton.setup();
-
-		// //Instantiate menubutton
-		// let menuButtonLayout = {
-		// 	x: this.gameSession.canvasWidth * .9,
-		// 	y: this.gameSession.canvasHeight * .9,
-		// 	width: this.gameSession.canvasWidth * .05,
-		// 	height: this.gameSession.canvasWidth * .05
-		// }
-
-		// let menuButtonStyle = {
-		// 	stroke: this.p5.color(255, 255, 255),
-		// 	strokeWeight: 5,
-		// 	fill: this.p5.color(0, 0, 0),
-		// 	hoverFill: this.p5.color(123, 123, 123),
-		// 	pressedFill: this.p5.color(255, 255, 255),
-		// 	loadingFill: this.p5.color(62, 62, 62),
-		// 	disabledFill: this.p5.color(125, 0, 0),
-		// }
-
-		// this.menuButton = new MenuButton(menuButtonLayout, menuButtonStyle, false, "Menu");
-		// this.menuButton.setup();
 
 		this.narrator = new Narrator();
 		this.narrator.setup();
@@ -160,10 +113,6 @@ export default class GameState extends State {
 
 		this.gameSession.formManager.render();
 
-		//UI
-		// this.backButton.render();
-		// this.menuButton.render();
-
 		//TODO: Make generic and add logic to exist across multiple states... singleton.
 		//Test Narrator
 		this.narrator.render();
@@ -171,23 +120,8 @@ export default class GameState extends State {
 
 	resize() {
 		super.resize();
-		//TODO: I'm almost sure there's a better way for us to structure resize
-		
-		// this.backButton.resize(
-		// 	this.gameSession.canvasWidth * .05,
-		// 	this.gameSession.canvasHeight * .05,
-		// 	this.gameSession.canvasWidth * .05,
-		// 	this.gameSession.canvasWidth * .05
-		// );
-
-		// this.menuButton.resize(
-		// 	this.gameSession.canvasWidth * .9,
-		// 	this.gameSession.canvasHeight * .05,
-		// 	this.gameSession.canvasWidth * .05,
-		// 	this.gameSession.canvasWidth * .05
-		// );
-
 		this.narrator.resize();
+		// TODO resize souvenirs too!
 	}
 
 	update() {
@@ -204,10 +138,6 @@ export default class GameState extends State {
 		//Test Target
 		this.gameSession.formManager.update();
 
-		//UI
-		// this.backButton.update();
-		// this.menuButton.update();
-
 		this.narrator.update();
 	}
 
@@ -221,15 +151,9 @@ export default class GameState extends State {
 		//Set relevant mechanics systems (form, narrator, targets, particles...)
 	}
 
-	mousePressed(){
-		// this.backButton.checkPressed();
-		// this.menuButton.checkPressed();
-	}
+	mousePressed() {}
 
-	mouseReleased(){
-		// this.backButton.checkReleased();
-		// this.menuButton.checkReleased();
-	}
+	mouseReleased() {}
 	
 	keyPressed() {
 		console.log(this.p5.key);
@@ -243,4 +167,10 @@ export default class GameState extends State {
 		return this.__gameBackground;
 	}
 
+	get configuration() {
+		return {
+			silhouette : this.silhouette.configuration,
+			smoke : this.smoke.configuration
+		};
+	}
 }

@@ -4,13 +4,21 @@ import GameSession from "./GameSession.js";
 export default class PoseFilter {
 
     landmarks = 33; // number of pose landmarks from MediaPipe
-    size = 8; // number of frames in the time window that is filtered, 0-index is the oldest
-    measurements = []; // [frame index] [pose index [x,y,z,w]] raw pose numbers
+    measurements = []; // [frame index] [pose index [x,y,z,w]] raw pose numbers, 0-index is the oldest
     sums = []; // [pose index [x,y,z,w]] // scratch space to reduce operations 
     state = []; // filtered output state; [{x,y,z,name,score,vx,vy,ax,ay},...]
     
     record = false;
     count = 0;
+
+    static DefaultConfiguration = {
+        pose_buffer_size : {type:'range', min:1, max:32, value:8},
+        show_poses : {type:'checkbox', value:true},
+        show_filter_confidence : {type:'checkbox', value:true},
+        show_filter_vectors : {type:'checkbox', value:true}
+    } // should we make the color's customizeable?
+
+    get settings() { return this._config; }
 
     // velocity and acceleration obtained using finite differences of the filtered measurements
     // TODO we might want to use a more sophisticated method of differentiation...
@@ -37,8 +45,8 @@ export default class PoseFilter {
     // For example, the skeleton (which has game physics) is tied to the raw measurements;
     // Shouldn't it be tied to the filter instead? How?
     
-    constructor(size=8) {
-        this.size = size;
+    constructor(config = PoseFilter.DefaultConfiguration) {
+        this._config = config;
     }
     
     setup() {
@@ -100,7 +108,7 @@ export default class PoseFilter {
         // should we record the raw or the filtered pose?
 
         // if the time window is getting too big, remove frames
-        while (this.measurements.length > this.size) {
+        while (this.measurements.length > this._config.pose_buffer_size.value) {
             let r = this.measurements.shift();
 
             // update the running totals correspondingly
@@ -131,7 +139,7 @@ export default class PoseFilter {
             let x = this.sums[i*4] / this.sums[i*4+3];
             let y = this.sums[i*4+1] / this.sums[i*4+3];
             let z = this.sums[i*4+2] / this.sums[i*4+3];
-            let score = this.sums[i*4+3] / this.size; // not sure if the average score is misleading...
+            let score = this.sums[i*4+3] / this._config.pose_buffer_size.value; // not sure if the average score is misleading...
             
             // compute new velocity & acceleration using finite differences
             let vx = (mark.x) ? x-mark.x : 0;
@@ -175,15 +183,16 @@ export default class PoseFilter {
         this.p5.strokeJoin(this.p5.ROUND);
 
         // draw all measured frames
-        for (let frame=0; frame<this.measurements.length; frame++) {
-            let pose = this.measurements[frame];
+        if (this._config.show_poses.value)
+            for (let frame=0; frame<this.measurements.length; frame++) {
+                let pose = this.measurements[frame];
 
-            // shift color by frame age
-            let c = this.p5.lerpColor(this.older, this.newer, frame/this.size);
-            this.p5.stroke(c);
-            
-            this.renderPose(pose);
-        }
+                // shift color by frame age
+                let c = this.p5.lerpColor(this.older, this.newer, frame/this._config.pose_buffer_size.value);
+                this.p5.stroke(c);
+                
+                this.renderPose(pose);
+            }
 
         // For each filtered pose landmark
         for (const p of this.state) {
@@ -193,11 +202,14 @@ export default class PoseFilter {
             this.p5.stroke(c);
 
             // draw the state vectors 4 times larger than actual magnitude
-            this.p5.line(p.x, p.y, p.x+(p.vx*4), p.y+(p.vy*4));
-            this.p5.line(p.x, p.y, p.x+(p.ax*4), p.y+(p.ay*4));
+            if (this._config.show_filter_vectors.value) {
+                this.p5.line(p.x, p.y, p.x+(p.vx*4), p.y+(p.vy*4));
+                this.p5.line(p.x, p.y, p.x+(p.ax*4), p.y+(p.ay*4));
+            }
 
             // draw a circle around the landmark at a scaled magnitude of 1 pixel/frame
-            this.p5.circle(p.x, p.y, 8);
+            if (this._config.show_filter_confidence.value)
+                this.p5.circle(p.x, p.y, 8);
         }
     }
     

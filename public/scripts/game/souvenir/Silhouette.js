@@ -9,14 +9,12 @@ import GameSession from "../GameSession.js";
 export default class Silhouette {
 
     // TODO see if media pipe provides a segmentation mask! It is mentioned in Google's MediaPipe docs...
+    // TODO handle screen resize!!!!!!!!!!!!!!!!!!!!!
 
-    // TODO should I just make the skeleton look like the silhouette and supply it this
-    // 'motion blur' image context? Such an organization would have less repetition...
-
-    static Default = {
-        thickness: 0,
-        empty: [50,50,50],
-        full: [250, 250, 250]
+    static DefaultSettings = {
+        thickness: { type: 'range', min:0, max:100, value: 0 },
+        exhale_color: { type: 'color', value:'#323232'},//[50,50,50] },//
+        inhale_color: { type: 'color', value:'#FAFAFA'},//[250,250,250] }//
     }
 
     /** @constructor
@@ -24,25 +22,17 @@ export default class Silhouette {
      * @param {Number[]} style.empty RGB(A) color channels of the silhouette when breath is empty
      * @param {Number[]} style.full RGB(A) color channels of the silhouette when breath is full
      */
-    constructor( style = Silhouette.Default ) {
+    constructor( settings = Silhouette.DefaultSettings ) {
         this._session = new GameSession();
-        this._style = style;
-        this._style.full = this._session.p5.color(...this._style.full);
-        this._style.empty = this._session.p5.color(...this._style.empty);
+        this._config = settings;
         this.g = this._session.p5.createGraphics(this._session.canvasWidth, this._session.canvasHeight);
     }
-
-    // TODO handle screen resize!!!!!!!!!!!!!!!!!!!!!
 
     /** Every render, the cumulative image is dimmed then a silhouette of the user is drawn on top. */
     render() {
 
         // dim the cumulative image
         this.g.background(0, 0, 0, 20);
-
-        // for now just don't draw components if we're missing landmarks
-        // but eventually we should contemplate a more sophisticated sol'n
-        // that includes time filtering, outlier rejection, estimation, etc...    
 
         // draw the avatar if we can see the torso
         let pose = this._session.pose.state; // array of {x, y, z, score, name}
@@ -53,8 +43,8 @@ export default class Silhouette {
         if( leftHip && rightHip && leftShoulder && rightShoulder ) {
 
             // use a large stroke weight to simulate the thickness of the limbs
-            let w = this._style.thickness;
-            if (!w) {
+            let w = this._config.thickness.value;
+            if (w==0) {
                 // Try to estimate limb width from the current size of the torso...
                 let d1 = Math.pow(leftHip.x - rightShoulder.x, 2) + Math.pow(leftHip.y - rightShoulder.y, 2);
                 let d2 = Math.pow(rightHip.x - leftShoulder.x, 2) + Math.pow(rightHip.y - leftShoulder.y, 2);
@@ -63,8 +53,9 @@ export default class Silhouette {
             this.g.strokeWeight(w);
 
             // adjust color of the avatar by the current breath
-            let c = this.g.lerpColor(this._style.empty, this._style.full, 
-                this._session.breathingManager.breath);
+            let full = this._session.p5.color(this._config.inhale_color.value);
+            let empty = this._session.p5.color(this._config.exhale_color.value);
+            let c = this.g.lerpColor(empty, full, this._session.breathingManager.breath);
             
             // default line styling
             this.g.strokeCap(this.g.ROUND);
@@ -134,7 +125,7 @@ export default class Silhouette {
         }
     }
 
-    get style() {return this._style;}
+    get settings() { return this._config;}
     
 }
 

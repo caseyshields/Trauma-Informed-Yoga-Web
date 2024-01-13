@@ -1,11 +1,8 @@
 import GameSession from "./game/GameSession.js";
 import GameState from "./game/states/GameState.js";
-// import LoadingState from "./game/states/LoadingState.js";
 import CreditState from "./game/states/CreditState.js";
 import TitleState from "./game/states/TitleState.js";
-import MenuState from "./game/states/MenuState.js";
-import AboutState from "./game/states/AboutState.js";
-import InfoState from "./game/states/InfoState.js";
+import ConfigState from "./game/states/ConfigState.js";
 
 /**TODOS:
 SETUP should be abstracted to be made easier to use.
@@ -38,8 +35,6 @@ var TIYW = function (p) {
 		gameSession.canvas = canvas;
 
 		//Library loading and camera initialization
-		// let loadingState = new LoadingState();
-		// gameSession.addStateToGame(loadingState);
 		let loadingState = new TitleState();
 		gameSession.addStateToGame(loadingState);
 
@@ -47,20 +42,12 @@ var TIYW = function (p) {
 		let gameState = new GameState();
 		gameSession.addStateToGame(gameState);
 
-		//Instantiate scene for game configurations
-		let menuState = new MenuState();
-		gameSession.addStateToGame(menuState);
-
-		//Instantiate scene for about page
-		let aboutState = new AboutState();
-		gameSession.addStateToGame(aboutState);
-
-		//Instantiate scene for info page
-		let infoState = new InfoState();
-		gameSession.addStateToGame(infoState);
-
 		let creditState = new CreditState();
 		gameSession.addStateToGame( creditState );
+
+		//Instantiate scene for game configurations
+		let configState = new ConfigState();
+		gameSession.addStateToGame( configState );
 
 		//Set initial game state as loading, call setup method
 		gameSession.setCurrentState(loadingState);

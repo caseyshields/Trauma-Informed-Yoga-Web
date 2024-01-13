@@ -1,0 +1,45 @@
+section.config {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+
+    color: var(--primary-color);
+    /* background-color: var(--secondary-color); */
+    font-family: Oswald;
+    font-size: var(--text-size);
+}
+
+section.config > h1 {
+    font-size: var(--header-size);
+    width: 100%;
+    text-align: center;
+}
+
+section.config img {
+    border: var(--primary-color) 4px solid;
+    padding: 5px;
+    background: black;
+    margin: var(--text-size);
+    position: absolute;
+    left: 5%;
+    top: 5%;
+}
+
+
+section.config fieldset {
+    display: grid;
+    grid-template-columns: 30% auto;
+}
+
+section.config label {
+    grid-column: 1/2;
+    text-align: center;
+}
+
+section.config input, section.config select {
+    grid-column: 2/3;
+    width: 100%;
+}
