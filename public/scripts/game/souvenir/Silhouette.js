@@ -13,8 +13,8 @@ export default class Silhouette {
 
     static DefaultSettings = {
         thickness: { type: 'range', min:0, max:100, value: 0 },
-        exhale_color: { type: 'color', value:[50,50,50] },//'#323232'},//
-        inhale_color: { type: 'color', value:[250,250,250] }//'#fafafa'},//
+        exhale_color: { type: 'color', value:'#323232'},//[50,50,50] },//
+        inhale_color: { type: 'color', value:'#FAFAFA'},//[250,250,250] }//
     }
 
     /** @constructor
@@ -53,8 +53,8 @@ export default class Silhouette {
             this.g.strokeWeight(w);
 
             // adjust color of the avatar by the current breath
-            let full = this._session.p5.color(...this._config.inhale_color.value);
-            let empty = this._session.p5.color(...this._config.exhale_color.value);
+            let full = this._session.p5.color(this._config.inhale_color.value);
+            let empty = this._session.p5.color(this._config.exhale_color.value);
             let c = this.g.lerpColor(empty, full, this._session.breathingManager.breath);
             
             // default line styling

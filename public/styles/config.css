@@ -4,11 +4,22 @@ section.config {
     top: 0;
     width: 100%;
     height: 100%;
+    overflow-y: scroll;
+
+    color: var(--primary-color);
+    /* background-color: var(--secondary-color); */
+    font-family: Oswald;
+    font-size: var(--text-size);
 }
+
+/* section.config h1 {
+    width: 100%;
+    text-align: center;
+} */
 
 section.config fieldset {
     display: grid;
-    grid-template-columns: 25% auto;
+    grid-template-columns: 30% auto;
 }
 
 section.config label {
@@ -16,7 +27,7 @@ section.config label {
     text-align: center;
 }
 
-section.config input, select {
+section.config input, section.config select {
     grid-column: 2/3;
     width: 100%;
 }

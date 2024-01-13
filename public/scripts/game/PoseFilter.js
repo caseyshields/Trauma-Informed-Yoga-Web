@@ -13,12 +13,12 @@ export default class PoseFilter {
 
     static DefaultConfiguration = {
         pose_buffer_size : {type:'range', min:1, max:32, value:8},
-        show_poses : {type:'check', value:true},
-        show_filter_confidence : {type:'check', value:true},
-        show_filter_vectors : {type:'check', value:true}
+        show_poses : {type:'checkbox', value:true},
+        show_filter_confidence : {type:'checkbox', value:true},
+        show_filter_vectors : {type:'checkbox', value:true}
     } // should we make the color's customizeable?
 
-    get configuration() { return this._config; }
+    get settings() { return this._config; }
 
     // velocity and acceleration obtained using finite differences of the filtered measurements
     // TODO we might want to use a more sophisticated method of differentiation...

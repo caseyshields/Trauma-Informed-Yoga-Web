@@ -47,25 +47,28 @@ export default class Smoke {
                 exhale_size: { type:'range', min:0, max:64, value:16 },
                 inhale_size: { type:'range', min:0, max:64, value:32 },
                 fuzz: { type: 'range', min:0, max:32, value:4 },
-                exhale_color: { type:'color', value:[25,150,25,5] },//'#199619'},//
-                inhale_color: { type:'color', value:[100,100,100,1] },//'#646464'},//
-                exhale_opacity: { type:'range', min:0, max:16, value:4}
+                exhale_color: { type:'color', value:'#199619'},//[25,150,25,5] },//
+                inhale_color: { type:'color', value:'#646464'},//[100,100,100,1] },//
+                exhale_opacity: { type:'range', min:0, max:255, value:4},
+                inhale_opacity: { type:'range', min:0, max:255, value:4}
             },{
                 landmark : { type:'select', values:landmarks, value:'left wrist' },
                 exhale_size: { type:'range', min:0, max:64, value:16 },
                 inhale_size: { type:'range', min:0, max:64, value:32 },
                 fuzz: { type: 'range', min:0, max:32, value:4 },
-                exhale_color: { type:'color', value:[150,0,25,5] },
-                inhale_color: { type:'color', value:[100,100,100,1] },
-                exhale_opacity: { type:'range', min:0, max:16, value:4}
+                exhale_color: { type:'color', value:'#960019' },//[150,0,25,5] },
+                inhale_color: { type:'color', value:'#646464' },//[100,100,100,1] },
+                exhale_opacity: { type:'range', min:0, max:255, value:4},
+                inhale_opacity: { type:'range', min:0, max:255, value:4}
             },{
                 landmark : { type:'select', values:landmarks, value:'right wrist' },
                 exhale_size: { type:'range', min:0, max:64, value:16 },
                 inhale_size: { type:'range', min:0, max:64, value:32 },
                 fuzz: { type: 'range', min:0, max:32, value:4 },
-                exhale_color: { type:'color', value:[25,0,150,5] },
-                inhale_color: { type:'color', value:[100,100,100,1] },
-                exhale_opacity: { type:'range', min:0, max:16, value:4}
+                exhale_color: { type:'color', value:'#190096'},//[25,0,150,5] },
+                inhale_color: { type:'color', value:'#646464'},//[100,100,100,1] },
+                exhale_opacity: { type:'range', min:0, max:255, value:4},
+                inhale_opacity: { type:'range', min:0, max:255, value:4}
             }
         ]
     }
@@ -115,8 +118,10 @@ export default class Smoke {
             if (mark) {
 
                 // set the color and size for the emitter using current breath volume
-                let empty = this._g.color(...e.exhale_color.value);
-                let full = this._g.color(...e.inhale_color.value);
+                let empty = this._g.color(e.exhale_color.value);
+                empty.setAlpha(e.exhale_opacity.value);
+                let full = this._g.color(e.inhale_color.value);
+                full.setAlpha(e.inhale_opacity.value);
                 let c = this._g.lerpColor(empty, full, this._session.breathingManager.breath);
                 let d = e.exhale_size.value + (1-this._session.breathingManager.breath)*(e.inhale_size.value-e.exhale_size.value);
                 this._g.fill(c);

@@ -68,9 +68,9 @@ export default class GameState extends State {
 		this.smoke = new SmokeTrails( SmokeTrails.DefaultConfiguration );
 
 		// register them with the SettingsManager
-		this.gameSession.settingsManager.register( this.diaphragm );
-		this.gameSession.settingsManager.register( this.silhouette );
-		this.gameSession.settingsManager.register( this.smoke );
+		// this.gameSession.settingsManager.register( 'diaphragm', this.diaphragm );
+		this.gameSession.settingsManager.register( 'silhouette', this.silhouette );
+		this.gameSession.settingsManager.register( 'smoke', this.smoke );
 	}
 
 	// TODO load style from some configuration

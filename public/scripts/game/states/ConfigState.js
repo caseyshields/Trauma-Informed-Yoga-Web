@@ -40,11 +40,23 @@ export default class ConfigState extends State {
 
         // create a new one we can synchronize with the current state of the configuration
         this.form = this.p5.createElement( 'form' );
-        this.form.parent( parent );
+        this.form.parent( this.section );
         
-        // get the configuration and make a UI to edit it
+        // get the configuration
         let configuration = this.gameSession.settingsManager.getConfiguration();
-        this.generateForm( configuration, this.form );
+        
+        // Make controls for each component
+        for (let topic in configuration) {                
+            let component = configuration[topic];
+        
+            // create a named border for the component
+            let fieldset = this.p5.createElement( 'fieldset' );
+            fieldset.parent( this.form );
+            let legend = this.p5.createElement('legend', topic);
+            legend.parent( fieldset );    
+
+            this.generateComponent(component, fieldset)
+        }
 
         // TODO add a nav bar that lets you move between configurations for different effects...
 
@@ -55,84 +67,96 @@ export default class ConfigState extends State {
 	/** Called when the current state is changed from this state. Makes the Title screen invisible. */
 	setdown() {
 		this.section.attribute('style', 'display:none;');
+        // destroy UI here?
 	}
 
-    /**  */
-    generateForm(config, parent) {
+    generateComponent(component, fieldset, count=0) {
+        // The component config contains parameter description objects
+        for (let name in component) {
+            let entry = component[name];
+            
+            if (count>0)
+                name = name+'_'+count;
 
-        // Iterate through the component configurations
-        for (let topic in config) {                
-            let component = config[topic];
-        
             // recurse on the elements of an array
-            if (Array.isArray(component)) {
-                for (item in component)
-                    generateForm(component, fieldset);
+            if (Array.isArray(entry)) {
+                let count=1;
+                for (let item of entry)
+                    this.generateComponent(item, fieldset, count++);
+                this.p5.createElement('br').parent(fieldset);
                 // TODO add controls for adding and removing items!!!
             }
 
-            // each component's configuration is an object
-            else if (typeof component ==='object') { 
+            else {//if (typeof component ==='object') { 
 
-                // create a named border for the component
-                let fieldset = this.p5.createElement( 'fieldset' );
-                fieldset.parent( parent );
-                let legend = this.p5.createElement('legend', topic);
-                legend.parent( fieldset );
+                // create a label for the field
+                let label = this.p5.createElement('label', name+' = '+entry.value.toString());
+                label.attribute('for', name);
+                label.parent( fieldset );
 
-                // The component config contains parameter description objects
-                for (let name in component) {
-                    let entry = component[name]; 
-
-                    // create a label for the field
-                    let label = this.p5.createElement('label', name);
-                    label.attribute('for', name);
-                    label.parent( fieldset );
-
-                    // create the appropriate input for the type of parameter
-                    if (entry.type=='range') {
-                        let slide = this.p5.createElement('input');
-                        slide.attribute('id', name);
-                        slide.attribute('type', 'range');
-                        slide.attribute('min', entry.min);
-                        slide.attribute('max', entry.max);
-                        slide.attribute('value', entry.value);
-                        slide.parent( fieldset );
-                    }
-                    else if (entry.type=='select') {
-                        let select = this.p5.createElement('select');
-                        select.attribute('name', name);
-                        select.attribute('id', name);
-                        select.parent(fieldset);
-                        for (let value of entry.values) {
-                            let option = this.p5.createElement('option', value);
-                            option.attribute('value', value);
-                            if (value==entry.value)
-                                option.attribute('selected', true);
-                            option.parent(select);
-                        }
-                    }
-                    else if (entry.type=='color') {
-                        let input = this.p5.createElement( 'input' );
-                        input.attribute( 'id', name);
-                        input.attribute( 'type', 'color');
-                        input.attribute( 'value', arrayToHex( entry.value ) );
-                        input.parent( fieldset );
-                    }
-                    else if (entry.type=='checkbox') {
-                        let check = this.p5.createElement( 'input' );
-                        check.attribute('id', name);
-                        check.attribute('type', 'checkbox');
-                        if (entry.value)
-                            check.attribute('checked', true);
-                        check.parent(fieldset);
-                    }
-                    
+                // create the appropriate input for the type of parameter
+                if (entry.type=='range') {
+                    let slide = this.p5.createElement('input');
+                    slide.attribute('id', name);
+                    slide.attribute('type', 'range');
+                    slide.attribute('min', entry.min);
+                    slide.attribute('max', entry.max);
+                    slide.attribute('value', entry.value);
+                    slide.parent( fieldset );
+                    slide.changed( ()=>{
+                        entry.value = slide.value();
+                        label.html(label.attribute('for')+' = '+entry.value.toString());
+                    });
                 }
+                else if (entry.type=='select') {
+                    let select = this.p5.createElement('select');
+                    select.attribute('name', name);
+                    select.attribute('id', name);
+                    select.parent(fieldset);
+                    for (let value of entry.values) {
+                        let option = this.p5.createElement('option', value);
+                        option.attribute('value', value);
+                        if (value==entry.value)
+                            option.attribute('selected', true);
+                        option.parent(select);
+                    }
+                    select.changed( ()=>{
+                        entry.value = select.value();
+                        label.html(label.attribute('for')+' = '+entry.value.toString());
+                    });
+                }
+                else if (entry.type=='color') {
+                    let input = this.p5.createElement( 'input' );
+                    input.attribute( 'id', name);
+                    input.attribute( 'type', 'color');
+                    input.attribute( 'value', entry.value );
+                    input.parent( fieldset );
+                    input.changed( ()=>{
+                        entry.value = input.value();
+                        console.log(input.value());
+                        label.html(label.attribute('for')+' = '+entry.value.toString());
+                    })
+                }
+                else if (entry.type=='checkbox') {
+                    let check = this.p5.createElement( 'input' );
+                    check.attribute('id', name);
+                    check.attribute('type', 'checkbox');
+                    if (entry.value)
+                        check.attribute('checked', true);
+                    check.parent(fieldset);
+                    check.changed( ()=>{
+                        entry.value = !entry.value;
+                        label.html(label.attribute('for')+' = '+entry.value.toString());
+                    })
+                }
+                else
+                    console.error('Unrecognized configuration parameter type: '+entry.type);
+                
+                
             }
 
-            else console.error(
-                'Config objects must contain an object describing the parameter');
+            // else console.error(
+            //     'Config objects must contain an object describing the parameter');
         }
         // TODO add way to configure array fields...
     }
