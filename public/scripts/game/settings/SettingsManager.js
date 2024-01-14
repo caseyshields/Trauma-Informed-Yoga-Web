@@ -77,15 +77,38 @@ export default class SettingsManager extends Manager {
         delete this._register[name];
     }
 
-    // Returns the configuration descriptions of every registered game system.
+    /** @returns a shallow copy of every registered component's configuration in an object */
     getConfiguration() {
-        let configuration = {}
-        for (let name in this._register) {
-            configuration[name] = this._register[name].settings
-        }
+        let configuration = {};
+        for (let name in this._register)
+            configuration[name] = this._register[name].settings;
         return configuration;
     }
 
+    /** resets all configurable objects to their provided defaults */
+    setDefaults() {
+        for (let name in this._register) {
+            let component = this._register[name];
+            component.settings = component.default;
+        }
+    }
+
+    /** Saves the current configuration to local browser storage */
+    saveConfiguration() {
+        for (let name in this._register) {
+            let config = this._register[name];
+            this.p5.storeItem(name, config);
+        }
+    }
+
+    /** Loads the configuration from local browser storage */
+    loadConfiguration() {
+        for (let name in this._register) {
+            let config = this.p5.getItem(name);
+            let component = this._register[name];
+            component.settings = config;
+        }
+    }
     // TODO right now we directly store links to the active configuration of all objects!
     // The wisdom of this is questionable. If we do introduce intermediate copies, then we'd
     // need an update step like this;
