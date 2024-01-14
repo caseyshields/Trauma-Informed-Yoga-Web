@@ -19,6 +19,8 @@ export default class PoseFilter {
     } // should we make the color's customizeable?
 
     get settings() { return this._config; }
+    set settings(config) { this._config = config }
+    get defaults() { return PoseFilter.DefaultConfiguration; }
 
     // velocity and acceleration obtained using finite differences of the filtered measurements
     // TODO we might want to use a more sophisticated method of differentiation...

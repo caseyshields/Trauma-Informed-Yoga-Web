@@ -28,6 +28,10 @@ export default class Silhouette {
         this.g = this._session.p5.createGraphics(this._session.canvasWidth, this._session.canvasHeight);
     }
 
+    get settings() { return this._config; }
+    set settings(config) { this._config = config }
+    get defaults() { return Silhouette.DefaultSettings; }
+
     /** Every render, the cumulative image is dimmed then a silhouette of the user is drawn on top. */
     render() {
 
@@ -124,8 +128,6 @@ export default class Silhouette {
             this._session.p5.image(this.g, this._session.canvasWidth/2, this._session.canvasHeight/2);
         }
     }
-
-    get settings() { return this._config;}
     
 }
 

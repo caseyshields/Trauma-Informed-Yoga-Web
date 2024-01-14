@@ -152,5 +152,6 @@ export default class Smoke {
     /** 
      * @returns {Object} The configuration of the smoke trails */
     get settings() {return this._config;}
-
-    }
+    set settings(config) { this._config = config }
+    get defaults() {return SmokeTrails.DefaultSettings;}
+}
