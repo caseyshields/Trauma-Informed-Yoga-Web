@@ -35,6 +35,9 @@ section.title h1 {
     animation-timing-function: ease-in-out;
     margin: 0;
 }
+section.title button {
+    width: 30vw;
+}
 /* Roughly supposed to mimic the game's breathing timer.
     Most every CSS property can be animated in this way */
 @keyframes breathing {
