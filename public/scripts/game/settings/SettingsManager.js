@@ -29,6 +29,45 @@ import Manager from "../../core/Manager/Manager.js";
  * because this manager exists in the singleton GameSession, and should exist before 
  * any game state is created. 
  */
+
+/**
+ * oof, been trying to add 'load', 'save', and 'defaults' buttons to config page 
+ * and the leaked state is kicking my ass. 
+ * I need to re-think parts of it. What's driving me crazy is I allow Arrays of 
+ * objects in the configuration. The thought being; I wanted the Smoke trail 
+ * object to handle an arbitrary number of emitters that you could add and remove. 
+ * This introduces a bunch of complications, including the need to add more UI for 
+ * adding/removing these arrays of sub-objects. But the worst problem is reference 
+ * assignments divvying up shared knowledge of the configuration state. IE; the
+ * setting manager, the widget event handler, the object's local configuration,
+ * etc, all pointing at a different config sub-objects. Esp. when performing a global 
+ * update like a save or load.
+ * 
+ * One solution is, I can flesh out the setting manager to know how to handle 
+ * deeper config objects. I think this would take 4 coordinates! (component, 
+ * parameter, index, sub-parameter). ugh. All that work and it's not even a 
+ * general solution; ie, arbitrary config object compositions.
+ * 
+ * Another route to flatten the config objects; break up the arrays of objects into 
+ * multiple configuration objects. For example, registering a new object for each smoke emitter.
+ * This fixes the Setting api complexity problem and makes it trivial to have a 
+ * single mediator for all setting updates. Though handling the indices of object 
+ * copies I don't see an intuitive solution for. And it makes I need to introduce
+ * some sort of shared canvas objects for objects like the smoke emitter who's 
+ * sole purpose is to draw on canvas.
+ * 
+ * Or I can double down on just exposing the state and make the Setting manager 
+ * always do deep copies and assignments. Seems really easy for any component
+ * to throw a booby trap in this design though... by just reassigning an array
+ * internally. Then when the SettingsManager loads a saved config, it's updating 
+ * the wrong reference!
+ * 
+ * Maybe the config object should never be local to the object they configure...
+ * maybe the settingManager should be passed at construction, and registration
+ * happens per-parameter... oof, then I'm starting to engineer a reactive framework 
+ * but shittier, lol. maybe it's not so bad; I just need a single owner of the state.
+ * all updates can simply be handled by polling.
+ */
 export default class SettingsManager extends Manager {
 
     //TODO: Audio
@@ -78,37 +117,69 @@ export default class SettingsManager extends Manager {
     }
 
     /** @returns a shallow copy of every registered component's configuration in an object */
-    getConfiguration() {
+    getAll() {
         let configuration = {};
         for (let name in this._register)
             configuration[name] = this._register[name].settings;
         return configuration;
     }
 
+    get(name) {
+        return this._register[name].settings;
+    }
+    get(component, parameter, index=0) {
+
+    }
+
+    set(component, parameter, index=0) {
+
+    }
+
     /** resets all configurable objects to their provided defaults */
-    setDefaults() {
+    reset() {
         for (let name in this._register) {
             let component = this._register[name];
-            component.settings = component.default;
+            // console.log(component.settings);
+            component.settings = component.defaults;
+            // console.log(component.settings);
         }
     }
 
     /** Saves the current configuration to local browser storage */
-    saveConfiguration() {
+    save() {
         for (let name in this._register) {
-            let config = this._register[name];
+            let config = this._register[name].settings;
             this.p5.storeItem(name, config);
         }
     }
 
     /** Loads the configuration from local browser storage */
-    loadConfiguration() {
+    load() {
         for (let name in this._register) {
             let config = this.p5.getItem(name);
+            console.log(name, config);
             let component = this._register[name];
             component.settings = config;
         }
     }
+
+    /**
+   * @param {Object} from
+   * @param {Object} to
+   */
+  static DeepAssign(from, to) {
+    for (let name in from) {
+      let item = from[name];
+      if (Array.isArray(item)) {
+        // recurse on array
+      } else if (typeof item ==='object') {
+        
+      } else {
+        to[name] = from[name];
+      }
+    }
+  }
+
     // TODO right now we directly store links to the active configuration of all objects!
     // The wisdom of this is questionable. If we do introduce intermediate copies, then we'd
     // need an update step like this;

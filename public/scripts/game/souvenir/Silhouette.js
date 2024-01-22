@@ -24,13 +24,13 @@ export default class Silhouette {
      */
     constructor( settings = Silhouette.DefaultSettings ) {
         this._session = new GameSession();
-        this._config = settings;
+        this._config = JSON.parse( JSON.stringify(settings) );
         this.g = this._session.p5.createGraphics(this._session.canvasWidth, this._session.canvasHeight);
     }
 
     get settings() { return this._config; }
     set settings(config) { this._config = config }
-    get defaults() { return Silhouette.DefaultSettings; }
+    get defaults() { return JSON.parse(JSON.stringify(Silhouette.DefaultSettings)); }
 
     /** Every render, the cumulative image is dimmed then a silhouette of the user is drawn on top. */
     render() {

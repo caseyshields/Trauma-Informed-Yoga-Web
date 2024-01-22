@@ -6,6 +6,7 @@ export default class ConfigState extends State {
     section;
     header;
     form;
+    ui = [];
 
     // TODO add a nav bar that lets you move between configurations for different effects...
     // TODO add a way to store the configuration in browser
@@ -42,10 +43,10 @@ export default class ConfigState extends State {
             this.form.parent( this.section );
             
             // get the configuration
-            let configuration = this.gameSession.settingsManager.getConfiguration();
+            let configuration = this.gameSession.settingsManager.getAll();
             
             // Make controls for each component
-            for (let topic in configuration) {                
+            for (let topic in configuration) {
                 let component = configuration[topic];
             
                 // create a named border for the component
@@ -55,7 +56,31 @@ export default class ConfigState extends State {
                 legend.parent( fieldset );    
 
                 this.generateComponent(component, fieldset)
-            }   
+            }
+
+            // Add save, load and reset buttons
+            let aside = this.p5.createElement('aside');
+            aside.parent(this.section);
+
+            let save = this.p5.createButton('save');
+            save.parent(aside);
+            save.mousePressed(()=>{
+                this.gameSession.settingsManager.save();
+            });
+            
+            let load = this.p5.createButton('load');
+            load.parent(aside);
+            load.mousePressed(()=>{
+                this.gameSession.settingsManager.load();
+                this.refreshForm();
+            });
+            
+            let reset = this.p5.createButton('reset');
+            reset.parent(aside);
+            reset.mousePressed(()=>{
+                this.gameSession.settingsManager.reset();
+                this.refreshForm();
+            });
         }
 
         // make the UI visible by removing the style attribute; 'display:none;'
@@ -101,9 +126,18 @@ export default class ConfigState extends State {
                     slide.attribute('value', entry.value);
                     slide.parent( fieldset );
                     slide.changed( ()=>{
-                        entry.value = slide.value();
-                        label.html(label.attribute('for')+' = '+entry.value.toString());
+                        let settings = this.gameSession.settingsManager.get(name);
+                        let setting = settings[name];
+                        setting.value = slide.value();
+                        // entry.value = slide.value();
+                        label.html(label.attribute('for')+' = '+entry.value);
                     });
+                    slide.elt.addEventListener('refresh', ()=>{
+                        console.log(name+' = '+entry.value)
+                        slide.value(entry.value);
+                        label.html(label.attribute('for')+' = '+entry.value);
+                    });
+                    this.ui.push(slide);
                 }
                 else if (entry.type=='select') {
                     let select = this.p5.createElement('select');
@@ -121,6 +155,8 @@ export default class ConfigState extends State {
                         entry.value = select.value();
                         label.html(label.attribute('for')+' = '+entry.value.toString());
                     });
+
+                    this.ui.push(select);
                 }
                 else if (entry.type=='color') {
                     let input = this.p5.createElement( 'input' );
@@ -130,9 +166,9 @@ export default class ConfigState extends State {
                     input.parent( fieldset );
                     input.changed( ()=>{
                         entry.value = input.value();
-                        console.log(input.value());
                         label.html(label.attribute('for')+' = '+entry.value.toString());
                     })
+                    this.ui.push(input);
                 }
                 else if (entry.type=='checkbox') {
                     let check = this.p5.createElement( 'input' );
@@ -142,9 +178,10 @@ export default class ConfigState extends State {
                         check.attribute('checked', true);
                     check.parent(fieldset);
                     check.changed( ()=>{
-                        entry.value = !entry.value;
-                        label.html(label.attribute('for')+' = '+entry.value.toString());
+                        entry.value = check.elt.checked;
+                        label.html(label.attribute('for')+' = '+entry.value);
                     })
+                    this.ui.push(check);
                 }
                 else
                     console.error('Unrecognized configuration parameter type: '+entry.type);
@@ -153,9 +190,13 @@ export default class ConfigState extends State {
         // TODO add way to configure array fields...
     }
 
-    /** @returns {p5.Element} The Dom section containing the credit page */
-    get section() {return this.section;}
-
+    refreshForm() {
+        this.ui.forEach( (input)=>{
+            let event = new Event('refresh');
+            input.elt.dispatchEvent(event);
+            // bit hacky...
+        });
+    }
 	
 	update() {
 		super.update();

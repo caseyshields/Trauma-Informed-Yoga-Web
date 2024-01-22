@@ -40,6 +40,8 @@ const landmarks = [
 /** Different parts of the pose emit smoke of different hues in time with breath */
 export default class Smoke {
     
+    // TODO handle resize events by resizing our graphics context too!
+
     static DefaultSettings = {
         emitters : [
             {
@@ -91,10 +93,12 @@ export default class Smoke {
             this._session.canvasHeight);
 
         // set emitter configuration
-        this._config = settings;
+        this._config = JSON.parse( JSON.stringify(settings) );
     }
 
-    // TODO handle resize events by resizing our graphics context too!
+    get settings() {return this._config;}
+    set settings(config) { this._config = config }
+    get defaults() { return JSON.parse(JSON.stringify(Smoke.DefaultSettings)); }
 
     /** Blend smoke trails into an offscreen buffer then draw it into the main context*/
     render() {
@@ -149,9 +153,4 @@ export default class Smoke {
     // I ask because just overlaying the image might not be what we want every time;
     // what if we want to use alpha masks and composite or something?
 
-    /** 
-     * @returns {Object} The configuration of the smoke trails */
-    get settings() {return this._config;}
-    set settings(config) { this._config = config }
-    get defaults() {return SmokeTrails.DefaultSettings;}
 }

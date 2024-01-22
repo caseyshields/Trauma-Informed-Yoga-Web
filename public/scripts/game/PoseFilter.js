@@ -11,7 +11,7 @@ export default class PoseFilter {
     record = false;
     count = 0;
 
-    static DefaultConfiguration = {
+    static DefaultSettings = {
         pose_buffer_size : {type:'range', min:1, max:32, value:8},
         show_poses : {type:'checkbox', value:true},
         show_filter_confidence : {type:'checkbox', value:true},
@@ -20,7 +20,7 @@ export default class PoseFilter {
 
     get settings() { return this._config; }
     set settings(config) { this._config = config }
-    get defaults() { return PoseFilter.DefaultConfiguration; }
+    get defaults() { return JSON.parse(JSON.stringify(PoseFilter.DefaultSettings)); }
 
     // velocity and acceleration obtained using finite differences of the filtered measurements
     // TODO we might want to use a more sophisticated method of differentiation...
@@ -47,8 +47,8 @@ export default class PoseFilter {
     // For example, the skeleton (which has game physics) is tied to the raw measurements;
     // Shouldn't it be tied to the filter instead? How?
     
-    constructor(config = PoseFilter.DefaultConfiguration) {
-        this._config = config;
+    constructor(config = PoseFilter.DefaultSettings) {
+        this._config = JSON.parse( JSON.stringify(config) );
     }
     
     setup() {
