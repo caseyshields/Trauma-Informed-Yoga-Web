@@ -52,9 +52,9 @@ import Manager from "../../core/Manager/Manager.js";
  * multiple configuration objects. For example, registering a new object for each smoke emitter.
  * This fixes the Setting api complexity problem and makes it trivial to have a 
  * single mediator for all setting updates. Though handling the indices of object 
- * copies I don't see an intuitive solution for. And it makes I need to introduce
- * some sort of shared canvas objects for objects like the smoke emitter who's 
- * sole purpose is to draw on canvas.
+ * copies I don't see an intuitive solution for. And it makes a need to introduce
+ * some sort of shared canvas objects for stuff like the smoke emitter whose 
+ * sole purpose is to draw on a canvas.
  * 
  * Or I can double down on just exposing the state and make the Setting manager 
  * always do deep copies and assignments. Seems really easy for any component
@@ -88,6 +88,30 @@ export default class SettingsManager extends Manager {
     constructor(){
         super();
         this._register = {};
+    }
+
+
+    getContext(id) {
+        if (register[id]===undefined)
+            register[id] = {};
+        // let component = register[id];
+        // TODO resolve conflicts with any previous definitions?
+
+        // TODO add undefined field guards...
+        return {
+            addRange: (name, min, max, value)=> {register[id][name] = {type:'range', min, max, value, default:value};},
+            addSelect: (name, values, value)=> {register[id][name] = {type:'select', values, value, default:value};},
+            addColor: (name, value)=> {register[id][name] = {type:'color', value, default:value};},
+            addCheck: (name, value)=> {register[id][name] = {type:'checkbox', value, default:value};},
+            get : (name) => {return register[id][name].value; },
+            set : (name, value) => {register[id][name].value = value;},
+            info: (name)=> {return register[id][name];}
+            // getWidget: (name)=> {
+            //     // instead of returning the validation metadata should we just create the UI here?
+            //     // probably should stay in the more UI focused ConfigState...
+            // }
+            
+        } // TODO add a way to set a validator function for the parameters...
     }
 
     setup(){
@@ -169,12 +193,25 @@ export default class SettingsManager extends Manager {
    */
   static DeepAssign(from, to) {
     for (let name in from) {
-      let item = from[name];
-      if (Array.isArray(item)) {
-        // recurse on array
-      } else if (typeof item ==='object') {
-        
-      } else {
+      let a = from[name];
+      let b = to[name];
+      
+      if (b===undefined)
+        to[name] = a;
+
+      else if (Array.isArray(a) && Array.isArray(b)) {
+        while (b.length)
+            b.pop();
+        while (a.length)
+            b.push(a.pop());
+      } // TODO this suggests configured objects should not save any internal references to arrayed config objects...
+      
+      else if (typeof a==='object' && typeof b==='object'
+            && !Array.isArray(a) && !Array.isArray(b)) {
+        to[name] = a;
+      } 
+      
+      else {
         to[name] = from[name];
       }
     }
