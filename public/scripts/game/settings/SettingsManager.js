@@ -91,28 +91,28 @@ export default class SettingsManager extends Manager {
     }
 
 
-    getContext(id) {
-        if (register[id]===undefined)
-            register[id] = {};
-        // let component = register[id];
-        // TODO resolve conflicts with any previous definitions?
+    // getContext(id) {
+    //     if (register[id]===undefined)
+    //         register[id] = {};
+    //     // let component = register[id];
+    //     // TODO resolve conflicts with any previous definitions?
 
-        // TODO add undefined field guards...
-        return {
-            addRange: (name, min, max, value)=> {register[id][name] = {type:'range', min, max, value, default:value};},
-            addSelect: (name, values, value)=> {register[id][name] = {type:'select', values, value, default:value};},
-            addColor: (name, value)=> {register[id][name] = {type:'color', value, default:value};},
-            addCheck: (name, value)=> {register[id][name] = {type:'checkbox', value, default:value};},
-            get : (name) => {return register[id][name].value; },
-            set : (name, value) => {register[id][name].value = value;},
-            info: (name)=> {return register[id][name];}
-            // getWidget: (name)=> {
-            //     // instead of returning the validation metadata should we just create the UI here?
-            //     // probably should stay in the more UI focused ConfigState...
-            // }
+    //     // TODO add undefined field guards...
+    //     return {
+    //         addRange: (name, min, max, value)=> {register[id][name] = {type:'range', min, max, value, default:value};},
+    //         addSelect: (name, values, value)=> {register[id][name] = {type:'select', values, value, default:value};},
+    //         addColor: (name, value)=> {register[id][name] = {type:'color', value, default:value};},
+    //         addCheck: (name, value)=> {register[id][name] = {type:'checkbox', value, default:value};},
+    //         get : (name) => {return register[id][name].value; },
+    //         set : (name, value) => {register[id][name].value = value;},
+    //         info: (name)=> {return register[id][name];}
+    //         // getWidget: (name)=> {
+    //         //     // instead of returning the validation metadata should we just create the UI here?
+    //         //     // probably should stay in the more UI focused ConfigState...
+    //         // }
             
-        } // TODO add a way to set a validator function for the parameters...
-    }
+    //     } // TODO add a way to set a validator function for the parameters...
+    // }
 
     setup(){
 
@@ -163,59 +163,67 @@ export default class SettingsManager extends Manager {
     reset() {
         for (let name in this._register) {
             let component = this._register[name];
-            // console.log(component.settings);
-            component.settings = component.defaults;
-            // console.log(component.settings);
+            let settings = component.settings;
+            for (let parameter in settings)
+                component[parameter] = settings[parameter].value;
         }
     }
 
     /** Saves the current configuration to local browser storage */
     save() {
         for (let name in this._register) {
-            let config = this._register[name].settings;
-            this.p5.storeItem(name, config);
+            // get the configured component and it's default setting object!
+            let component = this._register[name];
+            let settings = component.settings;
+            
+            // copy the current component values into a settings object
+            for (let parameter in settings)
+                settings[parameter].value = component[parameter];
+
+            // then save the setting to browser storage under the component name
+            this.p5.storeItem(name, settings);
         }
     }
 
     /** Loads the configuration from local browser storage */
     load() {
         for (let name in this._register) {
-            let config = this.p5.getItem(name);
-            console.log(name, config);
+            let settings = this.p5.getItem(name);
             let component = this._register[name];
-            component.settings = config;
+            for(let parameter in settings)
+                component[parameter] = settings[parameter];
         }
     }
 
-    /**
-   * @param {Object} from
-   * @param {Object} to
-   */
-  static DeepAssign(from, to) {
-    for (let name in from) {
-      let a = from[name];
-      let b = to[name];
+//     /**
+//    * @param {Object} from
+//    * @param {Object} to
+//    */
+//   static DeepAssign(from, to) {
+//     for (let name in from) {
+//       let a = from[name];
+//       let b = to[name];
       
-      if (b===undefined)
-        to[name] = a;
+//       if (b===undefined)
+//         to[name] = a;
 
-      else if (Array.isArray(a) && Array.isArray(b)) {
-        while (b.length)
-            b.pop();
-        while (a.length)
-            b.push(a.pop());
-      } // TODO this suggests configured objects should not save any internal references to arrayed config objects...
+//       else if (Array.isArray(a) && Array.isArray(b)) {
+//         while (b.length)
+//             b.pop();
+//         while (a.length)
+//             b.push(a.pop());
+//       } // TODO this suggests configured objects should not save any internal references to arrayed config objects...
       
-      else if (typeof a==='object' && typeof b==='object'
-            && !Array.isArray(a) && !Array.isArray(b)) {
-        to[name] = a;
-      } 
+//       else if (typeof a==='object' && typeof b==='object'
+//             && !Array.isArray(a) && !Array.isArray(b)) {
+//         to[name] = a;
+//       } 
       
-      else {
-        to[name] = from[name];
-      }
-    }
-  }
+//       else {
+//         to[name] = from[name];
+//       }
+//     }
+//   }
 
     // TODO right now we directly store links to the active configuration of all objects!
     // The wisdom of this is questionable. If we do introduce intermediate copies, then we'd

@@ -42,34 +42,67 @@ export default class Smoke {
     
     // TODO handle resize events by resizing our graphics context too!
 
-    static DefaultSettings = {
-        landmark_1 : { type:'select', values:landmarks, value:'nose' },
-        exhale_size_1: { type:'range', min:0, max:64, value:16 },
-        inhale_size_1: { type:'range', min:0, max:64, value:32 },
-        fuzz_1: { type: 'range', min:0, max:32, value:4 },
-        exhale_color_1: { type:'color', value:'#199619'},//[25,150,25,5] },//
-        inhale_color_1: { type:'color', value:'#646464'},//[100,100,100,1] },//
-        exhale_opacity_1: { type:'range', min:0, max:255, value:4},
-        inhale_opacity_1: { type:'range', min:0, max:255, value:4},
+    // configurable fields;
+    // TODO we should probably just make this a singular smoke trail and add three to the game.
+    // this will probably necessitate a separate canvas game object...
+    landmark_1 = 'nose';
+    exhale_size_1 = 16;
+    inhale_size_1 = 32;
+    fuzz_1 = 4;
+    exhale_color_1 = '#199619';
+    inhale_color_1 = '#646464';
+    exhale_opacity_1 = 4;
+    inhale_opacity_1 = 4;
 
-        landmark_2: { type:'select', values:landmarks, value:'left wrist' },
-        exhale_size_2: { type:'range', min:0, max:64, value:16 },
-        inhale_size_2: { type:'range', min:0, max:64, value:32 },
-        fuzz_2: { type: 'range', min:0, max:32, value:4 },
-        exhale_color_2: { type:'color', value:'#960019' },//[150,0,25,5] },
-        inhale_color_2: { type:'color', value:'#646464' },//[100,100,100,1] },
-        exhale_opacity_2: { type:'range', min:0, max:255, value:4},
-        inhale_opacity_2: { type:'range', min:0, max:255, value:4},
-        
-        landmark_3: { type:'select', values:landmarks, value:'right wrist' },
-        exhale_size_3: { type:'range', min:0, max:64, value:16 },
-        inhale_size_3: { type:'range', min:0, max:64, value:32 },
-        fuzz_3: { type: 'range', min:0, max:32, value:4 },
-        exhale_color_3: { type:'color', value:'#190096'},//[25,0,150,5] },
-        inhale_color_3: { type:'color', value:'#646464'},//[100,100,100,1] },
-        exhale_opacity_3: { type:'range', min:0, max:255, value:4},
-        inhale_opacity_3: { type:'range', min:0, max:255, value:4}
-    } // TODO we should probably just make this a singular smoke trail and add three to the game. this will probably necessitate a separate canvas game object...
+    landmark_2 = 'left wrist';
+    exhale_size_2 = 16;
+    inhale_size_2 = 32;
+    fuzz_2 = 4;
+    exhale_color_2 = '#960019';
+    inhale_color_2 = '#646464';
+    exhale_opacity_2 = 4;
+    inhale_opacity_2 = 4;
+    
+    landmark_3 = 'right wrist';
+    exhale_size_3 = 16;
+    inhale_size_3 = 32;
+    fuzz_3 = 4;
+    exhale_color_3 = '#190096';
+    inhale_color_3 = '#646464';
+    exhale_opacity_3 = 4;
+    inhale_opacity_3 = 4;
+
+    // static Settings = {
+    get settings() {
+        return {
+            landmark_1 : { type:'select', values:landmarks, value:'nose' },
+            exhale_size_1: { type:'range', min:0, max:64, value:16 },
+            inhale_size_1: { type:'range', min:0, max:64, value:32 },
+            fuzz_1: { type: 'range', min:0, max:32, value:4 },
+            exhale_color_1: { type:'color', value:'#199619'},//[25,150,25,5] },//
+            inhale_color_1: { type:'color', value:'#646464'},//[100,100,100,1] },//
+            exhale_opacity_1: { type:'range', min:0, max:255, value:4},
+            inhale_opacity_1: { type:'range', min:0, max:255, value:4},
+
+            landmark_2: { type:'select', values:landmarks, value:'left wrist' },
+            exhale_size_2: { type:'range', min:0, max:64, value:16 },
+            inhale_size_2: { type:'range', min:0, max:64, value:32 },
+            fuzz_2: { type: 'range', min:0, max:32, value:4 },
+            exhale_color_2: { type:'color', value:'#960019' },//[150,0,25,5] },
+            inhale_color_2: { type:'color', value:'#646464' },//[100,100,100,1] },
+            exhale_opacity_2: { type:'range', min:0, max:255, value:4},
+            inhale_opacity_2: { type:'range', min:0, max:255, value:4},
+            
+            landmark_3: { type:'select', values:landmarks, value:'right wrist' },
+            exhale_size_3: { type:'range', min:0, max:64, value:16 },
+            inhale_size_3: { type:'range', min:0, max:64, value:32 },
+            fuzz_3: { type: 'range', min:0, max:32, value:4 },
+            exhale_color_3: { type:'color', value:'#190096'},//[25,0,150,5] },
+            inhale_color_3: { type:'color', value:'#646464'},//[100,100,100,1] },
+            exhale_opacity_3: { type:'range', min:0, max:255, value:4},
+            inhale_opacity_3: { type:'range', min:0, max:255, value:4}
+        };
+    } 
 
     /** @constructor 
      * @param {Trail[]} settings An array  of smoke trail configurations
@@ -80,21 +113,14 @@ export default class Smoke {
      * @param {Number[]} Trail.empty The rgb(a) color channels of the smoke when breath is empty
      * @param {Number[]} Trail.full The rgb(a) color channels of the smoke when breath is full
     */
-    constructor( settings = Smoke.DefaultSettings ) {
+    constructor( ) {
         this._session = new GameSession();
 
         // create a separate graphics context where we render the smoke
         this._g = this._session.p5.createGraphics(
             this._session.canvasWidth, 
             this._session.canvasHeight);
-
-        // set emitter configuration
-        this._config = JSON.parse( JSON.stringify(settings) );
     }
-
-    get settings() {return this._config;}
-    set settings(config) { this._config = config }
-    get defaults() { return JSON.parse(JSON.stringify(Smoke.DefaultSettings)); }
 
     /** Blend smoke trails into an offscreen buffer then draw it into the main context*/
     render() {
@@ -110,7 +136,7 @@ export default class Smoke {
             
             // find the emitter's landmark's index
             // let index = landmarks.indexOf(e.landmark.value);
-            let index = landmarks.indexOf( this._config['landmark_'+i].value );
+            let index = landmarks.indexOf( this['landmark_'+i] );
             if (index==-1)
                 continue;
 
@@ -119,13 +145,13 @@ export default class Smoke {
             if (mark) {
 
                 // set the color and size for the emitter using current breath volume
-                let empty = this._g.color(this._config['exhale_color_'+i].value);
-                empty.setAlpha(this._config['exhale_opacity_'+i].value);
-                let full = this._g.color(this._config['inhale_color_'+i].value);
-                full.setAlpha( this._config['inhale_opacity_'+i].value);
+                let empty = this._g.color(this['exhale_color_'+i]);
+                empty.setAlpha(this['exhale_opacity_'+i]);
+                let full = this._g.color(this['inhale_color_'+i]);
+                full.setAlpha( this['inhale_opacity_'+i]);
                 let c = this._g.lerpColor(empty, full, this._session.breathingManager.breath);
-                let d = this._config['exhale_size_'+i].value + (1-this._session.breathingManager.breath)
-                        * (this._config['inhale_size_'+i].value - this._config['exhale_size_'+i].value);
+                let d = this['exhale_size_'+i] + (1-this._session.breathingManager.breath)
+                        * (this['inhale_size_'+i] - this['exhale_size_'+i]);
                 this._g.fill(c);
 
                 // draw a path of circles whose density is roughly proportional to the velocity
@@ -135,7 +161,7 @@ export default class Smoke {
 
                 for (let n=v; n>0; n--) {
                     let r = n/v
-                    let fuzz = this._config['fuzz_'+i].value;
+                    let fuzz = this['fuzz_'+i];
                     let x = mark.x - r*mark.vx + Math.random()*fuzz;
                     let y = mark.y - r*mark.vy + Math.random()*fuzz;
                     this._g.circle(x, y, d);
