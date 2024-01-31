@@ -43,37 +43,33 @@ export default class Smoke {
     // TODO handle resize events by resizing our graphics context too!
 
     static DefaultSettings = {
-        emitters : [
-            {
-                landmark : { type:'select', values:landmarks, value:'nose' },
-                exhale_size: { type:'range', min:0, max:64, value:16 },
-                inhale_size: { type:'range', min:0, max:64, value:32 },
-                fuzz: { type: 'range', min:0, max:32, value:4 },
-                exhale_color: { type:'color', value:'#199619'},//[25,150,25,5] },//
-                inhale_color: { type:'color', value:'#646464'},//[100,100,100,1] },//
-                exhale_opacity: { type:'range', min:0, max:255, value:4},
-                inhale_opacity: { type:'range', min:0, max:255, value:4}
-            },{
-                landmark : { type:'select', values:landmarks, value:'left wrist' },
-                exhale_size: { type:'range', min:0, max:64, value:16 },
-                inhale_size: { type:'range', min:0, max:64, value:32 },
-                fuzz: { type: 'range', min:0, max:32, value:4 },
-                exhale_color: { type:'color', value:'#960019' },//[150,0,25,5] },
-                inhale_color: { type:'color', value:'#646464' },//[100,100,100,1] },
-                exhale_opacity: { type:'range', min:0, max:255, value:4},
-                inhale_opacity: { type:'range', min:0, max:255, value:4}
-            },{
-                landmark : { type:'select', values:landmarks, value:'right wrist' },
-                exhale_size: { type:'range', min:0, max:64, value:16 },
-                inhale_size: { type:'range', min:0, max:64, value:32 },
-                fuzz: { type: 'range', min:0, max:32, value:4 },
-                exhale_color: { type:'color', value:'#190096'},//[25,0,150,5] },
-                inhale_color: { type:'color', value:'#646464'},//[100,100,100,1] },
-                exhale_opacity: { type:'range', min:0, max:255, value:4},
-                inhale_opacity: { type:'range', min:0, max:255, value:4}
-            }
-        ]
-    }
+        landmark_1 : { type:'select', values:landmarks, value:'nose' },
+        exhale_size_1: { type:'range', min:0, max:64, value:16 },
+        inhale_size_1: { type:'range', min:0, max:64, value:32 },
+        fuzz_1: { type: 'range', min:0, max:32, value:4 },
+        exhale_color_1: { type:'color', value:'#199619'},//[25,150,25,5] },//
+        inhale_color_1: { type:'color', value:'#646464'},//[100,100,100,1] },//
+        exhale_opacity_1: { type:'range', min:0, max:255, value:4},
+        inhale_opacity_1: { type:'range', min:0, max:255, value:4},
+
+        landmark_2: { type:'select', values:landmarks, value:'left wrist' },
+        exhale_size_2: { type:'range', min:0, max:64, value:16 },
+        inhale_size_2: { type:'range', min:0, max:64, value:32 },
+        fuzz_2: { type: 'range', min:0, max:32, value:4 },
+        exhale_color_2: { type:'color', value:'#960019' },//[150,0,25,5] },
+        inhale_color_2: { type:'color', value:'#646464' },//[100,100,100,1] },
+        exhale_opacity_2: { type:'range', min:0, max:255, value:4},
+        inhale_opacity_2: { type:'range', min:0, max:255, value:4},
+        
+        landmark_3: { type:'select', values:landmarks, value:'right wrist' },
+        exhale_size_3: { type:'range', min:0, max:64, value:16 },
+        inhale_size_3: { type:'range', min:0, max:64, value:32 },
+        fuzz_3: { type: 'range', min:0, max:32, value:4 },
+        exhale_color_3: { type:'color', value:'#190096'},//[25,0,150,5] },
+        inhale_color_3: { type:'color', value:'#646464'},//[100,100,100,1] },
+        exhale_opacity_3: { type:'range', min:0, max:255, value:4},
+        inhale_opacity_3: { type:'range', min:0, max:255, value:4}
+    } // TODO we should probably just make this a singular smoke trail and add three to the game. this will probably necessitate a separate canvas game object...
 
     /** @constructor 
      * @param {Trail[]} settings An array  of smoke trail configurations
@@ -110,10 +106,11 @@ export default class Smoke {
         // NOTE: enabling blend mode appears to be VERY expensive on some platforms...
 
         // for each valid configured pose landmark
-        for(let e of this._config.emitters) {
+        for(let i of [1,2,3]) {
             
             // find the emitter's landmark's index
-            let index = landmarks.indexOf(e.landmark.value);
+            // let index = landmarks.indexOf(e.landmark.value);
+            let index = landmarks.indexOf( this._config['landmark_'+i].value );
             if (index==-1)
                 continue;
 
@@ -122,12 +119,13 @@ export default class Smoke {
             if (mark) {
 
                 // set the color and size for the emitter using current breath volume
-                let empty = this._g.color(e.exhale_color.value);
-                empty.setAlpha(e.exhale_opacity.value);
-                let full = this._g.color(e.inhale_color.value);
-                full.setAlpha(e.inhale_opacity.value);
+                let empty = this._g.color(this._config['exhale_color_'+i].value);
+                empty.setAlpha(this._config['exhale_opacity_'+i].value);
+                let full = this._g.color(this._config['inhale_color_'+i].value);
+                full.setAlpha( this._config['inhale_opacity_'+i].value);
                 let c = this._g.lerpColor(empty, full, this._session.breathingManager.breath);
-                let d = e.exhale_size.value + (1-this._session.breathingManager.breath)*(e.inhale_size.value-e.exhale_size.value);
+                let d = this._config['exhale_size_'+i].value + (1-this._session.breathingManager.breath)
+                        * (this._config['inhale_size_'+i].value - this._config['exhale_size_'+i].value);
                 this._g.fill(c);
 
                 // draw a path of circles whose density is roughly proportional to the velocity
@@ -137,8 +135,9 @@ export default class Smoke {
 
                 for (let n=v; n>0; n--) {
                     let r = n/v
-                    let x = mark.x - r*mark.vx + Math.random()*e.fuzz.value;
-                    let y = mark.y - r*mark.vy + Math.random()*e.fuzz.value;
+                    let fuzz = this._config['fuzz_'+i].value;
+                    let x = mark.x - r*mark.vx + Math.random()*fuzz;
+                    let y = mark.y - r*mark.vy + Math.random()*fuzz;
                     this._g.circle(x, y, d);
                 }
             }
