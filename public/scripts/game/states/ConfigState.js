@@ -47,15 +47,15 @@ export default class ConfigState extends State {
             
             // Make controls for each component
             for (let topic in configuration) {
-                let component = configuration[topic];
             
                 // create a named border for the component
                 let fieldset = this.p5.createElement( 'fieldset' );
                 fieldset.parent( this.form );
                 let legend = this.p5.createElement('legend', topic);
-                legend.parent( fieldset );    
+                legend.parent( fieldset );
 
-                this.generateComponent(component, fieldset)
+                let component = configuration[topic];
+                this.generateComponent(component, fieldset);
             }
 
             // Add save, load and reset buttons
@@ -94,8 +94,10 @@ export default class ConfigState extends State {
 
     generateComponent(component, fieldset, count=0) {
         // The component config contains parameter description objects
-        for (let name in component) {
-            let entry = component[name];
+        let settings = component.settings;
+        for (let name in settings) {
+            let entry = settings[name];
+            let value = component[name];
             
             // hacky way to track array indices...
             if (count>0)
@@ -112,7 +114,7 @@ export default class ConfigState extends State {
             else {
 
                 // create a label for the field
-                let label = this.p5.createElement('label', name+' = '+entry.value.toString());
+                let label = this.p5.createElement('label', name+' = '+value.toString());
                 label.attribute('for', name);
                 label.parent( fieldset );
 
@@ -123,19 +125,19 @@ export default class ConfigState extends State {
                     slide.attribute('type', 'range');
                     slide.attribute('min', entry.min);
                     slide.attribute('max', entry.max);
-                    slide.attribute('value', entry.value);
+                    slide.attribute('value', value);
                     slide.parent( fieldset );
                     slide.changed( ()=>{
                         let settings = this.gameSession.settingsManager.get(name);
                         let setting = settings[name];
                         setting.value = slide.value();
-                        // entry.value = slide.value();
-                        label.html(label.attribute('for')+' = '+entry.value);
+                        // value = slide.value();
+                        label.html(label.attribute('for')+' = '+value);
                     });
                     slide.elt.addEventListener('refresh', ()=>{
-                        console.log(name+' = '+entry.value)
-                        slide.value(entry.value);
-                        label.html(label.attribute('for')+' = '+entry.value);
+                        console.log(name+' = '+value)
+                        slide.value(value);
+                        label.html(label.attribute('for')+' = '+value);
                     });
                     this.ui.push(slide);
                 }
@@ -147,13 +149,13 @@ export default class ConfigState extends State {
                     for (let value of entry.values) {
                         let option = this.p5.createElement('option', value);
                         option.attribute('value', value);
-                        if (value==entry.value)
+                        if (value==value)
                             option.attribute('selected', true);
                         option.parent(select);
                     }
                     select.changed( ()=>{
-                        entry.value = select.value();
-                        label.html(label.attribute('for')+' = '+entry.value.toString());
+                        value = select.value();
+                        label.html(label.attribute('for')+' = '+value.toString());
                     });
 
                     this.ui.push(select);
@@ -162,11 +164,11 @@ export default class ConfigState extends State {
                     let input = this.p5.createElement( 'input' );
                     input.attribute( 'id', name);
                     input.attribute( 'type', 'color');
-                    input.attribute( 'value', entry.value );
+                    input.attribute( 'value', value );
                     input.parent( fieldset );
                     input.changed( ()=>{
-                        entry.value = input.value();
-                        label.html(label.attribute('for')+' = '+entry.value.toString());
+                        value = input.value();
+                        label.html(label.attribute('for')+' = '+value.toString());
                     })
                     this.ui.push(input);
                 }
@@ -174,12 +176,12 @@ export default class ConfigState extends State {
                     let check = this.p5.createElement( 'input' );
                     check.attribute('id', name);
                     check.attribute('type', 'checkbox');
-                    if (entry.value)
+                    if (value)
                         check.attribute('checked', true);
                     check.parent(fieldset);
                     check.changed( ()=>{
-                        entry.value = check.elt.checked;
-                        label.html(label.attribute('for')+' = '+entry.value);
+                        value = check.elt.checked;
+                        label.html(label.attribute('for')+' = '+value);
                     })
                     this.ui.push(check);
                 }

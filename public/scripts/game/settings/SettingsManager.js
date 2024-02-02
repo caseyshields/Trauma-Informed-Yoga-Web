@@ -144,20 +144,20 @@ export default class SettingsManager extends Manager {
     getAll() {
         let configuration = {};
         for (let name in this._register)
-            configuration[name] = this._register[name].settings;
+            configuration[name] = this._register[name];//.settings;
         return configuration;
     }
 
     get(name) {
-        return this._register[name].settings;
+        return this._register[name];//.settings;
     }
-    get(component, parameter, index=0) {
+    // get(component, parameter, index=0) {
 
-    }
+    // }
 
-    set(component, parameter, index=0) {
+    // set(component, parameter, index=0) {
 
-    }
+    // }
 
     /** resets all configurable objects to their provided defaults */
     reset() {
