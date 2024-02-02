@@ -191,7 +191,7 @@ export default class SettingsManager extends Manager {
             let settings = this.p5.getItem(name);
             let component = this._register[name];
             for(let parameter in settings)
-                component[parameter] = settings[parameter];
+                component[parameter] = settings[parameter].value;
         }
     }
 

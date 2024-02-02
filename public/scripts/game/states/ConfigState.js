@@ -97,7 +97,6 @@ export default class ConfigState extends State {
         let settings = component.settings;
         for (let name in settings) {
             let entry = settings[name];
-            let value = component[name];
             
             // hacky way to track array indices...
             if (count>0)
@@ -114,7 +113,7 @@ export default class ConfigState extends State {
             else {
 
                 // create a label for the field
-                let label = this.p5.createElement('label', name+' = '+value.toString());
+                let label = this.p5.createElement('label', name+' = '+component[name]);
                 label.attribute('for', name);
                 label.parent( fieldset );
 
@@ -125,22 +124,20 @@ export default class ConfigState extends State {
                     slide.attribute('type', 'range');
                     slide.attribute('min', entry.min);
                     slide.attribute('max', entry.max);
-                    slide.attribute('value', value);
+                    slide.attribute('value', entry.value);
                     slide.parent( fieldset );
                     slide.changed( ()=>{
-                        let settings = this.gameSession.settingsManager.get(name);
-                        let setting = settings[name];
-                        setting.value = slide.value();
-                        // value = slide.value();
-                        label.html(label.attribute('for')+' = '+value);
+                        component[name] = slide.value();
+                        label.html(label.attribute('for')+' = '+slide.value());
                     });
                     slide.elt.addEventListener('refresh', ()=>{
-                        console.log(name+' = '+value)
-                        slide.value(value);
-                        label.html(label.attribute('for')+' = '+value);
+                        console.log(name+' = '+slide.value())
+                        slide.value(component[name]);
+                        label.html(label.attribute('for')+' = '+component[name]);
                     });
                     this.ui.push(slide);
                 }
+                // TOD add refreshes to the rest of the widgets below!
                 else if (entry.type=='select') {
                     let select = this.p5.createElement('select');
                     select.attribute('name', name);
@@ -149,13 +146,13 @@ export default class ConfigState extends State {
                     for (let value of entry.values) {
                         let option = this.p5.createElement('option', value);
                         option.attribute('value', value);
-                        if (value==value)
+                        if (value==entry.value)
                             option.attribute('selected', true);
                         option.parent(select);
                     }
                     select.changed( ()=>{
-                        value = select.value();
-                        label.html(label.attribute('for')+' = '+value.toString());
+                        component[name] = select.value();
+                        label.html(label.attribute('for')+' = '+component[name]);
                     });
 
                     this.ui.push(select);
@@ -164,11 +161,11 @@ export default class ConfigState extends State {
                     let input = this.p5.createElement( 'input' );
                     input.attribute( 'id', name);
                     input.attribute( 'type', 'color');
-                    input.attribute( 'value', value );
+                    input.attribute( 'value', entry.value );
                     input.parent( fieldset );
                     input.changed( ()=>{
-                        value = input.value();
-                        label.html(label.attribute('for')+' = '+value.toString());
+                        component[name] = input.value();
+                        label.html(label.attribute('for')+' = '+component[name]);
                     })
                     this.ui.push(input);
                 }
@@ -176,12 +173,12 @@ export default class ConfigState extends State {
                     let check = this.p5.createElement( 'input' );
                     check.attribute('id', name);
                     check.attribute('type', 'checkbox');
-                    if (value)
+                    if (component[name])
                         check.attribute('checked', true);
                     check.parent(fieldset);
                     check.changed( ()=>{
-                        value = check.elt.checked;
-                        label.html(label.attribute('for')+' = '+value);
+                        component[name] = check.elt.checked;
+                        label.html(label.attribute('for')+' = '+component[name]);
                     })
                     this.ui.push(check);
                 }
