@@ -131,7 +131,6 @@ export default class ConfigState extends State {
                         label.html(label.attribute('for')+' = '+slide.value());
                     });
                     slide.elt.addEventListener('refresh', ()=>{
-                        console.log(name+' = '+slide.value())
                         slide.value(component[name]);
                         label.html(label.attribute('for')+' = '+component[name]);
                     });
@@ -154,7 +153,10 @@ export default class ConfigState extends State {
                         component[name] = select.value();
                         label.html(label.attribute('for')+' = '+component[name]);
                     });
-
+                    select.elt.addEventListener('refresh', ()=>{
+                        select.value(component[name]);
+                        label.html(label.attribute('for')+' = '+component[name]);
+                    });
                     this.ui.push(select);
                 }
                 else if (entry.type=='color') {
@@ -167,6 +169,10 @@ export default class ConfigState extends State {
                         component[name] = input.value();
                         label.html(label.attribute('for')+' = '+component[name]);
                     })
+                    input.elt.addEventListener('refresh', ()=>{
+                        input.value(component[name]);
+                        label.html(label.attribute('for')+' = '+component[name]);
+                    });
                     this.ui.push(input);
                 }
                 else if (entry.type=='checkbox') {
@@ -180,6 +186,10 @@ export default class ConfigState extends State {
                         component[name] = check.elt.checked;
                         label.html(label.attribute('for')+' = '+component[name]);
                     })
+                    check.elt.addEventListener('refresh', ()=>{
+                        check.elt.checked = component[name];
+                        label.html(label.attribute('for')+' = '+component[name]);
+                    });
                     this.ui.push(check);
                 }
                 else
