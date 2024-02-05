@@ -15,14 +15,6 @@ export default class Silhouette {
     exhale_color = '#323232';
     inhale_color = '#FAFAFA';
 
-    get settings() { 
-        return {
-            thickness: { type: 'range', min:0, max:100, value: 0 },
-            exhale_color: { type: 'color', value:'#323232'},//[50,50,50] },//
-            inhale_color: { type: 'color', value:'#FAFAFA'},//[250,250,250] }//
-        };
-    }
-
     /** @constructor
      * @param {Number} style.thickness Stroke thickness used when drawing the silhouette
      * @param {Number[]} style.empty RGB(A) color channels of the silhouette when breath is empty
@@ -31,6 +23,10 @@ export default class Silhouette {
     constructor() {
         this._session = new GameSession();
         this.g = this._session.p5.createGraphics(this._session.canvasWidth, this._session.canvasHeight);
+        let config = this._session.settingsManager.register('Silhouette', this);
+        config.addRange('thickness', 0, 100, 0);
+        config.addColor('exhale_color', '#323232');
+        config.addColor('inhale_color', '#FAFAFA');
     }
 
     /** Every render, the cumulative image is dimmed then a silhouette of the user is drawn on top. */

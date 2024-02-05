@@ -71,38 +71,7 @@ export default class Smoke {
     inhale_color_3 = '#646464';
     exhale_opacity_3 = 4;
     inhale_opacity_3 = 4;
-
-    // static Settings = {
-    get settings() {
-        return {
-            landmark_1 : { type:'select', values:landmarks, value:'nose' },
-            exhale_size_1: { type:'range', min:0, max:64, value:16 },
-            inhale_size_1: { type:'range', min:0, max:64, value:32 },
-            fuzz_1: { type: 'range', min:0, max:32, value:4 },
-            exhale_color_1: { type:'color', value:'#199619'},//[25,150,25,5] },//
-            inhale_color_1: { type:'color', value:'#646464'},//[100,100,100,1] },//
-            exhale_opacity_1: { type:'range', min:0, max:255, value:4},
-            inhale_opacity_1: { type:'range', min:0, max:255, value:4},
-
-            landmark_2: { type:'select', values:landmarks, value:'left wrist' },
-            exhale_size_2: { type:'range', min:0, max:64, value:16 },
-            inhale_size_2: { type:'range', min:0, max:64, value:32 },
-            fuzz_2: { type: 'range', min:0, max:32, value:4 },
-            exhale_color_2: { type:'color', value:'#960019' },//[150,0,25,5] },
-            inhale_color_2: { type:'color', value:'#646464' },//[100,100,100,1] },
-            exhale_opacity_2: { type:'range', min:0, max:255, value:4},
-            inhale_opacity_2: { type:'range', min:0, max:255, value:4},
-            
-            landmark_3: { type:'select', values:landmarks, value:'right wrist' },
-            exhale_size_3: { type:'range', min:0, max:64, value:16 },
-            inhale_size_3: { type:'range', min:0, max:64, value:32 },
-            fuzz_3: { type: 'range', min:0, max:32, value:4 },
-            exhale_color_3: { type:'color', value:'#190096'},//[25,0,150,5] },
-            inhale_color_3: { type:'color', value:'#646464'},//[100,100,100,1] },
-            exhale_opacity_3: { type:'range', min:0, max:255, value:4},
-            inhale_opacity_3: { type:'range', min:0, max:255, value:4}
-        };
-    } 
+    // TODO have registration initialize everything, delete these?
 
     /** @constructor 
      * @param {Trail[]} settings An array  of smoke trail configurations
@@ -120,6 +89,34 @@ export default class Smoke {
         this._g = this._session.p5.createGraphics(
             this._session.canvasWidth, 
             this._session.canvasHeight);
+
+        let config = this._session.settingsManager.register('SmokeTrails', this);
+        config.addSelect('landmark_1', landmarks, 'nose');
+        config.addRange('exhale_size_1', 0, 64, 16);
+        config.addRange('inhale_size_1', 0, 64, 32);
+        config.addRange('fuzz_1', 0, 32, 4);
+        config.addColor('exhale_color_1', '#199619');
+        config.addColor('inhale_color_1', '#646464');
+        config.addRange('exhale_opacity_1', 0, 255, 4);
+        config.addRange('inhale_opacity_1', 0, 255, 4);
+        
+        config.addSelect('landmark_2', landmarks, 'left wrist');
+        config.addRange('exhale_size_2', 0, 64, 16);
+        config.addRange('inhale_size_2', 0, 64, 32);
+        config.addRange('fuzz_2', 0, 32, 4);
+        config.addColor('exhale_color_2', '#960019');
+        config.addColor('inhale_color_2', '#646464');
+        config.addRange('exhale_opacity_2', 0, 255, 4);
+        config.addRange('inhale_opacity_2', 0, 255, 4);
+        
+        config.addSelect('landmark_3', landmarks, 'right wrist');
+        config.addRange('exhale_size_3', 0, 64, 16);
+        config.addRange('inhale_size_3', 0, 64, 32);
+        config.addRange('fuzz_3', 0, 32, 4);
+        config.addColor('exhale_color_3', '#190096');
+        config.addColor('inhale_color_3', '#646464');
+        config.addRange('exhale_opacity_3', 0, 255, 4);
+        config.addRange('inhale_opacity_3', 0, 255, 4);
     }
 
     /** Blend smoke trails into an offscreen buffer then draw it into the main context*/

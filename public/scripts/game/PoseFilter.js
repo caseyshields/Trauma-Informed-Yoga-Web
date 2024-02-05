@@ -16,14 +16,14 @@ export default class PoseFilter {
     show_confidence = true;
     show_vectors = true;
 
-    // default description of those configurable fields;
-    get settings() {
-        return {
-            buffer_size : {type:'range', min:1, max:32, value:8},
-            show_poses : {type:'checkbox', value:true},
-            show_confidence : {type:'checkbox', value:true},
-            show_vectors : {type:'checkbox', value:true}
-        }; // should we make the color's customizeable?
+    constructor() {
+        this._session = new GameSession();
+        let config = this._session.settingsManager.register('PoseFilter', this);
+        config.addRange('buffer_size', 1, 32, 8);
+        config.addCheck('show_poses', true);
+        config.addCheck('show_confidence', true);
+        config.addCheck('show_vectors', true);
+        // should we make the color's customizable?
     }
 
     // velocity and acceleration obtained using finite differences of the filtered measurements
