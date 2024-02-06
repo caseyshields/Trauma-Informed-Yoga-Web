@@ -10,20 +10,14 @@ export default class PoseFilter {
     record = false;
     count = 0;
 
-    // configurable fields;
-    buffer_size = 8;
-    show_poses = true;
-    show_confidence = true;
-    show_vectors = true;
-
-    constructor() {
+    constructor(buffer_size=8, show_poses=true, show_confidence=true, show_vectors=true) {
         this._session = new GameSession();
         let config = this._session.settingsManager.register('PoseFilter', this);
-        config.addRange('buffer_size', 1, 32, 8);
-        config.addCheck('show_poses', true);
-        config.addCheck('show_confidence', true);
-        config.addCheck('show_vectors', true);
-        // should we make the color's customizable?
+        config.addRange('buffer_size', 1, 32, buffer_size);
+        config.addCheck('show_poses', show_poses);
+        config.addCheck('show_confidence', show_confidence);
+        config.addCheck('show_vectors', show_vectors);
+        // should we make the colors customizable?
     }
 
     // velocity and acceleration obtained using finite differences of the filtered measurements

@@ -42,37 +42,6 @@ export default class Smoke {
     
     // TODO handle resize events by resizing our graphics context too!
 
-    // configurable fields;
-    // TODO we should probably just make this a singular smoke trail and add three to the game.
-    // this will probably necessitate a separate canvas game object...
-    landmark_1 = 'nose';
-    exhale_size_1 = 16;
-    inhale_size_1 = 32;
-    fuzz_1 = 4;
-    exhale_color_1 = '#199619';
-    inhale_color_1 = '#646464';
-    exhale_opacity_1 = 4;
-    inhale_opacity_1 = 4;
-
-    landmark_2 = 'left wrist';
-    exhale_size_2 = 16;
-    inhale_size_2 = 32;
-    fuzz_2 = 4;
-    exhale_color_2 = '#960019';
-    inhale_color_2 = '#646464';
-    exhale_opacity_2 = 4;
-    inhale_opacity_2 = 4;
-    
-    landmark_3 = 'right wrist';
-    exhale_size_3 = 16;
-    inhale_size_3 = 32;
-    fuzz_3 = 4;
-    exhale_color_3 = '#190096';
-    inhale_color_3 = '#646464';
-    exhale_opacity_3 = 4;
-    inhale_opacity_3 = 4;
-    // TODO have registration initialize everything, delete these?
-
     /** @constructor 
      * @param {Trail[]} settings An array  of smoke trail configurations
      * @param {Number} Trail.index index of a pose landmark in the current filtered GameSession pose
@@ -83,6 +52,7 @@ export default class Smoke {
      * @param {Number[]} Trail.full The rgb(a) color channels of the smoke when breath is full
     */
     constructor( ) {
+        // TODO config values in constructor args...
         this._session = new GameSession();
 
         // create a separate graphics context where we render the smoke
@@ -117,6 +87,8 @@ export default class Smoke {
         config.addColor('inhale_color_3', '#646464');
         config.addRange('exhale_opacity_3', 0, 255, 4);
         config.addRange('inhale_opacity_3', 0, 255, 4);
+        // TODO we should probably just make this a singular smoke trail and add three to the game...
+    
     }
 
     /** Blend smoke trails into an offscreen buffer then draw it into the main context*/

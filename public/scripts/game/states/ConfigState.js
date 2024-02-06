@@ -9,8 +9,6 @@ export default class ConfigState extends State {
     ui = [];
 
     // TODO add a nav bar that lets you move between configurations for different effects...
-    // TODO add a way to store the configuration in browser
-    // TODO add a way to restore defaults
     // TODO this shows all registered components; if we have multiple game modes will we want to have separate config panels for them?
 
     /** @constructor */
@@ -122,7 +120,7 @@ export default class ConfigState extends State {
                 });
                 this.ui.push(slide);
             }
-            // TOD add refreshes to the rest of the widgets below!
+            
             else if (entry.type=='select') {
                 let select = this.p5.createElement('select');
                 select.attribute('name', name);
@@ -145,6 +143,7 @@ export default class ConfigState extends State {
                 });
                 this.ui.push(select);
             }
+
             else if (entry.type=='color') {
                 let input = this.p5.createElement( 'input' );
                 input.attribute( 'id', name);
@@ -161,6 +160,7 @@ export default class ConfigState extends State {
                 });
                 this.ui.push(input);
             }
+
             else if (entry.type=='checkbox') {
                 let check = this.p5.createElement( 'input' );
                 check.attribute('id', name);
@@ -178,6 +178,7 @@ export default class ConfigState extends State {
                 });
                 this.ui.push(check);
             }
+
             else
                 console.error('Unrecognized configuration parameter type: '+entry.type);
         }
