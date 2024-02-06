@@ -10,6 +10,12 @@ export default class PoseFilter {
     record = false;
     count = 0;
 
+    /**
+     * @param {Number} buffer_size number of consecutive poses to weighted average
+     * @param {Boolean} show_poses whether all sampled poses are drawn
+     * @param {Boolean} show_confidence whether the filtered landmarks are drawn with an average confidence score color-coding
+     * @param {Boolean} show_vectors whether the filtered landmarks' velocity and acceleration vectors are drawn
+     */
     constructor(buffer_size=8, show_poses=true, show_confidence=true, show_vectors=true) {
         this._session = new GameSession();
         let config = this._session.settingsManager.register('PoseFilter', this);

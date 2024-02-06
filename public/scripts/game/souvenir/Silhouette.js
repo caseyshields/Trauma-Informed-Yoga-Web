@@ -13,8 +13,8 @@ export default class Silhouette {
 
     /** @constructor
      * @param {Number} thickness Stroke thickness used when drawing the silhouette
-     * @param {Number[]} exhale_color RGB(A) color channels of the silhouette when breath is empty
-     * @param {Number[]} inhale_color RGB(A) color channels of the silhouette when breath is full
+     * @param {String} exhale_color CSS color string for the silhouette when breath is empty
+     * @param {String} inhale_color CSS color string for the silhouette when breath is full
      */
     constructor(thickness=0, exhale_color='#323232', inhale_color='#FAFAFA') {
         this._session = new GameSession();
