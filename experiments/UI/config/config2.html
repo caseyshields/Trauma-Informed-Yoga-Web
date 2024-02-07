@@ -1,0 +1,211 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="TIRED ROBOT">
+    <meta name="author" content="TODO: AUTHORS">
+
+    <!-- Mobile viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font import from CDN -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="../../../public/styles/index.css">
+    <link rel="stylesheet" type="text/css" href="../../../public/styles/config.css">
+</head>
+
+<body>
+    <section class="config">
+        <img src="../../../public/assets/images/back.svg">
+        <h1>Configuration</h1>
+        <form>
+            <fieldset>
+                <legend>PoseFilter</legend>
+                <label for="buffer_size">buffer_size = 8</label>
+                <input id="buffer_size" type="range" min="1" max="32" value="8">
+                <label for="show_poses">show_poses = true</label>
+                <input id="show_poses" type="checkbox" checked="true">
+                <label for="show_confidence">show_confidence = true</label>
+                <input id="show_confidence" type="checkbox" checked="true">
+                <label for="show_vectors">show_vectors = true</label>
+                <input id="show_vectors" type="checkbox" checked="true">
+            </fieldset>
+            <fieldset>
+                <legend>Silhouette</legend>
+                <label for="thickness">thickness = 0</label>
+                <input id="thickness" type="range" min="0" max="100" value="0">
+                <label for="exhale_color">exhale_color = #323232</label>
+                <input id="exhale_color" type="color" value="#323232">
+                <label for="inhale_color">inhale_color = #FAFAFA</label>
+                <input id="inhale_color" type="color" value="#FAFAFA">
+            </fieldset>
+            <fieldset>
+                <legend>SmokeTrails</legend>
+                <label for="landmark_1">landmark_1 = nose</label>
+                <select name="landmark_1" id="landmark_1">
+                    <option value="nose" selected="true">nose</option>
+                    <option value="left eye (inner)">left eye (inner)</option>
+                    <option value="left eye">left eye</option>
+                    <option value="left eye (outer)">left eye (outer)</option>
+                    <option value="right eye (inner)">right eye (inner)</option>
+                    <option value="right eye">right eye</option>
+                    <option value="right eye (outer)">right eye (outer)</option>
+                    <option value="left ear">left ear</option>
+                    <option value="right ear">right ear</option>
+                    <option value="mouth (left)">mouth (left)</option>
+                    <option value="mouth (right)">mouth (right)</option>
+                    <option value="left shoulder">left shoulder</option>
+                    <option value="right shoulder">right shoulder</option>
+                    <option value="left elbow">left elbow</option>
+                    <option value="right elbow">right elbow</option>
+                    <option value="left wrist">left wrist</option>
+                    <option value="right wrist">right wrist</option>
+                    <option value="left pinky">left pinky</option>
+                    <option value="right pinky">right pinky</option>
+                    <option value="left index">left index</option>
+                    <option value="right index">right index</option>
+                    <option value="left thumb">left thumb</option>
+                    <option value="right thumb">right thumb</option>
+                    <option value="left hip">left hip</option>
+                    <option value="right hip">right hip</option>
+                    <option value="left knee">left knee</option>
+                    <option value="right knee">right knee</option>
+                    <option value="left ankle">left ankle</option>
+                    <option value="right ankle">right ankle</option>
+                    <option value="left heel">left heel</option>
+                    <option value="right heel">right heel</option>
+                    <option value="left foot index">left foot index</option>
+                    <option value="right foot index">right foot index</option>
+                </select>
+                <label for="exhale_size_1">exhale_size_1 = 16</label>
+                <input id="exhale_size_1" type="range" min="0" max="64" value="16">
+                <label for="inhale_size_1">inhale_size_1 = 32</label>
+                <input id="inhale_size_1" type="range" min="0" max="64" value="32">
+                <label for="fuzz_1">fuzz_1 = 4</label>
+                <input id="fuzz_1" type="range" min="0" max="32" value="4">
+                <label for="exhale_color_1">exhale_color_1 = #199619</label>
+                <input id="exhale_color_1" type="color" value="#199619">
+                <label for="inhale_color_1">inhale_color_1 = #646464</label>
+                <input id="inhale_color_1" type="color" value="#646464">
+                <label for="exhale_opacity_1">exhale_opacity_1 = 4</label>
+                <input id="exhale_opacity_1" type="range" min="0" max="255" value="4">
+                <label for="inhale_opacity_1">inhale_opacity_1 = 4</label>
+                <input id="inhale_opacity_1" type="range" min="0" max="255" value="4">
+                <label for="landmark_2">landmark_2 = left wrist</label>
+                <select name="landmark_2" id="landmark_2">
+                    <option value="nose">nose</option>
+                    <option value="left eye (inner)">left eye (inner)</option>
+                    <option value="left eye">left eye</option>
+                    <option value="left eye (outer)">left eye (outer)</option>
+                    <option value="right eye (inner)">right eye (inner)</option>
+                    <option value="right eye">right eye</option>
+                    <option value="right eye (outer)">right eye (outer)</option>
+                    <option value="left ear">left ear</option>
+                    <option value="right ear">right ear</option>
+                    <option value="mouth (left)">mouth (left)</option>
+                    <option value="mouth (right)">mouth (right)</option>
+                    <option value="left shoulder">left shoulder</option>
+                    <option value="right shoulder">right shoulder</option>
+                    <option value="left elbow">left elbow</option>
+                    <option value="right elbow">right elbow</option>
+                    <option value="left wrist" selected="true">left wrist</option>
+                    <option value="right wrist">right wrist</option>
+                    <option value="left pinky">left pinky</option>
+                    <option value="right pinky">right pinky</option>
+                    <option value="left index">left index</option>
+                    <option value="right index">right index</option>
+                    <option value="left thumb">left thumb</option>
+                    <option value="right thumb">right thumb</option>
+                    <option value="left hip">left hip</option>
+                    <option value="right hip">right hip</option>
+                    <option value="left knee">left knee</option>
+                    <option value="right knee">right knee</option>
+                    <option value="left ankle">left ankle</option>
+                    <option value="right ankle">right ankle</option>
+                    <option value="left heel">left heel</option>
+                    <option value="right heel">right heel</option>
+                    <option value="left foot index">left foot index</option>
+                    <option value="right foot index">right foot index</option>
+                </select>
+                <label for="exhale_size_2">exhale_size_2 = 16</label>
+                <input id="exhale_size_2" type="range" min="0" max="64" value="16">
+                <label for="inhale_size_2">inhale_size_2 = 32</label>
+                <input id="inhale_size_2" type="range" min="0" max="64" value="32">
+                <label for="fuzz_2">fuzz_2 = 4</label>
+                <input id="fuzz_2" type="range" min="0" max="32" value="4">
+                <label for="exhale_color_2">exhale_color_2 = #960019</label>
+                <input id="exhale_color_2" type="color" value="#960019">
+                <label for="inhale_color_2">inhale_color_2 = #646464</label>
+                <input id="inhale_color_2" type="color" value="#646464">
+                <label for="exhale_opacity_2">exhale_opacity_2 = 4</label>
+                <input id="exhale_opacity_2" type="range" min="0" max="255" value="4">
+                <label for="inhale_opacity_2">inhale_opacity_2 = 4</label>
+                <input id="inhale_opacity_2" type="range" min="0" max="255" value="4">
+                <label for="landmark_3">landmark_3 = right wrist</label>
+                <select name="landmark_3" id="landmark_3">
+                    <option value="nose">nose</option>
+                    <option value="left eye (inner)">left eye (inner)</option>
+                    <option value="left eye">left eye</option>
+                    <option value="left eye (outer)">left eye (outer)</option>
+                    <option value="right eye (inner)">right eye (inner)</option>
+                    <option value="right eye">right eye</option>
+                    <option value="right eye (outer)">right eye (outer)</option>
+                    <option value="left ear">left ear</option>
+                    <option value="right ear">right ear</option>
+                    <option value="mouth (left)">mouth (left)</option>
+                    <option value="mouth (right)">mouth (right)</option>
+                    <option value="left shoulder">left shoulder</option>
+                    <option value="right shoulder">right shoulder</option>
+                    <option value="left elbow">left elbow</option>
+                    <option value="right elbow">right elbow</option>
+                    <option value="left wrist">left wrist</option>
+                    <option value="right wrist" selected="true">right wrist</option>
+                    <option value="left pinky">left pinky</option>
+                    <option value="right pinky">right pinky</option>
+                    <option value="left index">left index</option>
+                    <option value="right index">right index</option>
+                    <option value="left thumb">left thumb</option>
+                    <option value="right thumb">right thumb</option>
+                    <option value="left hip">left hip</option>
+                    <option value="right hip">right hip</option>
+                    <option value="left knee">left knee</option>
+                    <option value="right knee">right knee</option>
+                    <option value="left ankle">left ankle</option>
+                    <option value="right ankle">right ankle</option>
+                    <option value="left heel">left heel</option>
+                    <option value="right heel">right heel</option>
+                    <option value="left foot index">left foot index</option>
+                    <option value="right foot index">right foot index</option>
+                </select>
+                <label for="exhale_size_3">exhale_size_3 = 16</label>
+                <input id="exhale_size_3" type="range" min="0" max="64" value="16">
+                <label for="inhale_size_3">inhale_size_3 = 32</label>
+                <input id="inhale_size_3" type="range" min="0" max="64" value="32">
+                <label for="fuzz_3">fuzz_3 = 4</label>
+                <input id="fuzz_3" type="range" min="0" max="32" value="4">
+                <label for="exhale_color_3">exhale_color_3 = #190096</label>
+                <input id="exhale_color_3" type="color" value="#190096">
+                <label for="inhale_color_3">inhale_color_3 = #646464</label>
+                <input id="inhale_color_3" type="color" value="#646464">
+                <label for="exhale_opacity_3">exhale_opacity_3 = 4</label>
+                <input id="exhale_opacity_3" type="range" min="0" max="255" value="4">
+                <label for="inhale_opacity_3">inhale_opacity_3 = 4</label>
+                <input id="inhale_opacity_3" type="range" min="0" max="255" value="4">
+            </fieldset>
+        </form>
+        <aside>
+            <button>save</button>
+            <button>load</button>
+            <button>reset</button>
+        </aside>
+    </section>
+
+    <svg xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <path id="backArrow" d="M30 30L2 16L30 2L30 30Z" fill="#b1b1b1" stroke="#d9d9d9" stroke-width="4"></path>
+            <path id="settings" d=""></path>
+        </defs>
+    </svg>
+</body>
+</html>
