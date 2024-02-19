@@ -46,7 +46,6 @@ button {
   border-radius: var(--text-size);
   padding: calc( 0.5 * var(--text-size));
   margin-bottom: var(--text-size);
-  width: 35vw;
 
   /* you can animate transitions to property changes too; */
   transition-property: color, border-color, font-size;

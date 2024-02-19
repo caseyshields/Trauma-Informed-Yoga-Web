@@ -11,21 +11,18 @@ export default class Silhouette {
     // TODO see if media pipe provides a segmentation mask! It is mentioned in Google's MediaPipe docs...
     // TODO handle screen resize!!!!!!!!!!!!!!!!!!!!!
 
-    static DefaultSettings = {
-        thickness: { type: 'range', min:0, max:100, value: 0 },
-        exhale_color: { type: 'color', value:'#323232'},//[50,50,50] },//
-        inhale_color: { type: 'color', value:'#FAFAFA'},//[250,250,250] }//
-    }
-
     /** @constructor
-     * @param {Number} style.thickness Stroke thickness used when drawing the silhouette
-     * @param {Number[]} style.empty RGB(A) color channels of the silhouette when breath is empty
-     * @param {Number[]} style.full RGB(A) color channels of the silhouette when breath is full
+     * @param {Number} thickness Stroke thickness used when drawing the silhouette
+     * @param {String} exhale_color CSS color string for the silhouette when breath is empty
+     * @param {String} inhale_color CSS color string for the silhouette when breath is full
      */
-    constructor( settings = Silhouette.DefaultSettings ) {
+    constructor(thickness=0, exhale_color='#323232', inhale_color='#FAFAFA') {
         this._session = new GameSession();
-        this._config = settings;
         this.g = this._session.p5.createGraphics(this._session.canvasWidth, this._session.canvasHeight);
+        let config = this._session.settingsManager.register('Silhouette', this);
+        config.addRange('thickness', 0, 100, thickness);
+        config.addColor('exhale_color', exhale_color);
+        config.addColor('inhale_color', inhale_color);
     }
 
     /** Every render, the cumulative image is dimmed then a silhouette of the user is drawn on top. */
@@ -43,7 +40,7 @@ export default class Silhouette {
         if( leftHip && rightHip && leftShoulder && rightShoulder ) {
 
             // use a large stroke weight to simulate the thickness of the limbs
-            let w = this._config.thickness.value;
+            let w = this.thickness;
             if (w==0) {
                 // Try to estimate limb width from the current size of the torso...
                 let d1 = Math.pow(leftHip.x - rightShoulder.x, 2) + Math.pow(leftHip.y - rightShoulder.y, 2);
@@ -53,8 +50,8 @@ export default class Silhouette {
             this.g.strokeWeight(w);
 
             // adjust color of the avatar by the current breath
-            let full = this._session.p5.color(this._config.inhale_color.value);
-            let empty = this._session.p5.color(this._config.exhale_color.value);
+            let full = this._session.p5.color(this.inhale_color);
+            let empty = this._session.p5.color(this.exhale_color);
             let c = this.g.lerpColor(empty, full, this._session.breathingManager.breath);
             
             // default line styling
@@ -124,8 +121,6 @@ export default class Silhouette {
             this._session.p5.image(this.g, this._session.canvasWidth/2, this._session.canvasHeight/2);
         }
     }
-
-    get settings() { return this._config;}
     
 }
 

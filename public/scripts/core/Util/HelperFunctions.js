@@ -40,4 +40,9 @@ export default class HelperFunctions{
     return p5.noise(time);
   }
 
+  /** @param {Object} obj an object without self-referential loops */
+  static DeepCopy(obj) {
+    return JSON.parse( JSON.stringify(obj) );
+  }
+
 }

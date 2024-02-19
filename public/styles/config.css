@@ -28,6 +28,9 @@ section.config img {
     top: 5%;
 }
 
+section.config button {
+    margin: var(--text-size);
+}
 
 section.config fieldset {
     display: grid;
@@ -42,4 +45,13 @@ section.config label {
 section.config input, section.config select {
     grid-column: 2/3;
     width: 100%;
+}
+
+section.config aside {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 1fr;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    -ms-grid-column-align: center;
 }

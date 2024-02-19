@@ -1,113 +1,129 @@
 import Manager from "../../core/Manager/Manager.js";
 
-/** Settings Manager
- * Controls input settings for all game related states relevant to runtime.
- * 
- * Contains a list of parameterized variables that detail how the runtime environment works.
- * 
- * Whenever game state is loaded, this manager should be checked for updates to instantiate any downstream variables.
- * 
- * CDS: Earlier I had mentioned making game objects and systems provide their own configuration templates.
- * The aim of which was to enable the automatic generation of config UI and validation.
- * It also has a design advantage for our small team; the default configuration and it's validation
- * is always in one place with the code it configures. You don't have to edit a config ui, 
- * and a validator, and the object interface, you just edit the object.
- * 
- * There are downsides; putting config values with validation info is a little unwieldy, making it 
- * awkward to use the values in the configured object. (You could introduce a config value object,
- * but I didn't want to introduce any transforms that might be hard to keep track of in program 
- * flow yet... but it might be a better solution...). Plus you have to learn the syntax for describing
- * these parameters. In this case it's not so bad; they are directly lifted from the attributes of
- * HTML input elements!
- * 
- * Anyways, If we're going this route, it does presuppose a registration, where all the configurable 
- * objects and systems get collated in a single list and we can handle Configuration change events.
- * The Settings manager is prob the best place for this!
- * 
- * ... Though I could see this being rolled in with the Config State! But that might complicate some 
- * lifecycle stuff. ie States need an instantiation order...
- * because this manager exists in the singleton GameSession, and should exist before 
- * any game state is created. 
+/** Contains a registry of all configurable objects, which can be queried, saved and loaded.
+ * Configurable game objects must register with the SettingsManager before the setup() phase.
  */
 export default class SettingsManager extends Manager {
 
-    //TODO: Audio
+    // TODO think through how we will configure multiple instances of the same object...
 
-    //TODO: Visual
+    // an index of configurable components
+    components = {};
 
-    //TODO: Mechanics
-    //FORM
-    
-    //NARRATOR
+    // an index of configuration descriptions
+    configuration = {};
 
-    //TARGETS
+    setup() {}
 
-    //DIAPHRAGM
+    update() {}
 
-    //SOUVENIR
+    render() {}
 
-    constructor(){
-        super();
-        this._register = {};
-    }
-
-    setup(){
-
-    }
-
-    update(){
-
-    }
-
-    // Settings Manager shouldn't render
-    render(){
-
-    }
-
-    /** 
-     * @param {String} name Name of the configurable object
-     * @param {Object} A game object or system that implements get and set for it's 'configuration'.
+    /** Adds the given component to the configuration registry
+     * @param {String} id Name of the configurable object
+     * @param {Object} component A game object or system that implements a getter for 'settings' which returns a configuration description.
+     * @returns a context which can be used to add configurable parameters to the component
      */
-    register(name, configurable) {
-        // let c = Object.assign({},configurable.configuration);
-        this._register[name] = configurable;
+    register(id, component) {
+        if (this.components[id]===undefined) {
+            this.components[id] = component;
+            this.configuration[id] = {}
+        } // TODO resolve conflicts with any previous definitions?
+
+        return {
+            addRange: (name, min, max, value) => {
+                this.configuration[id][name] = {type:'range', min, max, value};
+                this.components[id][name] = value;
+            },
+            addSelect: (name, values, value) => {
+                this.configuration[id][name] = {type:'select', values, value};
+                this.components[id][name] = value;
+            },
+            addColor: (name, value) => {
+                this.configuration[id][name] = {type:'color', value};
+                this.components[id][name] = value;
+            },
+            addCheck: (name, value) => {
+                this.configuration[id][name] = {type:'checkbox', value};
+                this.components[id][name] = value;
+            },
+        } // TODO add a way to set a validator function?
+        // TODO add a description string for tooltips?
     }
 
+    /** Removes the components from the configuration. 
+     * @param {String} name Name of the previously registered object.
+    */
     unregister(name) {
-        delete this._register[name];
+        delete this.components[name];
+        delete this.configuration[name];
     }
 
-    // Returns the configuration descriptions of every registered game system.
-    getConfiguration() {
-        let configuration = {}
-        for (let name in this._register) {
-            configuration[name] = this._register[name].settings
+    /** @returns an object containing all registered components */
+    get registry() { return this.components; }
+    // TODO this seems way to much leaked state...
+
+    getIds() {
+        let ids = [];
+        for (let id in this.components)
+            ids.push(id);
+        return ids;
+    }
+
+    /** @returns the component registered with the given name */
+    getComponent(name) {
+        return this.components[name];
+    }
+    
+    /** @returns the configuration registered with the given name */
+    getConfiguration(name) {
+        return this.configuration[name];
+    }
+
+    foreach( func ) {
+        for (let id in this.components) {
+            let component = this.components[id];
+            let configuration = this.configuration[id];
+            func(component, configuration);
         }
-        return configuration;
+    }
+    
+    /** resets all configurable parameters to their defaults */
+    reset() {
+        for (let id in this.components) {
+            let component = this.components[id];
+            let settings = this.configuration[id];
+            for (let parameter in settings) {
+                // console.log(id+'.'+parameter+': '+component[parameter]+' -> '+settings[parameter].value);
+                component[parameter] = settings[parameter].value;
+            }
+        }
     }
 
-    // TODO right now we directly store links to the active configuration of all objects!
-    // The wisdom of this is questionable. If we do introduce intermediate copies, then we'd
-    // need an update step like this;
-    // updateConfiguration() {
-    //     for (let name in this.configuration) {
-    //         let configurable = this.configuration[name];
-    //         configurable.settings = 
-    //     }
-    // }
-    // not sure this provides us much robustness against leaked state;
-    // every object that implements getters/setters for its internals leaks its state already...
+    /** Saves the current configuration to local browser storage under their registered names. */
+    save() {
+        for (let name in this.components) {
+            // get the configured component and it's default setting object!
+            let component = this.components[name];
+            let settings = this.configuration[name];
+            
+            // copy the current component values into a settings object
+            for (let parameter in settings)
+                settings[parameter].value = component[parameter];
 
+            // then save the setting to browser storage under the component name
+            this.p5.storeItem(name, settings);
+        }
+    }
 
-    // each configurable component will now be responsible for initializing itself...
-    // right now this is just a hardcoded default, but we should probably try to pull it from browser storage...
-    // initializeGameFromSettings() {
-	// 	//Look at settings manager
+    /** Loads the configuration from local browser storage */
+    load() {
+        for (let name in this.components) {
+            let settings = this.p5.getItem(name);
+            let component = this.components[name];
+            for(let parameter in settings)
+                component[parameter] = settings[parameter].value;
+        }
+    }
 
-	// 	//Set relevant audio systems
-
-	// 	//Set relevant visual systems
-
-	// 	//Set relevant mechanics systems (form, narrator, targets, particles...)
-	// }
 }
