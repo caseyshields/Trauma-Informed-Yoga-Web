@@ -49,7 +49,7 @@ export default class Narrator extends GameObject {
     }
     
     __letterDelay = 150; //ms - how long to wait between display of letters
-    __displayDuration = 15000; //ms - how long to wait with current message on screen
+    __displayDuration = 20000; //ms - how long to wait with current message on screen
     __displayText = ""; //what we are literally rendering
     __fragmentText = ""; //Full phrase we are rendering
     __phraseStartTime = 0; //Date.now taken when starting phrase.
