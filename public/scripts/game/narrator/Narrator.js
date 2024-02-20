@@ -4,14 +4,36 @@
  * Do we need to know the width?
  * 
  * TODO: Maybe should be a singleton? I dunno...
+ * 
+ * Create a queue from which to cycle through comments
+ * at the end of each comment, move to the next in the queue
+ * cycle back through the beginning at the end
  */
 
 import GameObject from "../../core/GameObject/GameObject.js";
 
 export default class Narrator extends GameObject {
 
+    dialogue = [
+        "Our goal is for you to sense your own body.",
+        "Try syncing your breath to the character's outline.",
+        "Breath is critical to being.",
+        "Breath keeps us grounded when we feel overwhelmed.",
+        "You can use sound to sync your breath as well.",
+        "Your movement leaves visual trails.",
+        "We encourage you to be playful with your movement.",
+        "Draw something fun if you'd like.",
+        "Keep a focus on your breath throughout your play.",
+        "You can learn a simple pose by touching the targets.",
+        "Holding your hands over the targets triggers sparks.",
+        "Remember to keep breathing."
+
+    ]
+
+    dialogueCounter = 0;
+
     style = {
-		text: "This is a technical demo.",
+		text: "Welcome to Soothing Systems.",
 		textRatio: 20, // this is from the width of the button: text size = width / ratio
 		textSize: 1,
 		textFill: this.p5.color(255, 255, 255),
@@ -69,12 +91,16 @@ export default class Narrator extends GameObject {
 
             this.displayText = tempText;
             // console.log(numCharacters);
+            if(this.dialogueCounter >= this.dialogue.length){
+                this.dialogueCounter = 0;
+            }
 
             if(timeElapsed > this.displayDuration){
                 this.renderingFragment = false;
                 this.fragmentText = "";
                 //TODO: change how this is presented
-                this.style.text = "If you'd like, try touching the targets with both hands.";
+                this.style.text = this.dialogue[this.dialogueCounter];
+                this.dialogueCounter++;
                 
             }
         }
