@@ -84,6 +84,11 @@ export default class Smoke {
     
     }
 
+    /** Clears the internal graphics buffer */
+    clear() {
+        this._g.clear();
+    }
+
     /** Blend smoke trails into an offscreen buffer then draw it into the main context*/
     render() {
         // this._g.background(0,0,0,5);
