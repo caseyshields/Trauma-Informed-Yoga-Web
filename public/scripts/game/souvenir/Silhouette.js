@@ -25,6 +25,11 @@ export default class Silhouette {
         config.addColor('inhale_color', inhale_color);
     }
 
+    /** Clears the internal graphics buffer */
+    clear() {
+        this.g.clear();
+    }
+
     /** Every render, the cumulative image is dimmed then a silhouette of the user is drawn on top. */
     render() {
 
