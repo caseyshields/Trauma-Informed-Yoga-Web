@@ -37,8 +37,8 @@ export default class Narrator extends GameObject {
 		textRatio: 20, // this is from the width of the button: text size = width / ratio
 		textSize: 1,
 		textFill: this.p5.color(255, 255, 255),
-		textStroke: this.p5.color(255, 255, 255),
-		textStrokeWeight: 0,
+		textStroke: this.p5.color(0, 0, 0),
+		textStrokeWeight: 3,
     }
 
     layout = {
