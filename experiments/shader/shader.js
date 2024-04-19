@@ -25,7 +25,9 @@ let fs = `
 precision highp float;
 const float resolution = 256.0;
 const vec2 offset = vec2(256.0, 256.0);
-const int iterations = 500;
+const int iterations = 1000;
+const int dB = 0;
+const int dG = 0;
 
 uniform vec2 center;
 uniform vec2 control;
@@ -38,6 +40,7 @@ void main() {
 
   vec2 z = world;
   float n = 0.0;
+  int c = 0;
   for (int i = iterations; i > 0; i--) {
     float r2 = z.x * z.x;
     float i2 = z.y * z.y;
@@ -46,16 +49,21 @@ void main() {
     z = vec2(tr, ti);
     if (z.x+z.y > escape) {
       n = float(i)/float(iterations);
+      c = i;
       break;
     }
   }
 
   // gl_FragColor = vec4(screen[0], 0, screen[1], 1.);
   // gl_FragColor = vec4(world[0], 0, world[1], 1.);
+  // gl_FragColor = vec4(0.0, 
+  //   8.0 * abs(( mod( ((32.0*dG)+c), 32) ) - 16.0,
+  //   16.0 * abs(( mod( ((16.0*dB)+c), 16) ) - 8.0),
+  //   1.0);
   gl_FragColor = vec4(0.5-cos(n*17.0)/2.0,0.5-cos(n*13.0)/2.0,0.5-cos(n*23.0)/2.0,1.0);
 }`;
 
-let width = 256;
+let resolution = 256;
 let zoom = 1.0;
 let center = [0.0, 0.0];
 let control = [0.5, 0.5];
@@ -84,8 +92,8 @@ function draw() {
     let start = [pmouseX, pmouseY];
     let end = [mouseX, mouseY];
     let diff = [
-      zoom*(end[0]-start[0])/width, 
-      zoom*(end[1]-start[1])/width ];
+      zoom*(end[0]-start[0])/resolution, 
+      zoom*(end[1]-start[1])/resolution ];
     
     // left mouse updates the position of the fractal
     if (mouseButton==LEFT) {
