@@ -47,23 +47,37 @@ void main() {
     float tr = r2 - i2 + control.x;
     float ti = 2.0*z.x*z.y + control.y;
     z = vec2(tr, ti);
-    if (z.x+z.y > escape) {
+    // if (z.x+z.y > escape) { // causes interesting slope-ward striations...
+    if (r2+i2 > escape) {
       n = float(i)/float(iterations);
       c = i;
       break;
     }
   }
 
+  // Debug screen coordinates
   // gl_FragColor = vec4(screen[0], 0, screen[1], 1.);
   // gl_FragColor = vec4(world[0], 0, world[1], 1.);
-  // gl_FragColor = vec4(0.0, 
-  //   8.0 * abs(( mod( ((32.0*dG)+c), 32) ) - 16.0,
-  //   16.0 * abs(( mod( ((16.0*dB)+c), 16) ) - 8.0),
+
+  // banded color using modulus, prevent discontinuities with abs
+  gl_FragColor = vec4( 
+    0.0, 
+    abs(mod(float(c), 32.0) - 16.0) / 16.0, 
+    abs(mod(float(c), 16.0) - 8.0) / 8.0, 
+    1.0 );
+  // TODO add adjustable offset like with previous examples
+
+  // sinusoidal coloring
+  // gl_FragColor = vec4(
+  //   0.5-cos(n*17.0)/2.0,
+  //   0.5-cos(n*13.0)/2.0,
+  //   0.5-cos(n*23.0)/2.0,
   //   1.0);
-  gl_FragColor = vec4(0.5-cos(n*17.0)/2.0,0.5-cos(n*13.0)/2.0,0.5-cos(n*23.0)/2.0,1.0);
+  // mutually prime frequencies in color channels give unique colors up until 13*17*23
+
 }`;
 
-let resolution = 256;
+let resolution = 512;
 let zoom = 1.0;
 let center = [0.0, 0.0];
 let control = [0.5, 0.5];
