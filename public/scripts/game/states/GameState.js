@@ -56,6 +56,14 @@ export default class GameState extends State {
 			this.p5.saveCanvas("screenshot.jpg");
 		});
 
+		this.clearscreen = this.p5.createElement('button', 'Clear Screen');
+		this.clearscreen.parent( this.section );
+		this.clearscreen.mousePressed( ()=>{
+			this.silhouette.clear();
+			this.smoke.clear();
+			this.p5.clear();
+		})
+
 		//Make sure skeleton is already loaded, load if not
 		if(!this.gameSession.skeletonLoaded){
 			this.gameSession.skeleton = new Skeleton();
