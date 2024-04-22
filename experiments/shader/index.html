@@ -4,9 +4,55 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script> -->
     <script src="../../public/scripts/libs/p5/p5.min.js"></script>
     <script src="shader.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: minmax(512px, 60%) auto;
+        grid-template-areas:
+          "main main"
+          "instructions coordinates";
+        align-items: center;
+        justify-items: center;
+      }
+      main {
+        grid-area: main;
+      }
+      div#coordinates {
+        grid-area: coordinates;
+        padding: 1rem;
+      }
+      aside {
+        grid-area: instructions;
+        padding: 1rem;
+      }
+    </style>
   </head>
   <body>
     <main>
     </main>
+    
+    <div id="coordinates" class="menu">
+      <div id="mouse">mouse</div>
+      <div id="origin">origin</div>
+      <div id="control">control</div>
+      <div id="scale">scale</div>
+    </div>
+
+    <aside>
+      <ul>
+        <li>pan camera by dragging left mouse</li>
+        <li>scale image with mousewheel</li>
+        <li>move control point by dragging right mouse</li>
+      </ul>
+    </aside>
+
   </body>
 </html>

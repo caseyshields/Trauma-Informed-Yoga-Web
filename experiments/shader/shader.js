@@ -23,16 +23,16 @@ void main() {
 // the fragment shader is called for each pixel
 let fs = `
 precision highp float;
-const float resolution = 256.0;
-const vec2 offset = vec2(256.0, 256.0);
-const int iterations = 1000;
+const float resolution = 512.0;
+const vec2 offset = vec2(1024.0, 512.0);
+const int iterations = 500;
 const int dB = 0;
 const int dG = 0;
+const float escape = 4.0;
 
 uniform vec2 center;
 uniform vec2 control;
 uniform float scale;
-uniform float escape;
 
 void main() {
   vec2 screen = (gl_FragCoord.xy - offset) / resolution;
@@ -80,10 +80,22 @@ void main() {
 let resolution = 512;
 let zoom = 1.0;
 let center = [0.0, 0.0];
-let control = [0.5, 0.5];
+let control = [-0.75, -0.05];
 let julia;
+
+
+let mouse;
+let originDiv;
+let controlDiv;
+let scaleDiv;
+
 function setup() {
-  createCanvas(512, 512, WEBGL);
+  createCanvas(1024, 512, WEBGL);
+
+  mouse = document.getElementById("mouse");
+  originDiv = document.getElementById("origin");
+  controlDiv = document.getElementById("control");
+  scaleDiv = document.getElementById("scale");
 
   // create and initialize the shader
   julia = createShader(vs, fs);
@@ -93,9 +105,8 @@ function setup() {
   // 'p' is the center point of the julia image
   // julia.setUniform('p', [-0.74364388703, 0.13182590421]);
   julia.setUniform('center', [0.0,0.0]);
-  julia.setUniform('control', [0.5,0.5]);
+  julia.setUniform('control', [-0.75,-0.05]);
   julia.setUniform('scale', 1.0);
-  julia.setUniform('escape', 1e10);
   describe('zooming julia set. a colorful, infinitely detailed fractal.');
 }
 
@@ -113,14 +124,14 @@ function draw() {
     if (mouseButton==LEFT) {
       center = [center[0]-diff[0], center[1]+diff[1]];
       julia.setUniform('center', center);
-      // originDiv.innerText = "origin = ("+julia.position[0]+", "+julia.position[1]+"i)";
+      originDiv.innerText = "origin = ("+center[0]+", "+center[1]+"i)";
     }
 
     // right mouse button updates the fractal's control point        
     if (mouseButton==RIGHT) {
       control = [control[0]-diff[0], control[1]+diff[1]];
       julia.setUniform('control', control);
-      // controlDiv.innerText = "control = ("+julia.control[0]+", "+julia.control[1]+"i)";
+      controlDiv.innerText = "control = ("+control[0]+", "+control[1]+"i)";
     }
   }
 
@@ -135,8 +146,7 @@ function mouseWheel(event) {
   else if (event.delta>0)
     zoom *= 1.1;
   julia.setUniform('scale', zoom);
-  // julia.scale = zoom / width;
-  // scaleDiv.innerText = "scale = "+julia.scale;
+  scaleDiv.innerText = "scale = "+zoom;
 }
 
 // let fs2 = `
