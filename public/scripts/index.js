@@ -3,6 +3,7 @@ import GameState from "./game/states/GameState.js";
 import CreditState from "./game/states/CreditState.js";
 import TitleState from "./game/states/TitleState.js";
 import ConfigState from "./game/states/ConfigState.js";
+import DemoState from "./game/states/DemoState.js";
 
 /**TODOS:
 SETUP should be abstracted to be made easier to use.
@@ -48,6 +49,10 @@ var TIYW = function (p) {
 		//Instantiate scene for game configurations
 		let configState = new ConfigState();
 		gameSession.addStateToGame( configState );
+
+		// instantiate a shader demo
+		let demoState = new DemoState();
+		gameSession.addStateToGame( demoState );
 
 		//Set initial game state as loading, call setup method
 		gameSession.setCurrentState(loadingState);

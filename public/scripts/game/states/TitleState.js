@@ -13,6 +13,7 @@ export default class LoadingState extends State {
     aside;
     freeButton;
     guidedButton;
+	demoButton;
     initButton;
 
 	/** @constructor Creates the Title screen menu and adds it to the DOM. It is invisible by default. */
@@ -55,6 +56,14 @@ export default class LoadingState extends State {
         this.freeButton.mousePressed(()=> {
             this.gameSession.setCurrentStateByName("Game");
         });
+		
+		this.demoButton = this.__p5.createElement('button', 'Demo');
+        this.demoButton.attribute('disabled', true);
+        this.demoButton.parent(this.article);
+        this.demoButton.mousePressed(()=> {
+            this.gameSession.setCurrentStateByName("Demo");
+        });
+
         this.initButton = this.__p5.createElement('button', 'Initialize');
         this.initButton.parent(this.article);
         this.initButton.mousePressed(()=> {
@@ -121,6 +130,7 @@ export default class LoadingState extends State {
 				// this.initButton.attribute('style', 'display:none;')
                 this.freeButton.removeAttribute('disabled');
                 this.guidedButton.removeAttribute('disabled');
+				this.demoButton.removeAttribute('disabled');
             }
         }
 	}
