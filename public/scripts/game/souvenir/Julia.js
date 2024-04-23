@@ -21,8 +21,6 @@ void main() {
 // the fragment shader is called for each pixel
 let fs = `
 precision highp float;
-const float resolution = 379.0;
-const vec2 offset = vec2(379.0, 379.0);
 const int iterations = 500;
 const int dB = 0;
 const int dG = 0;
@@ -31,9 +29,13 @@ const float escape = 4.0;
 uniform vec2 center;
 uniform vec2 control;
 uniform float scale;
+uniform float resolution;
 
 void main() {
-  vec2 screen = (gl_FragCoord.xy - offset) / resolution;
+  float w = resolution/2.0;
+  vec2 screen = vec2( 
+    ((gl_FragCoord.x - (w)) / w), 
+    ((gl_FragCoord.y - (w)) / w) );
   vec2 world = (screen*scale) + center;
 
   vec2 z = world;
@@ -54,8 +56,8 @@ void main() {
   }
 
   // Debug screen coordinates
-  // gl_FragColor = vec4(screen[0], 0, screen[1], 1.);
-  // gl_FragColor = vec4(world[0], 0, world[1], 1.);
+//   gl_FragColor = vec4(screen[0], 0, screen[1], 1.);
+//   gl_FragColor = vec4(world[0], 0, world[1], 1.);
 
   // banded color using modulus, prevent discontinuities with abs
   gl_FragColor = vec4( 
@@ -77,38 +79,37 @@ void main() {
 
 export default class Julia {
 
-    resolution = 758;
-    zoom = 1.0;
-    center = [0.0, 0.0];
-    control = [-0.75, -0.05];
-    shader;
+    _resolution;
+    _scale;
+    _center;
+    _control;
+    _shader;
     
-    constructor() {
+    constructor(
+        resolution = 512,
+        center = [0.0, 0.0], 
+        control = [0.0, 0.0], //[-0.75, -0.05], 
+        scale = 1.0) 
+    {
+        this._resolution = resolution;
+        this._center = center;
+        this._control = control;
+        this._scale = scale;
         this._session = new GameSession();
         this._p5 = this._session.p5;
-        this.g = this._p5.createGraphics(758, 758, this._p5.WEBGL);
+        this.g = this._p5.createGraphics(this._resolution, this._resolution, this._p5.WEBGL);
     
       // create and initialize the shader
-      this.shader = this.g.createShader(vs, fs);
-      this.g.shader(this.shader);
-    //   this.g.noStroke();
+      this._shader = this.g.createShader(vs, fs);
+      this.g.shader(this._shader);
     }
     
-    get scale() { return this.zoom; }
-    set scale(s) { 
-        this.scale = s;
-        this.shader.setUniform('scale', this.scale);
-    }
-    get center() {return this.center; }
-    set center(v) {
-        this.center = v;
-        this.shader.setUniform('center', this.center);
-    }
-    get control() {return this.control; }
-    set control(v) {
-        this.control = v;
-        this.shader.setUniform('control', this.control);
-    }
+    get scale() { return this._zoom; }
+    set scale(s) { this._scale = s; }
+    get center() { return this._center; }
+    set center(v) { this._center = v; }
+    get control() { return this._control; }
+    set control(v) { this._control = v; }
 
     update() {
 
@@ -139,13 +140,20 @@ export default class Julia {
     //     }
     //   }
     
-      this.shader.setUniform('center', this.center);
-      this.shader.setUniform('control', this.control);
-      this.shader.setUniform('scale', this.zoom);
-
-      this.g.shader(this.shader);
-      this.g.plane(this.resolution, this.resolution);
-      this._session.p5.image(this.g, 0,0,this._session.canvasWidth*2, this._session.canvasHeight*2);
+    // console.log( this._center, this._control, this._scale, this._resolution);
+      this._shader.setUniform('resolution', this._resolution);
+      this._shader.setUniform('center', this._center);
+      this._shader.setUniform('control', this._control);
+      this._shader.setUniform('scale', this._scale);
+      // this._g.noStroke();
+      this.g.shader(this._shader);
+      this.g.plane(this._resolution, this._resolution);
+      this._session.p5.imageMode(this._session.p5.CORNER);
+      this._session.p5.image(this.g, 0, 0, this._session.canvasWidth, this._session.canvasHeight);
+        // -this._resolution/2.0, -this._resolution/2.0, 2.0*this._resolution, 2.0*this._resolution);
+      // p5.image(img, dx, dy, dw, dh, 
+      //  sx, sy, sw, sh, 
+      // fit{CONTAIN|COVER}, xAlign{LEFT|RIGHT|CENTER}, yAlign{TOP|BOTTOM|CENTER})
     }
     
     // function mouseWheel(event) {

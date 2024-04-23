@@ -56,7 +56,7 @@ export default class DemoState extends State {
 		// Create the various Graphics objects
 		this.silhouette = new Silhouette();// Silhouette.DefaultConfiguration );
 		this.joystick = new Joystick([0,0],200,'left_wrist');
-		this.julia = new Julia();
+		this.julia = new Julia();//[0.0,0.0], [-0.75,-0.05], 1.0);
 	}
 
 	// TODO load style from some configuration
