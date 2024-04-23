@@ -59,5 +59,6 @@ export default class Joystick extends GameObject {
     }
 
     get value() { return this._value; }
-    get magnitude() {return this._magnitude; }
+    get magnitude() { return this._magnitude; }
+    get radius() { return this._radius; }
 }

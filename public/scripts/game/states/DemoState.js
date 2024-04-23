@@ -56,7 +56,7 @@ export default class DemoState extends State {
 		// Create the various Graphics objects
 		this.silhouette = new Silhouette();// Silhouette.DefaultConfiguration );
 		this.joystick = new Joystick([0,0],200,'left_wrist');
-		this.julia = new Julia();//[0.0,0.0], [-0.75,-0.05], 1.0);
+		this.julia = new Julia(768, [0.0,0.0], [0.0,0.0], 1.5);
 	}
 
 	// TODO load style from some configuration
@@ -83,10 +83,10 @@ export default class DemoState extends State {
 
 		this.joystick.update();
 
-		const offset = [-0.75, -0.05];
+		const offset = [0.0, 0.0];//[-0.75, -0.05];
 		let v = this.joystick.value;
-		let m = this.joystick.magnitude;
-		v = [offset[0] + (v[0]/m), offset[1]+(v[1]/m)];
+		let r = this.joystick.radius;
+		v = [offset[0] + (v[0]/r), offset[1]+(v[1]/r)];
 		this.julia.control = v;
 
 		this.julia.update();

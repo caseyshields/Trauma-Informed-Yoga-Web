@@ -88,7 +88,7 @@ export default class Julia {
     constructor(
         resolution = 512,
         center = [0.0, 0.0], 
-        control = [0.0, 0.0], //[-0.75, -0.05], 
+        control = [0.0, 0.0],
         scale = 1.0) 
     {
         this._resolution = resolution;
@@ -148,11 +148,11 @@ export default class Julia {
       // this._g.noStroke();
       this.g.shader(this._shader);
       this.g.plane(this._resolution, this._resolution);
-      this._session.p5.imageMode(this._session.p5.CORNER);
-      this._session.p5.image(this.g, 0, 0, this._session.canvasWidth, this._session.canvasHeight);
+      //this._session.p5.imageMode(this._session.p5.CORNER);
+      this._session.p5.image(this.g, this._session.canvasWidth/2.0, this._session.canvasHeight/2.0, this._session.canvasWidth, this._session.canvasHeight);
         // -this._resolution/2.0, -this._resolution/2.0, 2.0*this._resolution, 2.0*this._resolution);
-      // p5.image(img, dx, dy, dw, dh, 
-      //  sx, sy, sw, sh, 
+      
+      // p5.image(img, dx, dy, dw, dh, sx, sy, sw, sh, 
       // fit{CONTAIN|COVER}, xAlign{LEFT|RIGHT|CENTER}, yAlign{TOP|BOTTOM|CENTER})
     }
     
