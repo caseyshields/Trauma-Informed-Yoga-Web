@@ -167,7 +167,46 @@ export default class PoseFilter {
     }
 
     state() { return this.state; }
-    // TODO more accessors
+
+    getLandmark(id) {
+        if (typeof(id)==='number')
+            return this.state[id];
+         
+        else if(typeof(id)==='string')
+            return this.state.find((landmark)=>{
+                return (landmark.name == id);
+            });
+
+        return null;
+    }
+    
+    getCom( landmarks = [23, 24, 11, 12] ) {
+        let count = 0;
+        let com = {x:0, y:0, z:0, vx:0, vy:0, vz:0, ax:0, ay:0, az:0, score:0}
+        for (let n of landmarks) {
+            let landmark = this.state[n];
+            if (!isNaN(landmark.x) && !isNaN(landmark.y)) {
+                count++;
+                for (let a in com)
+                    com[a] += landmark[a];
+            }
+        }
+        for (let a in com)
+            com[a] /= count;
+        return com;
+    }
+    
+    getWingspan(landmarks = [16,14,12,11,13,15]) {
+        let length = 0.0;
+        for (let n=1; n<landmarks.length; n++) {
+            let a = this.state[n-1];
+            let b = this.state[n];
+            let dx = a.x-b.x;
+            let dy = a.y-b.y;
+            length += Math.sqrt( (dx*dx) + (dy*dy) );
+        }
+        return length/2.0;
+    } // TODO handle missing or low score points?
 
     /** empties the filter's time window */
     clear() {
