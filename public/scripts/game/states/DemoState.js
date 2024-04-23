@@ -1,26 +1,14 @@
 import State from "../../core/State/State.js";
 import Skeleton from "../skeleton/Skeleton.js";
-import Target from "../form/Target.js";
-import Narrator from "../narrator/Narrator.js";
 import Silhouette from "../souvenir/Silhouette.js";
-import FormManager from "../form/FormManager.js";
+import Joystick from "../form/joystick.js";
 
-/** Example of Gamestate
- *
- *  1. Renders a background
- *  2. Takes poseLandmarks and renders a skeleton
- *  3. Loads relevant game items (charge pack, etc.)
- *  4. Goes through 4 poses
- *  5. Transition to game over
- *
- * Alt: Game over on empty charge pack for 5 seconds
- */
-
+/** example of controlling a shader with analog user input */
 export default class DemoState extends State {
 	backButton = {};
 	menuButton = {};
-	narrator = {};
 	silhouette = {};
+	joystick = {};
 	// why are fields instantiated with anonymous classes?
 	
 	constructor() {
@@ -65,6 +53,7 @@ export default class DemoState extends State {
 
 		// Create the various Graphics objects
 		this.silhouette = new Silhouette();// Silhouette.DefaultConfiguration );
+		this.joystick = new Joystick();
 	}
 
 	// TODO load style from some configuration
@@ -78,47 +67,37 @@ export default class DemoState extends State {
 		// needs to generalize to any configurable thing; audio, forms, etc...
 		this.initializeGameFromSettings();
 
-		// reference to form manager
-		this.gameSession.formManager = new FormManager();
-		this.gameSession.formManager.setup();
-
-		this.narrator = new Narrator();
-		this.narrator.setup();
-
 		//TODO: Test background waves out
 		this.gameSession.soundManager.waveSound.startLoop();
 	}
 
 	setdown() {
 		this.section.attribute('style', 'display:none;');
-		//TODO also deactivate sound, narrator, skeleton, poses etc!
 	}
 
 	render() {
 		super.render();
 
 		// this.silhouette.render();
+		this.joystick.render();
 		
 		//Render skeleton
 		// this.gameSession.skeleton.render();
 		// TODO I'm rendering the filter instead! Should the Skeleton be updated to also use the Filter?
 
-		this.gameSession.formManager.render();
 
 		//TODO: Make generic and add logic to exist across multiple states... singleton.
-		//Test Narrator
-		this.narrator.render();
 	}
 
 	resize() {
 		super.resize();
-		this.narrator.resize();
 		// TODO resize souvenirs too!
 	}
 
 	update() {
 		super.update();
 
+		this.joystick.update();
 
 		//Update skeleton
 		this.gameSession.skeleton.update();
@@ -127,9 +106,7 @@ export default class DemoState extends State {
 		this.gameSession.breathingManager.update();
 
 		//Test Target
-		this.gameSession.formManager.update();
 
-		this.narrator.update();
 	}
 
 	initializeGameFromSettings() {
@@ -139,7 +116,6 @@ export default class DemoState extends State {
 
 		//Set relevant visual systems
 
-		//Set relevant mechanics systems (form, narrator, targets, particles...)
 	}
 
 	mousePressed() {}
