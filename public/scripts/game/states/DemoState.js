@@ -2,6 +2,7 @@ import State from "../../core/State/State.js";
 import Skeleton from "../skeleton/Skeleton.js";
 import Silhouette from "../souvenir/Silhouette.js";
 import Joystick from "../form/joystick.js";
+import Julia from "../souvenir/Julia.js";
 
 /** example of controlling a shader with analog user input */
 export default class DemoState extends State {
@@ -9,6 +10,7 @@ export default class DemoState extends State {
 	menuButton = {};
 	silhouette = {};
 	joystick = {};
+	julia = {};
 	// why are fields instantiated with anonymous classes?
 	
 	constructor() {
@@ -53,7 +55,8 @@ export default class DemoState extends State {
 
 		// Create the various Graphics objects
 		this.silhouette = new Silhouette();// Silhouette.DefaultConfiguration );
-		this.joystick = new Joystick();
+		this.joystick = new Joystick([0,0],200,'left_wrist');
+		this.julia = new Julia();
 	}
 
 	// TODO load style from some configuration
@@ -75,9 +78,33 @@ export default class DemoState extends State {
 		this.section.attribute('style', 'display:none;');
 	}
 
+	update() {
+		super.update();
+
+		this.joystick.update();
+
+		const offset = [-0.75, -0.05];
+		let v = this.joystick.value;
+		let m = this.joystick.magnitude;
+		v = [offset[0] + (v[0]/m), offset[1]+(v[1]/m)];
+		this.julia.control = v;
+
+		this.julia.update();
+
+		//Update skeleton
+		this.gameSession.skeleton.update();
+
+		// Update breathing
+		this.gameSession.breathingManager.update();
+
+		//Test Target
+
+	}
+
 	render() {
 		super.render();
 
+		this.julia.render();
 		// this.silhouette.render();
 		this.joystick.render();
 		
@@ -92,21 +119,6 @@ export default class DemoState extends State {
 	resize() {
 		super.resize();
 		// TODO resize souvenirs too!
-	}
-
-	update() {
-		super.update();
-
-		this.joystick.update();
-
-		//Update skeleton
-		this.gameSession.skeleton.update();
-
-		// Update breathing
-		this.gameSession.breathingManager.update();
-
-		//Test Target
-
 	}
 
 	initializeGameFromSettings() {
